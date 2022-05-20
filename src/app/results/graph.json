@@ -1,0 +1,11 @@
+{
+    "name" : "Father",
+      "children": [
+        { "name" : "Son",
+          "children": [
+            {"name" : "Grandson"},
+            {"name" : "Granddaughter"}
+          ]
+        }
+      ]
+    }

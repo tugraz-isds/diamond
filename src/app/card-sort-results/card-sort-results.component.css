@@ -1,0 +1,61 @@
+.participants th {
+    padding: 15px;
+}
+
+.result-box {
+    border: 1px solid gray;
+    height: 280px;
+}
+
+.table {
+    width: initial;
+    max-width: initial;
+}
+
+.table th {
+    font-weight: 600;
+}
+
+table>tbody>tr>td {
+    padding: 4px;
+}
+
+.task-analysis-box {
+    border: 1px solid lightgray;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+.time-result {
+    margin-left: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+    .time-result {
+        margin-left: 0;
+    } 
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+body {
+    font: 10px sans-serif;
+  }
+  
+  .link {
+    fill: none;
+    stroke: #000;
+  }
+  
+  .border {
+    fill: none;
+    shape-rendering: crispEdges;
+    stroke: #aaa;
+  }
+  
+  .node {
+    stroke: #fff;
+    }

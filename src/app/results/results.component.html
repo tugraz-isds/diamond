@@ -1,0 +1,221 @@
+<div class="container-fluid mt-30">
+    <div [hidden]="test === undefined" *ngIf="!results.length" class="col-sm-offset-1 col-sm-10">
+      <button *ngIf="test" [routerLink]="['/create-tree-test/' + test.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
+      {{ "noparticipants" | translate }}
+    </div>
+    <div [hidden]="!results.length" class="col-sm-offset-1 col-sm-10">
+      <button *ngIf="test" [routerLink]="['/create-tree-test/' + test.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
+      <h3>{{ "study" | translate }}</h3>
+      <h4 *ngIf="test">{{test.name}}</h4>
+      <ul class="nav nav-tabs mt-50">
+        <li class="active"><a data-toggle="tab" href="#overview">{{ "overview" | translate }}</a></li>
+        <li><a data-toggle="tab" href="#participants">{{ "participants" | translate }}</a></li>
+        <li><a data-toggle="tab" href="#taskanalysis">{{ "taskanalysis" | translate }}</a></li>
+        <li><a data-toggle="tab" href="#destinations">{{ "destinations" | translate }}</a></li>
+      </ul>
+      
+      <div class="tab-content">
+  
+        <div id="overview" class="mt-30 tab-pane fade in active">
+          <h4 class="mt-30">{{ "participants" | translate }}</h4>
+          <hr>
+          <div style="padding: 0" class="container-fluid">
+            <div class="result-box col-md-4 col-sm-6">
+                <div class="mt-10">{{ "completion" | translate }}</div>
+                <hr>
+                {{ "completed" | translate }}: {{this.numberCompleted}} <br>
+                {{ "abandoned" | translate }}: {{this.numberLeft}}
+                <!-- <canvas id="completion" class="mb-10"></canvas> -->
+            </div>
+            <div class="time-result result-box col-md-4 col-sm-6">
+                <div class="mt-10">{{ "timetaken" | translate }}</div>
+                <hr>
+                <div class="text-center mt-30">{{ "timeusersneeded" | translate }}</div>
+                <h2 class="text-center mt-30">
+                  <b>{{averageSecondsByUser}}</b> {{ "seconds" | translate }}
+                </h2>
+
+                <div class="text-center mt-30">
+                  {{ "thelongest" | translate }} {{longestSeconds}} {{ "seconds" | translate }} <span *ngIf="results.length > 1">{{ "theshortest" | translate }} {{shortestSeconds}} {{ "seconds" | translate }}.</span>
+                </div>
+                <!-- {{totalSecondsTaken}}
+                {{averageSecondsByUser}} -->
+                <canvas id="completion" class="mb-20"></canvas>
+            </div>
+          </div>
+          <h4 class="mt-30">{{ "tasks" | translate }}</h4>
+          <hr>
+          <div style="padding: 0" class="container-fluid mb-10">
+            <div class="result-box col-md-4 col-sm-6">
+                <div style="display: inline-block;" class="mt-10" >{{ "success" | translate }}</div>
+                <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually&#10;(possibly with deviations from the direct path) managed to find&#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
+                <hr>
+                <div class="progress mt-30">
+                  <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': percentageCorrect + '%'}">{{percentageCorrect}}%</div>
+                </div>
+                  <div class="mt-20">{{ "success1" | translate }}</div>
+                  <div class="mt-20">{{ "success2" | translate }}, {{percentageCorrect}}% {{ "success3" | translate }}</div>
+            </div>
+            <div class="time-result result-box col-md-4 col-sm-6">
+              <div style="display: inline-block;" class="mt-10" >{{ "directness" | translate }}</div>
+              <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path&#10;to the correct answer without deviations, i.e. without navigating&#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
+                <hr>
+                <div class="progress mt-30">
+                  <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': percentageDirect + '%'}">{{percentageDirect}}%</div>
+                </div>
+                  <div class="mt-20">{{ "directness1" | translate }}</div>
+                  <div class="mt-20">{{ "success2" | translate }}, {{percentageDirect}}% {{ "directness2" | translate }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="participants" class="mt-30 tab-pane fade">
+          
+          <p>{{ "excludedparticipants" | translate }}</p>
+
+          <button type="button" class="btn btn-warning"  (click)="exportCSV()">{{ "exportcsv" | translate }}</button>
+
+          <table *ngIf="results.length && test" class="participants table table-bordered mt-30">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>{{ "dateandtime" | translate }}</th>
+                <th>{{ "duration" | translate }} [s]</th>
+                <th style="text-align: center">{{ "taskscompleted" | translate }}<br>({{ "outof" | translate }} {{test.tasks.length}})</th>
+                <th style="text-align: center">{{ "tasksskipped" | translate }}<br>({{ "outof" | translate }} {{test.tasks.length}})</th>
+                <th style="text-align: center">{{ "taskscorrect" | translate }}<br>({{ "outof" | translate }} {{test.tasks.length}})</th>
+                <th>Feedback</th>
+                <th>{{ "exclude" | translate }}</th>
+                <th>{{ "delete" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let result of results; let j = index;">
+                    <td>{{result.username}}</td>
+                    <td>{{result.timestamp}}</td>
+                    <td class="text-right" style="padding-right: 10px">{{getDuration(result)}}</td>
+                    <td class="text-right" style="padding-right: 10px">{{getCompletedTasks(result.results)}}</td>
+                    <td class="text-right" style="padding-right: 10px">{{getSkippedTasks(result.results)}}</td>
+                    <td class="text-right" style="padding-right: 10px">{{getCorrectTasks(result.results)}}</td>
+                    <td>{{result.feedback}}</td>
+                    <td class="text-center">
+                      <input type="checkbox" [checked]="result.exclude" [(ngModel)]="result.exclude" (click)="updateResultParticipants(j)">      
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal10" (click)="deleteParticipantResultIndex = j">{{ "delete" | translate }}</button>   
+                      </td>
+                </tr>
+            </tbody>
+          </table>
+
+
+        </div>
+
+
+        <div id="taskanalysis" class="mt-30 tab-pane fade">
+          <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
+            <div class="task-analysis-box">
+              {{i+1}}. {{test.tasks[i].text}}
+
+              <div class="row mt-20">
+                <div class="col-sm-4">
+                  <div style="display: inline-block">{{ "success" | translate }}</div>
+                  <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually &#10;(possibly with deviations from the direct path) managed to find &#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
+                  <div class="progress">
+                  <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': t.percentageCorrect + '%'}">{{t.percentageCorrect}}%
+                </div>
+              </div>
+              </div>
+              </div>
+
+              <div class="row mt-20">
+                  <div class="col-sm-4">
+                  <div style="display: inline-block">{{ "directness" | translate }}</div>
+                  <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path &#10;to the correct answer without deviations, i.e. without navigating &#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
+                  <div class="progress">
+                <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': t.percentageDirect + '%'}">{{t.percentageDirect}}%</div>
+              </div>
+              </div>
+              </div>
+
+              <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pieTree" (click)="preparePieTree(i)">Pie Tree</button> -->
+
+              <button type="button" class="btn btn-warning"  (click)="openPieTree(i)">Path Tree</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div *ngIf="test" id="destinations" class="mt-30 tab-pane fade">
+          <div class="mt-10 mb-10">{{ "tasks" | translate }}:</div>
+          <div *ngFor="let t of test.tasks; let i = index;">
+            <b>{{i+1}}.</b> {{t.text}}
+          </div>
+          <div class="mt-30">{{ "destinationsexplanation" | translate }}</div>
+          <div class="mt-20">
+            <div style="vertical-align: middle; display: inline-block; width: 15px; height: 15px; background-color: rgba(161,212,36,0.7)"></div><div style="display: inline-block; padding-left: 5px; vertical-align: middle">{{ "correct" | translate }}</div>
+
+            <div style="margin-left: 25px !important; vertical-align: middle; display: inline-block; width: 15px; height: 15px; background-color: rgba(245,98,0,0.7)"></div><div style="display: inline-block; padding-left: 5px; vertical-align: middle">{{ "incorrect" | translate }} (<20% {{ "ofallanswers" | translate }})</div>
+
+            <div style="margin-left: 25px; vertical-align: middle; display: inline-block; width: 15px; height: 15px; background-color: rgba(218,31,71,0.7)"></div><div style="display: inline-block; padding-left: 5px; vertical-align: middle">{{ "incorrect" | translate }} (>20% {{ "ofallanswers" | translate }})</div>
+          </div>
+          <button type="button" class="mt-30 btn btn-primary"  (click)="exportDestinationsCSV()">{{ "exportcsv" | translate }}</button>
+          <table *ngIf="results.length" class="table table-bordered mt-30">
+            <thead>
+              <tr>
+                <th style="width: 100px"></th>
+                <th class="text-center" style="width: 25px" *ngFor="let t of test.tasks; let i = index;">{{i+1}}</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of tree; let j = index;">
+                    <td *ngIf="item.data" [style.padding-left.px]="item.data.index*25 + 5">{{item.text}}</td>
+                    <td *ngIf="!item.data">{{item.text}}</td>
+                    <td class="text-center" *ngFor="let task of destinations; let k = index;">
+                      <div  [ngStyle]="{ 'background-color' : getBackgroundColor(k, j, task[item.id], item.id)}">{{task[item.id]}}</div>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        
+        </div>
+  
+  
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Modal -->
+<div id="pieTree" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      PIE TREE
+      <div id="pietreesvg"></div>
+      <button (click)="getSvg()">Get SVG link in console</button>
+      <a id="link">download svg</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="myModal10" class="modal fade" role="dialog">
+    <div style="max-width: 400px;" class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <p>{{ "deleteparticipantresultsure" | translate }}</p>
+        </div>
+        <div style="padding-bottom: 10px;" class="text-center">
+          <button type="button" class="btn btn-warning" (click)="prepareDeleteParticipantResult()">{{ "yes" | translate }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "no" | translate }}</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>

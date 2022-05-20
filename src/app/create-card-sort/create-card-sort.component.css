@@ -1,0 +1,17 @@
+.glyphicon-trash:hover {
+    color: lightcoral;
+}
+
+textarea {
+    width: 100%;
+}
+
+.cardName{
+    width: 25%;
+}
+
+.nav-tabs>li.active>a {
+    color: black !important;
+}
+
+.not-allowed {cursor: not-allowed; pointer-events: none;}

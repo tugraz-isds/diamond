@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <div class="col-sm-offset-1 col-sm-3">
+      <h3>{{ "useraccounts" | translate }}</h3>
+      <button type="button" class="mt-20 btn btn-primary"  data-toggle="modal" data-target="#myModal3">{{ "adduser" | translate }}</button>
+    <table *ngIf="users && users.length" class="table table-bordered mt-50">
+        <thead>
+          <tr>
+            <th>{{ "user" | translate }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users; let i = index;">
+            <td>
+              {{user.email}}
+            </td>
+            <td>
+              <button *ngIf="user.email !== 'admin' && !user.study" type="button" class="btn btn-primary" (click)="studyAccess(true, user._id)">{{ "enable" | translate }}</button>
+              <button *ngIf="user.email !== 'admin' && user.study" type="button" class="btn btn-warning" (click)="studyAccess(false, user._id)">{{ "disable" | translate }}</button>
+            </td>
+            <td>
+                <button *ngIf="user.email !== 'admin'" type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal2" (click)="deleteUserId = user._id">{{ "delete" | translate }}</button>
+            </td>
+            <td>
+                <button style="width: 125px" type="button" class="btn btn-warning"  data-toggle="modal" data-target="#myModal4" (click)="userid = user._id; deleteUserId = user.email;">{{ "changepassword" | translate }}</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="mt-20 btn btn-primary"  data-toggle="modal" data-target="#myModal3">{{ "adduser" | translate }}</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="myModal2" class="modal fade" role="dialog">
+    <div style="max-width: 400px;" class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <p>{{ "deleteusersure" | translate }}</p>
+        </div>
+        <div style="padding-bottom: 10px;" class="text-center">
+          <button type="button" class="btn btn-warning" (click)="prepareDeleteUser()">{{ "yes" | translate }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "no" | translate }}</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+  <!-- Modal -->
+<div id="myModal3" class="modal fade" role="dialog">
+  <div style="max-width: 300px;" class="modal-dialog">
+
+    <!-- Modal content-->
+    <div style="padding: 15px;" class="modal-content">
+      <div class="modal-body text-center">
+        <h4>{{ "adduser" | translate }}</h4>
+      </div>
+      <div style="padding-bottom: 10px;" class="text-center">
+        <p class="text-left">{{ "username" | translate }}</p>
+        <input [(ngModel)]="username" type="text" class="form-control"/>
+        <p class="text-left mt-20">{{ "password" | translate }}</p>
+        <input [(ngModel)]="password" type="text" class="form-control"/>
+        <button type="button" class="mt-20 btn btn-primary" (click)="addUser()">{{ "add" | translate }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <!-- Modal -->
+  <div id="myModal4" class="modal fade" role="dialog">
+      <div style="max-width: 300px;" class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div style="padding: 15px;" class="modal-content">
+          <div class="modal-body text-center">
+            <h4>{{ "changepassword" | translate }}</h4>
+          </div>
+          <div style="padding-bottom: 10px;" class="text-center">
+            <p class="text-left">{{ "newpassword" | translate }}</p>
+            <input [(ngModel)]="password" type="text" class="form-control"/>
+            <button type="button" class="mt-20 btn btn-warning" (click)="changePassword()">{{ "changepassword" | translate }}</button>
+          </div>
+        </div>
+    
+      </div>
+    </div>

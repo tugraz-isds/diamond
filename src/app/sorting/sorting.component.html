@@ -1,0 +1,121 @@
+<div cdkDropListGroup>
+
+    <div class="col-md-12 mt-10 mb-10 text-center">
+            <button type="button" class="btn btn-control btn-primary" data-toggle="modal" data-target="#create_group">
+                {{ "Add Group" | translate }}
+            </button>
+        <button type="button" class="btn btn-control btn-success mr-5" [disabled]="ungrouped_cards.length"
+                (click)="finish()">{{ "finish" | translate }}</button>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-container">
+            <h2>Cards ({{ungrouped_cards.length}})</h2>
+            <div cdkDropList [cdkDropListData]="ungrouped_cards" class="group" (cdkDropListDropped)="drop($event)">
+                <div class="card" id="{{ungrouped_i}}" *ngFor="let card of ungrouped_cards; index as ungrouped_i"
+                     cdkDrag><h5 tabindex="0">{{card}}</h5>
+                    <!-- Dropdown Menu-->
+
+                    <div class="dropdown">
+                        <button class="btn btn-move dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                aria-label="move card">
+                            <i class="glyphicon glyphicon-move"></i>
+                        </button>
+                        <ul class="dropdown-menu" id="dropdown-content">
+                           <span tabindex="0"
+                                  role="link"
+                                  id="{{ung_resgroup_i}}"
+                                  *ngFor="let group of resultGroups; index as ung_resgroup_i"
+                                  (click)="simulateDropFromUngrouped($event.target, card, ungrouped_i)"
+                                  (keypress)="simulateDropFromUngrouped($event.target,card, ungrouped_i)">
+                                {{group.group_name}}
+                            </span>
+                            <span tabindex="0"
+                                  role="link"
+                                  class="add-group-link"
+                                  (click)="addGroup()"
+                                  (keypress)="addGroup()">
+                                 {{ "Add Group" | translate }}
+                            </span>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-8">
+        <ng-container *ngFor="let res of resultGroups; index as group_i">
+            <div class="col-md-6">
+                <div class="card-group"
+                     id="{{ group_i }}">
+                    <h2 contenteditable="true" id="group_name_{{group_i}}"
+                        (blur)="changeGroupName($event.target, group_i)">{{ res.group_name }}</h2>
+                    <button (click)="deleteGroup(group_i)"
+                            (keypress)="deleteGroup(group_i)"
+                            aria-label="close"
+                            class="delete glyphicon glyphicon-remove">
+                    </button>
+                    <div cdkDropList class="group" [cdkDropListData]="res.group_list"
+                         (cdkDropListDropped)="drop($event)">
+                        <div class="card" id="{{i}}" *ngFor="let card of res.group_list; index as i"
+                             cdkDrag><h5 tabindex="0">{{card}}</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-move dropdown-toggle" type="button" id="dropdownMenuButton_{{i}}"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-label="move card"
+                                        aria-expanded="false">
+                                    <i class="glyphicon glyphicon-move"></i>
+                                </button>
+                                <ul class="dropdown-menu" id="dropdown-content">
+                                    <span tabindex="0"
+                                          role="link"
+                                          id="{{resgroup_i}}"
+                                          *ngFor="let group of resultGroups; index as resgroup_i"
+                                          (click)="simulateDrop($event.target, card, group_i)"
+                                          (keypress)="simulateDrop($event.target, card, group_i)">
+                                        {{group.group_name}}
+                                    </span>
+                                        <span tabindex="0"
+                                              role="link"
+                                              class="add-group-link"
+                                                   (click)="addGroup()"
+                                                   (keypress)="addGroup()">
+                                         {{ "Add Group" | translate }}
+                                     </span>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+
+<div id="create_group" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h3 class="modal-title">Add Group</h3>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" type="text" [(ngModel)]="groupName" type="text" (keyup.enter)="addGroup()">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-control" (click)="addGroup()"
+                        data-dismiss="modal">{{ "Add Group" | translate }}</button>
+                <button type="button" class="btn btn-danger btn-control" data-dismiss="modal" aria-label="Close">
+                    {{"Close" | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

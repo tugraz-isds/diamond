@@ -1,0 +1,85 @@
+<div class="container-fluid mt-50">
+  <div class="col-sm-offset-1">
+    <p *ngIf="!this.authService.user.study && this.authService.user.email !== 'admin'">{{ "accountnotenabled" | translate }}</p>
+    <h3 *ngIf="(this.authService.user.study || this.authService.user.email === 'admin')">{{ "TreeTest Studies" | translate }}</h3>
+    
+    <div class="row">
+      <div class="col-sm-9">
+        <table *ngIf="tests && tests.length && (this.authService.user.study || this.authService.user.email === 'admin')" class="table table-bordered mt-50">
+          <thead>
+            <tr>
+              <th style="width: 150px">Name</th>
+              <th style="width: 300px;">URL</th>
+              <th class="text-center">{{ "edit" | translate }}</th>
+              <th class="text-center">{{ "action" | translate }}</th>
+              <th class="text-center">{{ "delete" | translate }}</th>
+              <th class="text-center">{{ "preview" | translate }}</th>
+              <th class="text-center">{{ "results" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of tests; let i = index;">
+              <td><a [routerLink]="['/results/' + t.id]" class="pointer">{{t.name}}</a></td>
+              <td>
+                <input #myInput style="width: 250px; border: 1px solid lightgray; padding-left: 3px; display: inline-block;" type="text" 
+                [ngModel]="getLink(t.id)"
+                >
+                <i (click)="copyToClipboard(t.id); myInput.select();" class="glyphicon glyphicon-copy"></i></td>
+              <td class="text-center">
+                <button [routerLink]="['/create-tree-test/' + t.id]" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" style="padding-right: 5px;" ></span></button>
+              </td>
+              <td class="text-center">
+                  <button *ngIf="!t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="launchTest(t.id)">
+                    <span style="padding-right: 5px" class="glyphicon glyphicon-play"></span>
+                    {{ "launch" | translate }}</button>
+                  <button *ngIf="t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="stopTest(t.id)">
+                    <span style="padding-right: 1px" class="glyphicon glyphicon-pause"></span>
+                    {{ "endstudy" | translate }}</button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal" (click)="deleteTestId = t._id"> 
+                  <span style="padding-right: 5px;" class="glyphicon glyphicon-trash"></span></button>
+              </td>
+              <td class="text-center">
+                  <button type="button" class="btn btn-primary" (click)="launchTest(t.id, true)">
+                    <span style="padding-right: 5px" class="glyphicon glyphicon-eye-open"></span></button>
+              </td>
+              <td class="text-center">
+
+                <button [routerLink]="['/results/' + t.id]" type="button" class="btn btn-primary">
+                  <span style="padding-right: 5px" class="glyphicon glyphicon-book"></span></button>
+            </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+   </div>
+
+
+
+
+    <div *ngIf="(this.authService.user.study || this.authService.user.email === 'admin')">
+      <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-tree-test">{{ "createstudy" | translate }}</button>
+    </div>
+  </div>
+</div>
+
+<div id="copyboardtest"></div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div style="max-width: 400px;" class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <p>{{ "deletestudysure" | translate }}</p>
+      </div>
+      <div style="padding-bottom: 10px;" class="text-center">
+        <button type="button" class="btn btn-warning" (click)="prepareDeleteStudy()">{{ "yes" | translate }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "no" | translate }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>

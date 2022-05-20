@@ -1,0 +1,76 @@
+a:hover {
+    text-decoration: underline;
+}
+
+table td {
+    font-size: 13px !important;
+}
+table th {
+    font-size: 13px !important;
+    font-weight: 500;
+}
+
+button {
+    font-size: 80% !important;
+    text-transform: initial !important;
+    color: white !important;
+}
+
+.color-red {
+    color: darkred;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-50 {
+    margin-bottom: 50px;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+
+.modal {
+    text-align: center;
+  }
+  
+@media screen and (min-width: 768px) { 
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.glyphicon-question-sign {
+    color: darkslategray;
+}

@@ -1,0 +1,128 @@
+<div class="container-fluid mt-50">
+  <div class="col-sm-offset-1 col-sm-10">
+    <h3 *ngIf="!id">{{ "newstudy" | translate }}</h3>
+    <h3 *ngIf="id">{{ "editstudy" | translate }}</h3>
+
+    <ul class="nav nav-tabs mt-20">
+      <li class="active"><a data-toggle="tab" href="#settings">1. {{ "settings" | translate }}</a></li>
+      <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest()"><a  [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#tree">2. {{ "tree" | translate }}</a></li>
+      <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest(); defineCorrectAnswer(0);"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#tasks">3. {{ "tasks" | translate }}</a></li>
+      <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest()"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#messages">4. {{ "messages" | translate }}</a></li>
+      <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest()"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#finish">5. {{ "finish" | translate }}</a></li>
+    </ul>
+    
+    <div class="tab-content">
+
+      <div id="settings" class="mt-30 tab-pane fade in active">
+        <p>{{ "studytitle" | translate }} *</p>
+        <input [(ngModel)]="testName" type="text">
+        <div>
+        <p style="display: inline-block" class="mt-20">{{ "studypassword" | translate }}</p><span style="padding-left: 5px;" data-toggle="tooltip" title="Set a study password to protect your study. Users will have to enter this password before starting the tree test." class="glyphicon glyphicon-question-sign"></span>
+      </div>
+        <input [(ngModel)]="studyPassword" type="text">
+        <div class="mt-20">
+          <input type="checkbox" id="leaf-nodes" [checked]="leafNodes"
+          (change)="leafNodes = !leafNodes">{{ "leafnodes" | translate }}
+          <span style="padding-left: 5px;" data-toggle="tooltip" title="If this option is checked, users will be able to select  leaf nodes only in the information hierarchy tree." class="glyphicon glyphicon-question-sign"></span>
+          <br>
+          <input type="checkbox" id="order-numbers" [checked]="orderNumbers"
+          (change)="orderNumbers = !orderNumbers" /> {{ "tasknumbers" | translate }}
+          <span style="padding-left: 5px;" data-toggle="tooltip" title="If this option is checked, users will see task number while doing a tree test." class="glyphicon glyphicon-question-sign"></span>
+        </div>
+        <p class="mt-20">{{ "studyurl" | translate }}</p>
+        <small>{{ "link" | translate }}</small>
+        <div>
+          <span style="background-color: lightgray">{{baseurl}}/#/test/{{randomTestId}}</span>
+        </div>
+        <div style="margin-top: 10px"><small>* {{ "requiredfield" | translate }}</small></div>
+        <button [disabled]="!testName.length" type="button" class="btn btn-primary mt-30" (click)="open('tree'); saveTest();">{{ "nextstep" | translate }}</button>
+        <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+      </div>
+
+
+      <div id="tree" class="mt-30 tab-pane fade">
+        <p>{{ "csv" | translate }}</p>
+        <div class="color-red" *ngIf="tasks.length">
+          {{ "treecant" | translate }}
+        </div>
+        <div class="mt-10 mb-10">
+          <button [disabled]="tasks.length" type="button" class="btn btn-primary mr-5" (click)="addNode()">{{
+            "addnode" |
+                  translate }}</button>
+          <button [disabled]="tasks.length" type="button" class="btn btn-primary mr-5" (click)="renameNode()">{{ "rename" | translate }}</button>
+          <button [disabled]="tasks.length" type="button" class="btn btn-primary" (click)="deleteSelectedNode()">{{ "delete" | translate }}</button>
+          <label style="font-size: 10px !important; text-transform: initial !important;" for="file" class="btn btn-primary">{{ "importcsv" | translate }}</label>
+          <input style="display: none;" type="file" id="file" (change)="onFileSelect($event.target)">
+        </div>
+        <div [ngClass]="{'tree-disabled': tasks.length}" id="test-tree"></div>
+        <button type="button" class="btn btn-primary mt-30" (click)="open('tasks'); saveTest();">{{ "nextstep" | translate }}</button>
+        <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+      </div>
+
+
+      <div id="tasks" class="mt-30 tab-pane fade">
+        <div class="col-sm-4">
+          <p>{{ "tasks" | translate }}</p>
+          <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
+            <div (click)="setIndex(i)" [ngClass]="{'selected-task': i === currentTaskIndex}" class="task col-sm-12">
+              <div class="pull-left mt-10">{{i+1}}.</div>
+              <span (click)="deleteTask(i)" class="mt-10 pointer pull-right glyphicon glyphicon-trash"></span>
+              <textarea (click)="setIndex(i)" class="mt-10" rows="4" placeholder="Where would you expect to find ... ?" [(ngModel)]="tasks[i].text">
+              </textarea>
+              <div *ngIf="!tasks[i].answer" class="mb-10">{{ "selectcorrect" | translate }}</div>
+              <div *ngIf="tasks[i].answer" class="mb-10">{{ "selectedanswer" | translate }}: <b>{{tasks[i].answer}}</b></div>
+            </div>
+          </div>
+          <button type="button" class="mt-20 btn btn-primary" (click)="addTask()">{{ "addtask" | translate }}</button>
+
+          <div>
+            <button type="button" class="btn btn-primary mt-30" (click)="open('messages'); saveTest();">{{ "nextstep" | translate }}</button>
+            <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+          </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-1">
+          <div style="padding: 5px; border: 1px solid lightgray;">
+            <div id="test-tree-answer"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="messages" class="mt-30 tab-pane fade">
+        
+          <p class="mt-30">{{ "welcomemessage" | translate }}</p>
+          <textarea style="width: 300px" class="mt-10" rows="4"  [(ngModel)]="welcomeMessage">
+          </textarea>
+
+          <p class="mt-30">{{ "instructions" | translate }}</p>
+          <textarea style="width: 300px" class="mt-10" rows="4"  [(ngModel)]="instructions">
+          </textarea>
+
+          <p class="mt-30">{{ "thankyoumessage" | translate }}</p>
+          <textarea style="width: 300px" class="mt-10" rows="4"  [(ngModel)]="thankYouScreen">
+          </textarea>
+
+          <p class="mt-30">{{ "leavefeedbackmessage" | translate }}</p>
+          <textarea style="width: 300px" class="mt-10" rows="4"  [(ngModel)]="leaveFeedback">
+          </textarea>
+
+
+          <div>
+              <button type="button" class="btn btn-primary mt-30" (click)="open('finish'); saveTest();">{{ "nextstep" | translate }}</button>
+              <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+          </div>
+      </div>
+
+
+      <div id="finish" class="mt-30 tab-pane fade">
+          <div>{{ "studysaved" | translate }}</div>
+          <div>{{ "studysaved1" | translate }}</div>
+          <div class="mt-10">
+            {{ "studysaved2" | translate }} <a routerLink="/tests">{{ "studysaved3" | translate }}</a>.
+          </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

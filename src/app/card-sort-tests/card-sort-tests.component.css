@@ -1,0 +1,9 @@
+.glyphicon-copy {
+    margin-left: 5px;
+    cursor: pointer;
+    color: dimgray;
+}
+
+table td {
+    vertical-align: middle;
+}

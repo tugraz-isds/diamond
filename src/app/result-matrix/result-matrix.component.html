@@ -1,0 +1,21 @@
+
+
+<p > {{"curentlyviewingresultsof" | translate}} {{result.username}}  </p>
+
+<button type="button" class="btn btn-danger"  (click)="close()">{{ "close" | translate }}</button>
+
+<table class="participants table table-bordered mt-30">
+  <thead>
+    <tr>
+      <th *ngFor="let category of this.categories"> {{category}} </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let cardName of matrix[maxCardIndex]; let i = index">
+      <td *ngFor="let category of categories; let j = index">
+        <p> {{matrix[j][i]}} </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
