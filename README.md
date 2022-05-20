@@ -79,8 +79,11 @@ The following people have contributed to Diamond:
   [kandrews@iicm.edu](mailto:kandrews@iicm.edu?subject=Rslidy)  
   Project Leader
 
+- Philipp Brandl, Tamara David, and Bernhard Kargl  
+  (IAweb WS 2020 G1). Made Card Sorting accessible.
+
 - Christopher Oser, Markus Ruplitsch, and Markus Stradner  
-  IAweb WS 2020 G3. Added support for Card Sorting.
+  (IAweb WS 2020 G3). Added support for Card Sorting.
 
 - Ajdin Mehic  
   Master's Thesis. Original developer of TreeTest.
