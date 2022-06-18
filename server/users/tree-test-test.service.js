@@ -5,7 +5,7 @@ const db = require('../_helpers/db');
 const User = db.User;
 const Test = db.Test;
 const Result = db.Result;
-const userService = require('./user.service');
+const userService = require('./account.service');
 
 module.exports = {
     saveResults
