@@ -12,10 +12,10 @@ mongoose.connect(database_connection_url || database_connection_url, { useCreate
 mongoose.Promise = global.Promise;
 
 module.exports = {
-    User: require('../users/account.model'),
-    Test: require('../users/tree-test-study.model'),
-    CardSortTest: require('../users/card-sort-study.model'),
-    Result: require('../users/tree-test-test.model'),
-    CardSortResult: require('../users/card-sort-test.model'),
+    User: require('../src/models/account.model'),
+    Test: require('../src/models/tree-test-study.model'),
+    CardSortTest: require('../src/models/card-sort-study.model'),
+    Result: require('../src/models/tree-test-test.model'),
+    CardSortResult: require('../src/models/card-sort-test.model'),
     database_connection_url
 };

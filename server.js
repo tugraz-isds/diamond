@@ -9,7 +9,7 @@ const config = require('./server/config.json');
 const expressJwt = require('express-jwt');
 const db = require('./server/_helpers/db');
 
-const userService = require('./server/users/account.service');
+const userService = require('./server/src/services/account.service');
 
 var mongodb = require("mongodb");
 
@@ -29,11 +29,11 @@ app.use(cors());
 app.use(jwt());
 
 // api routes
-app.use('/users', require('./server/users/account.controller'));
-app.use('/users', require('./server/users/tree-test-study.controller'));
-app.use('/users', require('./server/users/card-sort-study.controller'));
-app.use('/users', require('./server/users/tree-test-test.controller'));
-//app.use('/users', require('./server/users/card-sort-test.controller'));
+app.use('/users', require('./server/src/controllers/account.controller'));
+app.use('/users', require('./server/src/controllers/tree-test-study.controller'));
+app.use('/users', require('./server/src/controllers/card-sort-study.controller'));
+app.use('/users', require('./server/src/controllers/tree-test-test.controller'));
+//app.use('/users', require('./server/src/card-sort-test.controller'));
 
 // global error handler
 app.use(errorHandler);

@@ -1,6 +1,6 @@
 ﻿const express = require('express');
 const router = express.Router();
-const testsService = require('./tree-test-study.service');
+const testsService = require('../services/tree-test-study.service');
 
 // routes
 router.post('/tests/getbyuserid', getTestsByUserId);
