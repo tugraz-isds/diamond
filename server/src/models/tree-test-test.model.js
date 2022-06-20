@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const resultSchema = new Schema({
+const treeTestTestSchema = new Schema({
     id: { type: String, required: true },
     createdDate: { type: Date, default: Date.now },
     results: { type: Array, required: true },
@@ -11,6 +11,6 @@ const resultSchema = new Schema({
     feedback: { type: String, required: false },
 });
 
-resultSchema.set('toJSON', { virtuals: true });
+treeTestTestSchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('Result', resultSchema);
+module.exports = mongoose.model('TreeTestTest', treeTestTestSchema);

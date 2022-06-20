@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const cardSortResultSchema = new Schema({
+const cardSortTestSchema = new Schema({
     id: { type: String, required: true },
     createdDate: { type: Date, default: Date.now },
     results: { type: Array, required: true },
@@ -12,6 +12,6 @@ const cardSortResultSchema = new Schema({
     feedback: { type: String, required: false },
 });
 
-cardSortResultSchema.set('toJSON', { virtuals: true });
+cardSortTestSchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('CardSortResult', cardSortResultSchema);
+module.exports = mongoose.model('CardSortTest', cardSortTestSchema);

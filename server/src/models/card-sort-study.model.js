@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const cardSortTestSchema = new Schema({
+const cardSortStudySchema = new Schema({
     name: { type: String, unique: false, required: true },
     password: { type: String, unique: false, required: false },
     launched: { type: Boolean, unique: false, required: true },
@@ -17,6 +17,6 @@ const cardSortTestSchema = new Schema({
     subCategories: { type: Boolean, unique: false, required: false },
 });
 
-cardSortTestSchema.set('toJSON', { virtuals: true });
+cardSortStudySchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('CardSortTest', cardSortTestSchema);
+module.exports = mongoose.model('CardSortStudy', cardSortStudySchema);

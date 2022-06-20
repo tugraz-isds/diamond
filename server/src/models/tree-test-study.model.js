@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const testSchema = new Schema({
+const treeStudySchema = new Schema({
     name: { type: String, unique: false, required: true },
     password: { type: String, unique: false, required: false },
     launched: { type: Boolean, unique: false, required: true },
@@ -18,6 +18,6 @@ const testSchema = new Schema({
     orderNumbers: { type: Boolean, unique: false, required: false }
 });
 
-testSchema.set('toJSON', { virtuals: true });
+treeStudySchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('Test', testSchema);
+module.exports = mongoose.model('treeTestStudy', treeStudySchema);

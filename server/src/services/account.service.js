@@ -1,12 +1,12 @@
-﻿const config = require('../config.json');
+﻿const config = require('../../config.json');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const db = require('../_helpers/db');
-const User = db.User;
-const Test = db.Test;
-const Result = db.Result;
-const CardSortResult = db.CardSortResult;
+const db = require('../../_helpers/db');
+const Account = db.Account;
+const TreeTestStudy = db.TreeTestStudy;
+const TreeTestTest = db.TreeTestTest;
 const CardSortTest = db.CardSortTest;
+const CardSortStudy = db.CardSortStudy;
 
 module.exports = {
     // Tree Test
@@ -55,7 +55,7 @@ module.exports = {
 //#######################################
 
 async function authenticate({ email, password }) {
-    const user = await User.findOne({ email });
+    const user = await Account.findOne({ email });
     if (user && bcrypt.compareSync(password, user.hash)) {
         const { hash, ...userWithoutHash } = user.toObject();
         const token = jwt.sign({ sub: user.id }, config.secret);
@@ -67,20 +67,20 @@ async function authenticate({ email, password }) {
 }
 
 async function getAll() {
-    return await User.find().select('-hash');
+    return await Account.find().select('-hash');
 }
 
 async function getById(id) {
-    return await User.findById(id).select('-hash');
+    return await Account.findById(id).select('-hash');
 }
 
 async function create(userParam) {
     // validate
-    if (await User.findOne({ email: userParam.email })) {
+    if (await Account.findOne({ email: userParam.email })) {
         throw 'email "' + userParam.email + '" is already taken';
     }
 
-    const user = new User(userParam);
+    const user = new Account(userParam);
 
     // hash password
     if (userParam.password) {
@@ -91,11 +91,11 @@ async function create(userParam) {
 }
 
 async function update(userParam) {
-    const user = await User.findById(userParam.userid);
+    const user = await Account.findById(userParam.userid);
 
     // validate
     if (!user) throw 'User not found';
-    if (user.email !== userParam.email && await User.findOne({ email: userParam.email })) {
+    if (user.email !== userParam.email && await Account.findOne({ email: userParam.email })) {
         throw 'email "' + userParam.email + '" is already taken';
     }
 
@@ -110,7 +110,7 @@ async function update(userParam) {
 }
 
 async function _delete(id) {
-    await User.findByIdAndRemove(id);
+    await Account.findByIdAndRemove(id);
 }
 
 
@@ -120,9 +120,9 @@ async function _delete(id) {
 
 
 async function getResultsById(id) {
-    const result = await Result.find({ "id" : id });
-    const test = await Test.find({ "id" : id });
-    const card_sort_test = await CardSortTest.find({ "id" : id });
+    const result = await TreeTestTest.find({ "id" : id });
+    const test = await TreeTestStudy.find({ "id" : id });
+    const card_sort_test = await CardSortStudy.find({ "id" : id });
     const object = {
         result: result,
         test: test,
@@ -131,7 +131,7 @@ async function getResultsById(id) {
 }
 
 async function saveFeedback(resultParam) {
-    const result = await Result.findOne({ username: resultParam.username })
+    const result = await TreeTestTest.findOne({ username: resultParam.username })
 
     result.feedback = resultParam.feedback;
 
@@ -142,27 +142,27 @@ async function saveFeedback(resultParam) {
 
 
 async function saveResults(resultParam) {
-    const result = new Result(resultParam);
+    const result = new TreeTestTest(resultParam);
     // save user
     await result.save();
 }
 
 
 async function addTest(testParam) {
-    const test = new Test(testParam);
+    const test = new TreeTestStudy(testParam);
     // save user
     await test.save();
 }
 
 async function getAllTests(data) {
 
-    const tests = await Test.find({ "user" : data.user })
+    const tests = await TreeTestStudy.find({ "user" : data.user })
     return tests;
 }
 
 async function passwordRequired(studyId) {
 
-    const test = await Test.find({ "id" : studyId });
+    const test = await TreeTestStudy.find({ "id" : studyId });
 
     if (!test[0].launched) {
         return 'redirect';
@@ -177,7 +177,7 @@ async function passwordRequired(studyId) {
 
 async function testPassword(body) {
 
-    const test = await Test.find({ "id" : body.id });
+    const test = await TreeTestStudy.find({ "id" : body.id });
     if (test && test[0].password === body.password) {
         return test[0];
     }
@@ -186,25 +186,25 @@ async function testPassword(body) {
 
 async function getTest(id) {
 
-    const test = await Test.find({ "id" : id });
+    const test = await TreeTestStudy.find({ "id" : id });
     return test;
 }
 
 async function deleteTest(testId) {
-    const test = await Test.find({ "_id" : testId });
+    const test = await TreeTestStudy.find({ "_id" : testId });
     await test[0].delete();
     return 1;
 }
 
 async function deleteIndividualResult(resultId) {
-    const result = await Result.find({ "_id" : resultId });
+    const result = await TreeTestTest.find({ "_id" : resultId });
     await result[0].delete();
     return 1;
 }
 
 async function editTest(updatedTest) {
 
-    const test = await Test.find({ "id" : updatedTest.id });
+    const test = await TreeTestStudy.find({ "id" : updatedTest.id });
 
     //Object.assign(test, updatedTest);
     if (updatedTest.name) {
@@ -254,8 +254,8 @@ async function editTest(updatedTest) {
 //#######################################
 
 async function getCardSortResultsById(id) {
-    const result = await CardSortResult.find({ "id" : id });
-    const card_sort_test = await CardSortTest.find({ "id" : id });
+    const result = await CardSortTest.find({ "id" : id });
+    const card_sort_test = await CardSortStudy.find({ "id" : id });
     const object = {
         result: result,
         card_sort_test: card_sort_test,
@@ -264,7 +264,7 @@ async function getCardSortResultsById(id) {
 }
 
 async function saveCardSortMindset(resultParam) {
-    const result = await CardSortResult.findOne({ username: resultParam.username })
+    const result = await CardSortTest.findOne({ username: resultParam.username })
 
     result.mindset = resultParam.mindset;
 
@@ -274,7 +274,7 @@ async function saveCardSortMindset(resultParam) {
 }
 
 async function saveCardSortFeedback(resultParam) {
-    const result = await CardSortResult.findOne({ username: resultParam.username })
+    const result = await CardSortTest.findOne({ username: resultParam.username })
 
     result.feedback = resultParam.feedback;
 
@@ -284,14 +284,14 @@ async function saveCardSortFeedback(resultParam) {
 }
 
 async function saveCardSortResults(resultParam) {
-    const result = new CardSortResult(resultParam);
+    const result = new CardSortTest(resultParam);
     // save user
     await result.save();
 }
 
 async function cardSortPasswordRequired(studyId) {
 
-    const test = await CardSortTest.find({ "id" : studyId });
+    const test = await CardSortStudy.find({ "id" : studyId });
     if (!test[0].launched) {
         return 'redirect';
     }
@@ -303,20 +303,20 @@ async function cardSortPasswordRequired(studyId) {
 }
 
 async function addCardSortTest(testParam) {
-    const test = new CardSortTest(testParam);
+    const test = new CardSortStudy(testParam);
     // save user
     await test.save();
 }
 
 async function getAllCardSortTests(data) {
 
-    const tests = await CardSortTest.find({ "user" : data.user })
+    const tests = await CardSortStudy.find({ "user" : data.user })
     return tests;
 }
 
 async function cardSortTestPassword(body) {
 
-    const test = await CardSortTest.find({ "id" : body.id });
+    const test = await CardSortStudy.find({ "id" : body.id });
     if (test && test[0].password === body.password) {
         return test[0];
     }
@@ -325,25 +325,25 @@ async function cardSortTestPassword(body) {
 
 async function getCardSortTest(id) {
 
-    const test = await CardSortTest.find({ "id" : id });
+    const test = await CardSortStudy.find({ "id" : id });
     return test;
 }
 
 async function deleteCardSortTest(testId) {
-    const test = await CardSortTest.find({ "_id" : testId });
+    const test = await CardSortStudy.find({ "_id" : testId });
     await test[0].delete();
     return 1;
 }
 
 async function deleteIndividualCardSortResult(resultId) {
-    const result = await CardSortResult.find({ "_id" : resultId });
+    const result = await CardSortTest.find({ "_id" : resultId });
     await result[0].delete();
     return 1;
 }
 
 async function editCardSortTest(updatedTest) {
 
-    const test = await CardSortTest.find({ "id" : updatedTest.id });
+    const test = await CardSortStudy.find({ "id" : updatedTest.id });
 
     //Object.assign(test, updatedTest);
     if (updatedTest.name) {

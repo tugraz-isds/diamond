@@ -1,6 +1,6 @@
 ﻿const express = require('express');
 const router = express.Router();
-const testsService = require('./card-sort-test.service');
+const testsService = require('../services/card-sort-study.service');
 
 // routes
 router.post('/card-sort-tests/getbyuserid', getCardSortTestsByUserId);
