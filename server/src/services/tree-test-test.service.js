@@ -2,9 +2,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../../_helpers/db');
-const User = db.User;
-const Test = db.Test;
-const Result = db.Result;
+
+const TreeTestTest = db.TreeTestTest;
 const userService = require('./account.service');
 
 module.exports = {
@@ -12,7 +11,7 @@ module.exports = {
 };
 
 async function saveResults(resultParam) {
-    const result = new Result(resultParam);
+    const treeTest = new TreeTestTest(resultParam);
     // save user
-    await result.save();
+    await treeTest.save();
 }
