@@ -19,6 +19,7 @@
     "curentlyviewingresultsof": "Results of User ",
     "incorrect": "Incorrect",
     "createstudy": "Create Study",
+    "importstudy": "Import Study",
     "csv": "Please provide content of your tree. Tree can also be imported as a tab-indented CSV file. Comma (,) and semicolon (;) are also supported as delimiters.",
     "cardcsv": "Please provide the cards for the card sorting. The cards can be imported as a CSV file. Comma (,) and semicolon (;) are also supported as delimiters.",
     "dateandtime": "Date and Time",

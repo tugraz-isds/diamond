@@ -19,6 +19,7 @@
     "curentlyviewingresultsof": "Ergebnisse von Nutzer ",
     "incorrect": "Falsch",
     "createstudy": "Studie erstellen",
+    "importstudy": "Studie importieren",
     "csv": "Bitte geben Sie den Inhalt Ihres Stammbaums an. Tree kann auch als CSV-Datei mit Tabulatoreinzug importiert werden. Komma (,) und Semikolon (;) werden ebenfalls als Trennzeichen unterstützt.",
     "cardcsv": "Bitte geben sie die gewünschten Karten an. Die Karten können auch als CSV Datei importiert werde. Komma (,) und Semikolon (;) werden als Trennzeichen unterstützt.",
     "delete": "Löschen",

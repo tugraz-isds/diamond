@@ -49,6 +49,11 @@
                 <button [routerLink]="['/results/' + t.id]" type="button" class="btn btn-primary">
                   <span style="padding-right: 5px" class="glyphicon glyphicon-book"></span></button>
             </td>
+
+            <td class="text-center">
+              <button type="button" class="btn btn-primary" (click)="export(t._id)">
+                export</button>
+            </td>
             </tr>
           </tbody>
         </table>
@@ -60,6 +65,9 @@
 
     <div *ngIf="(this.authService.user.study || this.authService.user.email === 'admin')">
       <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-tree-test">{{ "createstudy" | translate }}</button>
+      <!-- <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary">{{ "importstudy" | translate }}</button> -->
+      <label style="font-size: 10px !important; text-transform: initial !important;" for="file" class="btn btn-primary">{{ "importstudy" | translate }}</label>
+      <input style="display: none;" type="file" id="file" (change)="onFileSelect($event.target)">
     </div>
   </div>
 </div>

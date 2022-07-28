@@ -78,6 +78,7 @@ export class ResultsComponent implements OnInit {
     } else {
       this.router.navigate(['tests']);
     }
+    console.log(this.id);
   }
 
   openPieTree(index) {
