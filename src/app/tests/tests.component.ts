@@ -248,9 +248,10 @@ export class TestsComponent implements OnInit {
       this.postStudyData(study)
       .subscribe(
         res => {
-          console.log(res);
+          alert("Study Successfully saved!");
         },
         err => {
+          alert("Error: " + err);
           console.log(err);
         }
       );

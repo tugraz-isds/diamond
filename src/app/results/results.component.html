@@ -72,7 +72,7 @@
         <div id="participants" class="mt-30 tab-pane fade">
           
           <p>{{ "excludedparticipants" | translate }}</p>
-
+          <p>{{numberIncludedParticipants}} {{"participants" | translate}} ({{totalParticipants}} {{"totalWith" | translate}} {{totalParticipants - numberIncludedParticipants}} {{"excluded" | translate}})</p>
           <button type="button" class="btn btn-warning"  (click)="exportCSV()">{{ "exportcsv" | translate }}</button>
 
           <table *ngIf="results.length && test" class="participants table table-bordered mt-30">
