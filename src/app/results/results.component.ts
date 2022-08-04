@@ -121,7 +121,7 @@ export class ResultsComponent implements OnInit {
     this.numberCompleted = 0;
     this.numberLeft = 0;
 
-    this. totalParticipants = 0;
+    this.totalParticipants = 0;
     this.numberIncludedParticipants =0;
 
     this.totalSecondsTaken = 0;
@@ -242,7 +242,6 @@ export class ResultsComponent implements OnInit {
 
       let percentageDirect = Math.round((directSuccess + directFailure)*100 / this.results.length * 100) / 100;
       let percentageCorrect = Math.round((directSuccess + indirectSuccess)*100 / this.results.length * 100) / 100;
-
       (<any>task).percentageDirect = percentageDirect;
       (<any>task).percentageCorrect = percentageCorrect;
 

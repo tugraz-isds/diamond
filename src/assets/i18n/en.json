@@ -124,5 +124,6 @@
     "welcomemessage": "Welcome Message",
     "yes": "Yes",
     "yourname": "Please enter your name:",
-    "totalWith": "total with"
+    "totalWith": "total with",
+    "outOf": "out of"
 }
