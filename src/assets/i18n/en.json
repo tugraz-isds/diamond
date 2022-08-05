@@ -50,6 +50,7 @@
     "exportuserdatatransposed": "Export Users (as columns)",
     "excludedparticipants": "Excluded participants are not included in statistics or exports.",
     "exclude": "Exclude",
+    "excluded": "Excluded",
     "finish": "Finish",
     "importcsv": "Import CSV",
     "instructions": "Instructions",
@@ -122,5 +123,7 @@
     "welcome": "Welcome",
     "welcomemessage": "Welcome Message",
     "yes": "Yes",
-    "yourname": "Please enter your name:"
+    "yourname": "Please enter your name:",
+    "totalWith": "total with",
+    "outOf": "out of"
 }

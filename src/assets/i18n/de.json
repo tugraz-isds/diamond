@@ -50,6 +50,7 @@
     "exportuserdatatransposed": "Nutzer exportieren (als Spalten)",
     "excludedparticipants": "Ausgeschlossene Teilnehmer werden nicht in Statistiken oder Exporte einbezogen.",
     "exclude": "Ausschließen",
+    "excluded": "Ausgeschloßen",
     "finish": "Fertig machen",
     "importcsv": "CSV importieren",
     "instructions": "Anleitung",
@@ -122,5 +123,7 @@
     "welcome": "Willkommen",
     "welcomemessage": "Willkommensnachricht",
     "yes": "Ja",
-    "yourname": "Bitte geben Sie Ihren Namen ein:"
+    "yourname": "Bitte geben Sie Ihren Namen ein:",
+    "totalWith": "insgesamt mit",
+    "outOf": "von"
 }

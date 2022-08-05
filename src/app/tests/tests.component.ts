@@ -34,7 +34,7 @@ export class TestsComponent implements OnInit {
     const data = {
         user: JSON.parse(localStorage.getItem('currentUser')).email
     };
-    console.log(data)
+    
     this.getTestData(data)
     .subscribe(
       res => {
@@ -228,11 +228,12 @@ export class TestsComponent implements OnInit {
       fileReader.onload = (e) => {
         json = JSON.parse(e.target.result.toString());
         //console.log(json);
+        const randomStudyId = Math.random().toString(36).substring(2, 15);
         const study = {
           name: json["name"],
           launched: false,
           password: json["password"],
-          id: json["id"],
+          id: randomStudyId,
           tree: json["tree"],
           tasks: json["tasks"],
           user: JSON.parse(localStorage.getItem('currentUser')).email,
@@ -247,15 +248,16 @@ export class TestsComponent implements OnInit {
       this.postStudyData(study)
       .subscribe(
         res => {
-          console.log(res);
+          alert("Study Successfully saved!");
         },
         err => {
+          alert("Error: " + err);
           console.log(err);
         }
       );
       for(let test of json["tests"]){
         const temp = {
-          id: test["id"],
+          id: randomStudyId,
           results: test["results"],
           finished: test["finished"],
           username: test["username"],
@@ -275,6 +277,7 @@ export class TestsComponent implements OnInit {
       }
         
       // console.log(study);
+      this.getAllTests();
       };
       fileReader.readAsText(input.files[0]);
       
@@ -294,9 +297,11 @@ export class TestsComponent implements OnInit {
   }
 
   postTestData(object) {
+    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
     const httpOptions = {
         headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     //http://localhost:48792
