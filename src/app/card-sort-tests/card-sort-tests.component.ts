@@ -7,6 +7,8 @@ import { AuthenticationService } from '../authentification.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { saveAs } from 'file-saver'
+
 declare var $: any;
 
 @Component({
@@ -15,9 +17,10 @@ declare var $: any;
   styleUrls: ['./card-sort-tests.component.css', '../app.component.css']
 })
 export class CardSortTestsComponent implements OnInit {
-  cardSortTests;
+  cardSortStudies;
   deleteCardSortTestId;
   baseurl = "";
+  results = [];
 
   constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
 
@@ -34,7 +37,7 @@ export class CardSortTestsComponent implements OnInit {
     this.getCardSortTestData(data)
     .subscribe(
       res => {
-        this.cardSortTests = res;
+        this.cardSortStudies = res;
       },
       err => {
       }
@@ -165,4 +168,140 @@ export class CardSortTestsComponent implements OnInit {
     return this.http.post(this.userService.serverUrl + '/users/card-sort-test/edit', data, httpOptions);
   }
 
+  // Export Study
+  export(studyId){
+    let study = this.cardSortStudies.find(test => test._id === studyId);
+    let id = study.id;
+    let file;
+    this.resultsInformation(id)
+          .subscribe(
+            res => {
+              this.results = (<any>res).result;
+              for (let i = 0; i < this.results.length; i++) {
+                this.results[i]["exclude"] = false;
+              }
+              file = {...study, tests : this.results};
+              this.downloadFile(file, id);
+              console.log(file);
+            },
+            err => {
+              console.log(err);
+            }
+          );
+    }
+
+    private downloadFile(data, fileName) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      saveAs(blob, `study-${fileName}.json`);
+    }
+
+    resultsInformation(id) {
+      /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
+      const httpOptions = {
+          headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+    };
+    // return this.http.post('http://localhost:48792/users/results/' +
+      return this.http.post(this.userService.serverUrl + '/users/card-sort-results/' + id, '', httpOptions);
+    }
+
+    // Import Study
+    onFileSelect(input) {
+
+      const files = input.files;
+      
+      // var content = this.csvContent;    
+      if (files && files.length) {
+  
+        const fileToRead = files[0];
+        let extension = fileToRead.name.split(".");
+        if (extension[extension.length -1] !== "json") {
+          alert("File extension is wrong! Please provide .json file.");
+          return;
+        }
+  
+        const fileReader = new FileReader();
+        let json = null;
+        fileReader.onload = (e) => {
+          json = JSON.parse(e.target.result.toString());
+          //console.log(json);
+          const randomStudyId = Math.random().toString(36).substring(2, 15);
+          const study = {
+            cards: json["cards"],
+            name: json["name"],
+            launched: false,
+            password: json["password"],
+            id: randomStudyId,
+            instructions: json["instructions"],
+            user: JSON.parse(localStorage.getItem('currentUser')).email,
+            welcomeMessage: json["welcomeMessage"],
+            thankYouScreen: json["thankYouScreen"],
+            leaveFeedback: json["leaveFeedback"],
+            explanation: json["explanation"],
+            subCategories: json["subCategories"]
+        };
+        
+  
+        this.postCardSortStudyData(study)
+        .subscribe(
+          res => {
+            alert("Study Successfully saved!");
+          },
+          err => {
+            alert("Error: " + err);
+            console.log(err);
+          }
+        );
+        for(let test of json["tests"]){
+          const temp = {
+            id: randomStudyId,
+            results: test["results"],
+            finished: test["finished"],
+            username: test["username"],
+            timestamp: test["timestamp"],
+            feedback: test["feedback"],
+            mindset: test["mindset"]
+          };
+          //console.log(temp);
+          this.postCardSortTestData(temp)
+            .subscribe(
+              res => {
+                console.log(res);
+              },
+              err => {
+                console.log(err);
+              }
+            );
+        }
+          
+        // console.log(study);
+        this.getAllCardSortTests();
+        };
+        fileReader.readAsText(input.files[0]);
+        
+      }
+    }
+
+    postCardSortStudyData(object) {
+      const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
+        })
+      };
+      return this.http.post(this.userService.serverUrl + '/users/card-sort-test/add', object, httpOptions);
+    }
+
+    postCardSortTestData(object) {
+      const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
+        })
+      };
+      return this.http.post(this.userService.serverUrl + '/users/card-sort-results/add', object, httpOptions);
+    }
 }

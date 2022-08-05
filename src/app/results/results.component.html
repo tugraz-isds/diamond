@@ -175,9 +175,11 @@
                       <div  [ngStyle]="{ 'background-color' : getBackgroundColor(k, j, task[item.id], item.id)}">{{task[item.id]}}</div>
                     </td>
                 </tr>
-            </tbody>
+                <tr>
+                  <td class="text-center">skipped</td>
+                  <td *ngFor="let task of tasks" class="text-center">{{task.skipped}}</td>
+                </tr>
           </table>
-        
         </div>
   
   

@@ -297,9 +297,11 @@ export class TestsComponent implements OnInit {
   }
 
   postTestData(object) {
+    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
     const httpOptions = {
         headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     //http://localhost:48792
