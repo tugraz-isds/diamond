@@ -384,7 +384,9 @@ export class CreateTestComponent implements OnInit {
         thankYouScreen: this.thankYouScreen,
         leaveFeedback: this.leaveFeedback,
         leafNodes: this.leafNodes,
-        orderNumbers: this.orderNumbers
+        orderNumbers: this.orderNumbers,
+        lastEnded: new Date(),
+        lastLaunched: new Date()
     };
 
     if(showPopup) {

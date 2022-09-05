@@ -241,7 +241,12 @@ async function editTest(updatedTest) {
     if (updatedTest.launched !== undefined) {
         test[0].launched = updatedTest.launched;
     }
-
+    if(updatedTest.lastLaunched){
+        test[0].lastLaunched = updatedTest.lastLaunched
+    }
+    if(updatedTest.lastEnded){
+        test[0].lastEnded = updatedTest.lastEnded
+    }
     await test[0].save();
 
     return test[0];

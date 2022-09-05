@@ -15,7 +15,9 @@ const treeStudySchema = new Schema({
     thankYouScreen: { type: String, unique: false, required: false },
     leaveFeedback: { type: String, unique: false, required: false },
     leafNodes: { type: Boolean, unique: false, required: false },
-    orderNumbers: { type: Boolean, unique: false, required: false }
+    orderNumbers: { type: Boolean, unique: false, required: false },
+    lastEnded: {type: Date, unique: false, required: true },
+    lastLaunched: {type: Date, unique: false, required: true }
 });
 
 treeStudySchema.set('toJSON', { virtuals: true });

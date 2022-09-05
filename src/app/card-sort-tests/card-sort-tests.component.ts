@@ -98,7 +98,8 @@ export class CardSortTestsComponent implements OnInit {
   launchCardSortTest(studyId, preview?) {
     const data = {
       id: studyId,
-      launched: true
+      launched: true,
+      lastLaunched: new Date()
   };
     this.editCardSortTest(data)
     .subscribe(
@@ -117,7 +118,8 @@ export class CardSortTestsComponent implements OnInit {
   stopCardSortTest(studyId) {
     const data = {
       id: studyId,
-      launched: false
+      launched: false,
+      lastEnded: new Date()
     };
     this.editCardSortTest(data)
     .subscribe(
@@ -239,7 +241,9 @@ export class CardSortTestsComponent implements OnInit {
             thankYouScreen: json["thankYouScreen"],
             leaveFeedback: json["leaveFeedback"],
             explanation: json["explanation"],
-            subCategories: json["subCategories"]
+            subCategories: json["subCategories"],
+            lastEnded: new Date(),
+            lastLaunched: new Date()
         };
         
   

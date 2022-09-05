@@ -99,7 +99,8 @@ export class TestsComponent implements OnInit {
   launchTest(studyId, preview?) {
     const data = {
       id: studyId,
-      launched: true
+      launched: true,
+      lastLaunched: new Date()
   };
     this.editTest(data)
     .subscribe(
@@ -116,9 +117,11 @@ export class TestsComponent implements OnInit {
   }
 
   stopTest(studyId) {
+    let date = new Date();
     const data = {
       id: studyId,
-      launched: false
+      launched: false,
+      lastEnded: new Date()
     };
     this.editTest(data)
     .subscribe(
@@ -242,7 +245,9 @@ export class TestsComponent implements OnInit {
           thankYouScreen: json["thankYouScreen"],
           leaveFeedback: json["leaveFeedback"],
           leafNodes: json["leafNodes"],
-          orderNumbers: json["orderNumbers"]
+          orderNumbers: json["orderNumbers"],
+          lastEnded: new Date(),
+          lastLaunched: new Date()
       };
 
       this.postStudyData(study)

@@ -125,5 +125,9 @@
     "yes": "Yes",
     "yourname": "Please enter your name:",
     "totalWith": "total with",
-    "outOf": "out of"
+    "outOf": "out of",
+    "lastLaunched": "Last Launched",
+    "lastEnded": "Last Ended",
+    "createdAt": "Created At",
+    "export": "Export"
 }
