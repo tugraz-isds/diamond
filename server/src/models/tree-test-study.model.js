@@ -17,7 +17,8 @@ const treeStudySchema = new Schema({
     leafNodes: { type: Boolean, unique: false, required: false },
     orderNumbers: { type: Boolean, unique: false, required: false },
     lastEnded: {type: Date, unique: false, required: true },
-    lastLaunched: {type: Date, unique: false, required: true }
+    lastLaunched: {type: Date, unique: false, required: true },
+    isLaunchable: { type: Boolean, unique: false, required: true },
 });
 
 treeStudySchema.set('toJSON', { virtuals: true });

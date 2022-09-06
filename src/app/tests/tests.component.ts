@@ -232,6 +232,7 @@ export class TestsComponent implements OnInit {
         json = JSON.parse(e.target.result.toString());
         //console.log(json);
         const randomStudyId = Math.random().toString(36).substring(2, 15);
+        let launchable: boolean = json["tasks"].length > 0 ? true : false; 
         const study = {
           name: json["name"],
           launched: false,
@@ -247,7 +248,8 @@ export class TestsComponent implements OnInit {
           leafNodes: json["leafNodes"],
           orderNumbers: json["orderNumbers"],
           lastEnded: new Date(),
-          lastLaunched: new Date()
+          lastLaunched: new Date(),
+          isLaunchable: launchable
       };
 
       this.postStudyData(study)

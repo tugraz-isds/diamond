@@ -33,7 +33,8 @@
                 <button [routerLink]="['/create-tree-test/' + t.id]" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" style="padding-right: 5px;" ></span></button>
               </td>
               <td class="text-center">
-                  <button *ngIf="!t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="launchTest(t.id)">
+                  <button *ngIf="!t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="launchTest(t.id)"
+                  [disabled] = "!t.isLaunchable ? 'disabled' : null">
                     <span style="padding-right: 5px" class="glyphicon glyphicon-play"></span>
                     {{ "launch" | translate }}</button>
                   <button *ngIf="t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="stopTest(t.id)">
