@@ -36,6 +36,7 @@ import { SortingComponent } from './sorting/sorting.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {ResultMatrixComponent} from './result-matrix/result-matrix.component';
 
+import {participantsFilterPipe} from 'src/app/pipes/filter.pipe'
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent},
@@ -74,6 +75,7 @@ const appRoutes: Routes = [
     CardListComponent,
     ResultMatrixComponent,
     SortingComponent,
+    participantsFilterPipe
   ],
   imports: [
     HttpClientModule,

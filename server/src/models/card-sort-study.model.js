@@ -15,6 +15,8 @@ const cardSortStudySchema = new Schema({
     thankYouScreen: { type: String, unique: false, required: false },
     leaveFeedback: { type: String, unique: false, required: false },
     subCategories: { type: Boolean, unique: false, required: false },
+    lastEnded: {type: Date, unique: false, required: true },
+    lastLaunched: {type: Date, unique: false, required: true }
 });
 
 cardSortStudySchema.set('toJSON', { virtuals: true });

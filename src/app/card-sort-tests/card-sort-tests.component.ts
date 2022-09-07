@@ -21,6 +21,7 @@ export class CardSortTestsComponent implements OnInit {
   deleteCardSortTestId;
   baseurl = "";
   results = [];
+  numberParticipants = [];
 
   constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
 
@@ -38,6 +39,7 @@ export class CardSortTestsComponent implements OnInit {
     .subscribe(
       res => {
         this.cardSortStudies = res;
+        this.setNumberOfParticipants();
       },
       err => {
       }
@@ -98,7 +100,8 @@ export class CardSortTestsComponent implements OnInit {
   launchCardSortTest(studyId, preview?) {
     const data = {
       id: studyId,
-      launched: true
+      launched: true,
+      lastLaunched: new Date()
   };
     this.editCardSortTest(data)
     .subscribe(
@@ -117,7 +120,8 @@ export class CardSortTestsComponent implements OnInit {
   stopCardSortTest(studyId) {
     const data = {
       id: studyId,
-      launched: false
+      launched: false,
+      lastEnded: new Date()
     };
     this.editCardSortTest(data)
     .subscribe(
@@ -206,6 +210,30 @@ export class CardSortTestsComponent implements OnInit {
       return this.http.post(this.userService.serverUrl + '/users/card-sort-results/' + id, '', httpOptions);
     }
 
+    setNumberOfParticipants(){
+      let obj;
+      this.numberParticipants = [];
+      for(let study of this.cardSortStudies){
+        let number = 0;
+        let id = study["id"];
+        this.resultsInformation(id)
+          .subscribe(
+            res => {
+              let results = (<any>res).result;
+              for (let i = 0; i < results.length; i++) {
+                number ++;
+              }
+              obj = {id: id, participants: number}
+              this.numberParticipants.push(obj)
+            },
+            err => {
+              console.log(err);
+            }
+          );
+      }
+    }
+
+
     // Import Study
     onFileSelect(input) {
 
@@ -239,7 +267,9 @@ export class CardSortTestsComponent implements OnInit {
             thankYouScreen: json["thankYouScreen"],
             leaveFeedback: json["leaveFeedback"],
             explanation: json["explanation"],
-            subCategories: json["subCategories"]
+            subCategories: json["subCategories"],
+            lastEnded: new Date(),
+            lastLaunched: new Date()
         };
         
   

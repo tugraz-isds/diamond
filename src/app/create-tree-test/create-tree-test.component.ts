@@ -371,6 +371,7 @@ export class CreateTestComponent implements OnInit {
     } else {
       passTmp = this.studyPassword;
     }
+    const launchable: boolean = this.tasks.length > 0 ? true : false; 
     const test = {
         name: this.testName,
         launched: false,
@@ -384,7 +385,10 @@ export class CreateTestComponent implements OnInit {
         thankYouScreen: this.thankYouScreen,
         leaveFeedback: this.leaveFeedback,
         leafNodes: this.leafNodes,
-        orderNumbers: this.orderNumbers
+        orderNumbers: this.orderNumbers,
+        lastEnded: new Date(),
+        lastLaunched: new Date(),
+        isLaunchable: launchable
     };
 
     if(showPopup) {

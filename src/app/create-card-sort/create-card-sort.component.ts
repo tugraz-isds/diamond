@@ -195,6 +195,8 @@ export class CreateCardSortComponent implements OnInit {
       thankYouScreen: this.thankYouScreen,
       leaveFeedback: this.leaveFeedback,
       subCategories: this.subCategories,
+      lastEnded: new Date(),
+      lastLaunched: new Date()
     };
 
     if (showPopup) {
