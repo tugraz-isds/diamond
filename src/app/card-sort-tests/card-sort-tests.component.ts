@@ -21,6 +21,7 @@ export class CardSortTestsComponent implements OnInit {
   deleteCardSortTestId;
   baseurl = "";
   results = [];
+  numberParticipants = [];
 
   constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
 
@@ -38,6 +39,7 @@ export class CardSortTestsComponent implements OnInit {
     .subscribe(
       res => {
         this.cardSortStudies = res;
+        this.setNumberOfParticipants();
       },
       err => {
       }
@@ -207,6 +209,30 @@ export class CardSortTestsComponent implements OnInit {
     // return this.http.post('http://localhost:48792/users/results/' +
       return this.http.post(this.userService.serverUrl + '/users/card-sort-results/' + id, '', httpOptions);
     }
+
+    setNumberOfParticipants(){
+      let obj;
+      this.numberParticipants = [];
+      for(let study of this.cardSortStudies){
+        let number = 0;
+        let id = study["id"];
+        this.resultsInformation(id)
+          .subscribe(
+            res => {
+              let results = (<any>res).result;
+              for (let i = 0; i < results.length; i++) {
+                number ++;
+              }
+              obj = {id: id, participants: number}
+              this.numberParticipants.push(obj)
+            },
+            err => {
+              console.log(err);
+            }
+          );
+      }
+    }
+
 
     // Import Study
     onFileSelect(input) {

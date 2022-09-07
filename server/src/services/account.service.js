@@ -391,9 +391,7 @@ async function editCardSortTest(updatedTest) {
     if(updatedTest.lastEnded){
         test[0].lastEnded = updatedTest.lastEnded
     }
-    if(updatedTest.isLaunchable !== undefined){
-        test[0].isLaunchable = updatedTest.isLaunchable
-    }
+    
     await test[0].save();
 
     return test[0];

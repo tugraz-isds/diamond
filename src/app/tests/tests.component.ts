@@ -21,13 +21,15 @@ export class TestsComponent implements OnInit {
   results = [];
   deleteTestId;
   baseurl = "";
-
+  //number of participants for each study
+  numberParticipants = [];
   constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
-    this.getAllTests();  
+    this.getAllTests(); 
+    
   }
 
   getAllTests() {
@@ -39,6 +41,7 @@ export class TestsComponent implements OnInit {
     .subscribe(
       res => {
         this.tests = res;
+        this.setNumberOfParticipants();
       },
       err => {
       }
@@ -210,6 +213,29 @@ export class TestsComponent implements OnInit {
     return this.http.post(this.userService.serverUrl + '/users/results/' + id, "", httpOptions);
   }
 
+  setNumberOfParticipants(){
+    let obj;
+    this.numberParticipants = [];
+    for(let test of this.tests){
+      let number = 0;
+      let id = test["id"];
+      console.log('test id ', id);
+      this.resultsInformation(id)
+        .subscribe(
+          res => {
+            let results = (<any>res).result;
+            for (let i = 0; i < results.length; i++) {
+              number ++;
+            }
+            obj = {id: id, participants: number}
+            this.numberParticipants.push(obj)
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    }
+  }
   
 
   onFileSelect(input) {
@@ -315,4 +341,7 @@ export class TestsComponent implements OnInit {
     return this.http.post(this.userService.serverUrl + '/users/results/add', object, httpOptions);
   }
 
+  
+
 }
+
