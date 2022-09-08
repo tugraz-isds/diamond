@@ -21,6 +21,7 @@ export class TestsComponent implements OnInit {
   results = [];
   deleteTestId;
   baseurl = "";
+  showModal = false;
   //number of participants for each study
   numberParticipants = [];
   constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
@@ -281,7 +282,7 @@ export class TestsComponent implements OnInit {
       this.postStudyData(study)
       .subscribe(
         res => {
-          alert("Study Successfully saved!");
+          $("#success").modal('show');
         },
         err => {
           alert("Error: " + err);

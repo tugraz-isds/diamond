@@ -276,7 +276,7 @@ export class CardSortTestsComponent implements OnInit {
         this.postCardSortStudyData(study)
         .subscribe(
           res => {
-            alert("Study Successfully saved!");
+            $("#success").modal('show');
           },
           err => {
             alert("Error: " + err);

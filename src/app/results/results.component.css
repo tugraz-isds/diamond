@@ -26,14 +26,19 @@ table>tbody>tr>td {
     padding: 10px;
 }
 
+@media only screen and (min-width: 992px) {
 .time-result {
     margin-left: 15px;
 }
-
-@media only screen and (max-width: 768px) {
+}
+@media only screen and (max-width: 992px) {
     .time-result {
         margin-left: 0;
-    } 
+    }
+    .result-box {
+        margin-right: 15px;
+        margin-bottom: 15px;
+    }
     canvas {
         width: 100%;
         height: auto;
