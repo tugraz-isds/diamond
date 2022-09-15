@@ -42,7 +42,10 @@ export class CreateTestComponent implements OnInit {
 
   itemsFinal;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private userService: UserService) { }
+  constructor(private http: HttpClient, 
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private router: Router) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
@@ -397,6 +400,7 @@ export class CreateTestComponent implements OnInit {
         alert("Saved!");
         else 
         alert("Gespeichert!");
+      this.router.navigate(['/tests']);
       }
     if (!this.id) { // new test
       this.postTestData(test)
@@ -404,6 +408,7 @@ export class CreateTestComponent implements OnInit {
         res => {
           console.log(res);
           this.id = this.randomTestId;
+          
         },
         err => {
           console.log(err);
