@@ -19,16 +19,18 @@
         <div id="overview" class="mt-30 tab-pane fade in active">
           <h4 class="mt-30">{{ "participants" | translate }}</h4>
           <hr>
-          <div style="padding: 0" class="container-fluid">
-            <div class="result-box col-md-4 col-sm-6">
-                <div class="mt-10">{{ "completion" | translate }}</div>
+          <div style="padding: 0" class="container mb-10">
+            <div class="result-box">
+                <div style="margin: 10px 0 0 10px;">{{ "completion" | translate }}</div>
                 <hr>
-                {{ "completed" | translate }}: {{this.numberCompleted}} <br>
-                {{ "abandoned" | translate }}: {{this.numberLeft}}
+                <div class="text-center mt-30">
+                  {{ "completed" | translate }}: {{this.numberCompleted}} <br>
+                  {{ "abandoned" | translate }}: {{this.numberLeft}}
+                </div>
                 <!-- <canvas id="completion" class="mb-10"></canvas> -->
             </div>
-            <div class="time-result result-box col-md-4 col-sm-6">
-                <div class="mt-10">{{ "timetaken" | translate }}</div>
+            <div class="time-result result-box">
+                <div style="margin: 10px 0 0 10px;">{{ "timetaken" | translate }}</div>
                 <hr>
                 <div class="text-center mt-30">{{ "timeusersneeded" | translate }}</div>
                 <h2 class="text-center mt-30">
@@ -45,26 +47,26 @@
           </div>
           <h4 class="mt-30">{{ "tasks" | translate }}</h4>
           <hr>
-          <div style="padding: 0" class="container-fluid mb-10">
-            <div class="result-box col-md-4 col-sm-6">
-                <div style="display: inline-block;" class="mt-10" >{{ "success" | translate }}</div>
+          <div style="padding: 0" class="container mb-10">
+            <div class="result-box">
+                <div style="display: inline-block; margin: 10px 0 0 10px;" >{{ "success" | translate }}</div>
                 <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually&#10;(possibly with deviations from the direct path) managed to find&#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
                 <hr>
-                <div class="progress mt-30">
+                <div style="margin: 30px 10px 10px 10px;" class="progress">
                   <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': percentageCorrect + '%'}">{{percentageCorrect}}%</div>
                 </div>
-                  <div class="mt-20">{{ "success1" | translate }}</div>
-                  <div class="mt-20">{{ "success2" | translate }}, {{percentageCorrect}}% {{ "success3" | translate }}</div>
+                  <div style="margin: 30px 10px 10px 10px;">{{ "success1" | translate }}</div>
+                  <div style="margin: 30px 10px 10px 10px;">{{ "success2" | translate }}, {{percentageCorrect}}% {{ "success3" | translate }}</div>
             </div>
-            <div class="time-result result-box col-md-4 col-sm-6">
-              <div style="display: inline-block;" class="mt-10" >{{ "directness" | translate }}</div>
+            <div class="time-result result-box">
+              <div style="display: inline-block; margin: 10px 0 0 10px;" class="mt-10" >{{ "directness" | translate }}</div>
               <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path&#10;to the correct answer without deviations, i.e. without navigating&#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
                 <hr>
-                <div class="progress mt-30">
+                <div style="margin: 30px 10px 10px 10px;" class="progress">
                   <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': percentageDirect + '%'}">{{percentageDirect}}%</div>
                 </div>
-                  <div class="mt-20">{{ "directness1" | translate }}</div>
-                  <div class="mt-20">{{ "success2" | translate }}, {{percentageDirect}}% {{ "directness2" | translate }}</div>
+                  <div style="margin: 30px 10px 10px 10px;">{{ "directness1" | translate }}</div>
+                  <div style="margin: 30px 10px 10px 10px;">{{ "success2" | translate }}, {{percentageDirect}}% {{ "directness2" | translate }}</div>
             </div>
           </div>
         </div>
