@@ -11,7 +11,8 @@ export class participantsFilterPipe implements PipeTransform {
         }
         
         const obj = items.filter(item => item["id"] == id);
-        if(obj[0])
-            return obj[0]["participants"];
+        if (obj[0]) {
+            return obj[0].participants;
+        }
     }
 }
