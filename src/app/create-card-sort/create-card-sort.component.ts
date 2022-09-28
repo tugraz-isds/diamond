@@ -42,7 +42,8 @@ export class CreateCardSortComponent implements OnInit {
 
   //itemsFinal;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private userService: UserService) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, 
+    private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
@@ -207,6 +208,7 @@ export class CreateCardSortComponent implements OnInit {
       else {
         alert('Gespeichert!');
       }
+      this.router.navigate(['/card-sort-tests']);
     }
     if (!this.id) { // new test
       this.postTestData(test)

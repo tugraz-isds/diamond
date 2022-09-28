@@ -5,13 +5,17 @@
 .result-box {
     border: 1px solid gray;
     height: 280px;
+    width: 100%;
 }
 
 .table {
     width: initial;
     max-width: initial;
 }
-
+.container {
+    display: flex;
+    max-width: 100%;
+}
 .table th {
     font-weight: 600;
 }
@@ -36,8 +40,12 @@ table>tbody>tr>td {
         margin-left: 0;
     }
     .result-box {
-        margin-right: 15px;
-        margin-bottom: 15px;
+      margin-right: 15px;
+      margin-bottom: 15px;
+    }
+    .container{
+        flex-direction: column;
+        align-items: center;
     }
     canvas {
         width: 100%;

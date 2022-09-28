@@ -57,9 +57,9 @@
               <button type="button" class="btn btn-primary" (click)="export(t._id)">
                 export</button>
             </td>
-            <td>{{ t["createdDate"] | date:'medium'}}</td>
-            <td>{{ t["lastLaunched"] | date:'medium'}}</td>
-            <td>{{ t["lastEnded"] | date:'medium' }}</td>
+            <td>{{ t["createdDate"] | datePipe}}</td>
+            <td>{{ t["lastLaunched"] | datePipe}}</td>
+            <td>{{ t["lastEnded"] | datePipe }}</td>
             <td >{{ numberParticipants | participantsFilter:t.id}}</td>
             </tr>
           </tbody>
