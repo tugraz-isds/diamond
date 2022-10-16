@@ -120,23 +120,32 @@
               {{i+1}}. {{test.tasks[i].text}}
 
               <div class="row mt-20">
-                <div class="col-sm-4">
+                <div class="col-sm-8">
                   <div style="display: inline-block">{{ "success" | translate }}</div>
                     <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually &#10;(possibly with deviations from the direct path) managed to find &#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
-                    <div class="progress">
-                      <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': t.percentageCorrect + '%'}">{{t.percentageCorrect}}% ({{t.directSuccess + t.indirectSuccess}} {{"outOf" | translate}} {{numberIncludedParticipants}})
+                    <div class="bar-container">
+                    <div class="progress bar-width">
+                      <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': t.percentageCorrect + '%'}">
+                      </div>
+                    </div>
+                      <div class="percentage">
+                          {{t.percentageCorrect}}% ({{t.directSuccess + t.indirectSuccess}} {{"outOf" | translate}} {{numberIncludedParticipants}})
                       </div>
                     </div>
                 </div>
               </div>
 
               <div class="row mt-20">
-                  <div class="col-sm-4">
+                  <div class="col-sm-8">
                   <div style="display: inline-block">{{ "directness" | translate }}</div>
                   <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path &#10;to the correct answer without deviations, i.e. without navigating &#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
-                  <div class="progress">
-                <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': t.percentageDirect + '%'}">{{t.percentageDirect}}% ({{t.directSuccess + t.directFailure}} {{"outOf" | translate}} {{numberIncludedParticipants}})</div>
-              </div>
+                  <div class="bar-container">
+                      <div class="progress bar-width">
+                          <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': t.percentageDirect + '%'}"></div>
+                      </div>
+                      <div class="percentage">{{t.percentageDirect}}% ({{t.directSuccess + t.directFailure}} {{"outOf" | translate}} {{numberIncludedParticipants}})</div>
+                 </div>
+
               </div>
               </div>
 

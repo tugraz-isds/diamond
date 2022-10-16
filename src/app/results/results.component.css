@@ -81,3 +81,14 @@ body {
     height: 20px;
     border: none;
 }
+
+.bar-container{
+    display: flex;
+    max-width: 100%;
+}
+.bar-width{
+    width: 70%;
+}
+.percentage{
+    margin-left: 2px;
+}
