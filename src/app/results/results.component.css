@@ -12,6 +12,7 @@
     width: initial;
     max-width: initial;
 }
+
 .container {
     display: flex;
     max-width: 100%;
@@ -72,3 +73,11 @@ body {
   .node {
     stroke: #fff;
     }
+
+  .skipped{
+      font-weight: bold;
+  }
+.spacer{
+    height: 20px;
+    border: none;
+}

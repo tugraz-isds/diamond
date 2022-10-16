@@ -165,23 +165,31 @@
           <table *ngIf="results.length" class="table table-bordered mt-30">
             <thead>
               <tr>
-                <th style="width: 100px"></th>
+                <th style="width: 350px"></th>
                 <th class="text-center" style="width: 25px" *ngFor="let t of test.tasks; let i = index;">{{i+1}}</th>
               </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of tree; let j = index;">
+                <tr *ngFor="let item of tree; let j = index;" >
                     <td *ngIf="item.data" [style.padding-left.px]="item.data.index*25 + 5">{{item.text}}</td>
                     <td *ngIf="!item.data">{{item.text}}</td>
                     <td class="text-center" *ngFor="let task of destinations; let k = index;">
                       <div  [ngStyle]="{ 'background-color' : getBackgroundColor(k, j, task[item.id], item.id)}">{{task[item.id]}}</div>
                     </td>
                 </tr>
-                <tr>
-                  <td class="text-center">skipped</td>
-                  <td *ngFor="let task of tasks" class="text-center">{{task.skipped}}</td>
-                </tr>
+
+            </tbody>
           </table>
+
+        <table class="table table-bordered mt-30">
+            <thead></thead>
+            <tbody>
+            <tr>
+                <td class="text-center skipped" style="width: 350px">SKIPPED</td>
+                <td *ngFor="let task of tasks" class="text-center" style="width: 25px">{{task.skipped}}</td>
+            </tr>
+            </tbody>
+        </table>
         </div>
   
   
