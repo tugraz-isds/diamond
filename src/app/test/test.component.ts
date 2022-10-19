@@ -104,7 +104,7 @@ export class TestComponent implements OnDestroy, OnInit {
 
           if (res === 'redirect') {
             console.log('redirect');
-            this.router.navigate(['tests']);
+            this.router.navigate(['study-closed']);
           } else {
             console.log('NO REDIRECT');
           }
@@ -279,7 +279,6 @@ export class TestComponent implements OnDestroy, OnInit {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
       })
   };
-  //http://localhost:48792
     return this.http.post(this.userService.serverUrl + '/users/test/passwordrequired', id, httpOptions);
   }
 
