@@ -38,6 +38,7 @@ import {ResultMatrixComponent} from './result-matrix/result-matrix.component';
 
 import {participantsFilterPipe} from 'src/app/pipes/filter.pipe';
 import {datePipe} from './pipes/datePipe.pipe';
+import { StudyClosedComponent } from './study-closed/study-closed.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent},
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
   { path: 'tests', component: TestsComponent},
   { path: 'card-sort-tests', component: CardSortTestsComponent},
   { path: 'pie-tree/:id/:index', component: PietreeComponent },
+  {path: 'study-closed', component: StudyClosedComponent},
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 
@@ -77,7 +79,8 @@ const appRoutes: Routes = [
     ResultMatrixComponent,
     SortingComponent,
     participantsFilterPipe,
-    datePipe
+    datePipe,
+    StudyClosedComponent
   ],
   imports: [
     HttpClientModule,
