@@ -21,6 +21,9 @@ export class CardSortResultsComponent implements OnInit {
   numberCompleted = 0;
   numberLeft = 0;
 
+  totalParticipants = 0;
+  numberIncludedParticipants =0;
+
   showingMatrix = false;
 
   root;
@@ -89,8 +92,13 @@ export class CardSortResultsComponent implements OnInit {
     this.numberCompleted = 0;
     this.numberLeft = 0;
 
+    this.numberIncludedParticipants = 0;
+    this.totalParticipants = 0;
+
     for (let i = 0; i < this.results.length; i++) {
+      this.totalParticipants ++;
       if (!this.results[i].exclude) {
+        this.numberIncludedParticipants++;
         if (this.results[i].finished) { this.numberCompleted++; }
         else { this.numberLeft++; }
       }
