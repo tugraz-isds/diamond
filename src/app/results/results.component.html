@@ -120,7 +120,7 @@
               {{i+1}}. {{test.tasks[i].text}}
 
               <div class="row mt-20">
-                <div class="col-sm-8">
+                <div class="col-sm-5">
                   <div style="display: inline-block">{{ "success" | translate }}</div>
                     <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually &#10;(possibly with deviations from the direct path) managed to find &#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
                     <div class="bar-container">
@@ -136,7 +136,7 @@
               </div>
 
               <div class="row mt-20">
-                  <div class="col-sm-8">
+                  <div class="col-sm-5">
                   <div style="display: inline-block">{{ "directness" | translate }}</div>
                   <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path &#10;to the correct answer without deviations, i.e. without navigating &#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
                   <div class="bar-container">
@@ -194,7 +194,7 @@
             <thead></thead>
             <tbody>
             <tr>
-                <td class="text-center skipped" style="width: 350px">SKIPPED</td>
+                <td class="skipped" style="width: 350px">{{"skipped" | translate}}</td>
                 <td *ngFor="let task of tasks" class="text-center" style="width: 25px">{{task.skipped}}</td>
             </tr>
             </tbody>
