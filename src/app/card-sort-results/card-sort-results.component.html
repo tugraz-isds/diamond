@@ -75,7 +75,7 @@
               </thead>
 
               <tbody>
-                <tr *ngFor="let result of results; let j = index;">
+                <tr *ngFor="let result of results; let j = index;" [ngClass]="{'exclude': result.excluded === true}">
                   <td>{{result.username}}</td>
                   <td>{{result.timestamp}}</td>
                   <!--
@@ -84,7 +84,9 @@
                   <td>{{result.mindset}}</td>
                   <td>{{result.feedback}}</td>
                   <td class="text-center">
-                    <input type="checkbox" [checked]="result.exclude" [(ngModel)]="result.exclude" (click)="updateResultParticipants(j)">
+                    <button *ngIf="!result.excluded" class="btn btn-primary" (click)="excludeParticpant(result, j)">Exclude</button>
+                    <button *ngIf="result.excluded" class="btn btn-primary" (click)="includeParticipant(result, j)">Include</button>
+<!--                    <input type="checkbox" [checked]="result.exclude" [(ngModel)]="result.exclude" (click)="updateResultParticipants(j)">-->
                   </td>
                   <td class="text-center">
                       <button type="button" class="btn btn-primary" (click)="showResultMatrix(result)">{{ "viewresults" | translate }}</button>

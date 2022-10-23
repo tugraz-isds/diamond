@@ -9,6 +9,7 @@ const treeTestTestSchema = new Schema({
     username: { type: String, required: true },
     timestamp: { type: String, required: true },
     feedback: { type: String, required: false },
+    excluded: {type: Boolean, required:false, default: false}
 });
 
 treeTestTestSchema.set('toJSON', { virtuals: true });

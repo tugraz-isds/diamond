@@ -284,6 +284,8 @@ export class CardSortTestsComponent implements OnInit {
           }
         );
         for(let test of json["tests"]){
+          let exclude = false;
+          if (test["excluded"] !== undefined) { exclude = test["excluded"]};
           const temp = {
             id: randomStudyId,
             results: test["results"],
@@ -291,7 +293,8 @@ export class CardSortTestsComponent implements OnInit {
             username: test["username"],
             timestamp: test["timestamp"],
             feedback: test["feedback"],
-            mindset: test["mindset"]
+            mindset: test["mindset"],
+            excluded: exclude,
           };
           //console.log(temp);
           this.postCardSortTestData(temp)

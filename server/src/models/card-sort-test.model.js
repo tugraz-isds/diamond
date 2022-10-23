@@ -10,6 +10,7 @@ const cardSortTestSchema = new Schema({
     timestamp: { type: String, required: true },
     mindset: { type: String, required: false},
     feedback: { type: String, required: false },
+    excluded: {type: Boolean, required:false, default: false}
 });
 
 cardSortTestSchema.set('toJSON', { virtuals: true });

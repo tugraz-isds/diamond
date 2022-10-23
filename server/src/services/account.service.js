@@ -12,6 +12,7 @@ module.exports = {
     // Tree Test
     getResultsById,
     saveResults,
+    editResult,
     saveFeedback,
     
     addTest,
@@ -26,6 +27,7 @@ module.exports = {
 
     // Card Sort
     getCardSortResultsById,
+    editCardSortResult,
     saveCardSortResults,
     saveCardSortMindset,
     saveCardSortFeedback,
@@ -129,7 +131,15 @@ async function getResultsById(id) {
     }
     return object;
 }
+async function editResult(updatedResult){
+    const result = await TreeTestTest.findOne({ "_id": updatedResult._id });
+    if(updatedResult.excluded !== undefined){
+        result["excluded"] = updatedResult["excluded"];
+    }
 
+    await result.save();
+    return result;
+}
 async function saveFeedback(resultParam) {
     const result = await TreeTestTest.findOne({ username: resultParam.username })
 
@@ -290,7 +300,15 @@ async function saveCardSortFeedback(resultParam) {
 
     return result;
 }
+async function editCardSortResult(updatedResult){
+    const result = await CardSortTest.findOne({ "_id": updatedResult._id });
+    if(updatedResult.excluded !== undefined){
+        result["excluded"] = updatedResult["excluded"];
+    }
 
+    await result.save();
+    return result;
+}
 async function saveCardSortResults(resultParam) {
     const result = new CardSortTest(resultParam);
     // save user

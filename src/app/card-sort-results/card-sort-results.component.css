@@ -59,3 +59,7 @@ body {
   .node {
     stroke: #fff;
     }
+.exclude{
+    background: #d2c9c9;
+    color: white;
+}

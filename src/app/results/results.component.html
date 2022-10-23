@@ -92,7 +92,7 @@
               </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let result of results; let j = index;">
+                <tr *ngFor="let result of results; let j = index;" [ngClass]="{'exclude': result.excluded === true}">
                     <td>{{result.username}}</td>
                     <td>{{result.timestamp}}</td>
                     <td class="text-right" style="padding-right: 10px">{{getDuration(result)}}</td>
@@ -100,8 +100,10 @@
                     <td class="text-right" style="padding-right: 10px">{{getSkippedTasks(result.results)}}</td>
                     <td class="text-right" style="padding-right: 10px">{{getCorrectTasks(result.results)}}</td>
                     <td>{{result.feedback}}</td>
-                    <td class="text-center">
-                      <input type="checkbox" [checked]="result.exclude" [(ngModel)]="result.exclude" (click)="updateResultParticipants(j)">      
+                    <td class="text-center" >
+                        <button *ngIf="!result.excluded" class="btn btn-primary" (click)="excludeParticpant(result, j)">Exclude</button>
+                        <button *ngIf="result.excluded" class="btn btn-primary" (click)="includeParticipant(result, j)">Include</button>
+<!--                      <input type="checkbox" [checked]="result.exclude" [(ngModel)]="result.exclude" (click)="updateResultParticipants(j)">-->
                     </td>
                     <td class="text-center">
                         <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal10" (click)="deleteParticipantResultIndex = j">{{ "delete" | translate }}</button>   
