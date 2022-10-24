@@ -217,7 +217,6 @@ export class TestsComponent implements OnInit {
     for(let test of this.tests){
       let number = 0;
       let id = test["id"];
-      console.log('test id ', id);
       this.resultsInformation(id)
         .subscribe(
           res => {
@@ -298,7 +297,7 @@ export class TestsComponent implements OnInit {
           feedback: test["feedback"],
           excluded: exclude,
         };
-        //console.log(temp);
+
         this.postTestData(temp)
           .subscribe(
             res => {
@@ -309,8 +308,6 @@ export class TestsComponent implements OnInit {
             }
           );
       }
-        
-      // console.log(study);
       this.getAllTests();
       };
       fileReader.readAsText(input.files[0]);

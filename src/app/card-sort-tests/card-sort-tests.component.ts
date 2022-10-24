@@ -253,7 +253,6 @@ export class CardSortTestsComponent implements OnInit {
         let json = null;
         fileReader.onload = (e) => {
           json = JSON.parse(e.target.result.toString());
-          //console.log(json);
           const randomStudyId = Math.random().toString(36).substring(2, 15);
           const study = {
             cards: json["cards"],
@@ -296,7 +295,7 @@ export class CardSortTestsComponent implements OnInit {
             mindset: test["mindset"],
             excluded: exclude,
           };
-          //console.log(temp);
+
           this.postCardSortTestData(temp)
             .subscribe(
               res => {
@@ -307,8 +306,6 @@ export class CardSortTestsComponent implements OnInit {
               }
             );
         }
-          
-        // console.log(study);
         this.getAllCardSortTests();
         };
         fileReader.readAsText(input.files[0]);
