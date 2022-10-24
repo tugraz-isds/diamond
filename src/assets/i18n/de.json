@@ -129,5 +129,6 @@
     "lastLaunched": "Zuletzt gestartet",
     "lastEnded": "Zuletzt beendet",
     "createdAT": "Erstellt",
-    "export": "Exportieren"
+    "export": "Exportieren",
+    "skipped": "Übersprungen"
 }

@@ -240,10 +240,10 @@ export class ResultsComponent implements OnInit {
       (<any>task).minTime = minTime;
       (<any>task).maxTime = maxTime;
 
-      let percentageDirect = Math.round((directSuccess + directFailure)*100 / this.results.length * 100) / 100;
-      let percentageCorrect = Math.round((directSuccess + indirectSuccess)*100 / this.results.length * 100) / 100;
-      (<any>task).percentageDirect = percentageDirect;
-      (<any>task).percentageCorrect = percentageCorrect;
+      let percentageDirect = Math.round((directSuccess + directFailure)*100 / this.numberIncludedParticipants * 100) / 100;
+      let percentageCorrect = Math.round((directSuccess + indirectSuccess)*100 / this.numberIncludedParticipants * 100) / 100;
+      (<any>task).percentageDirect = Math.round(percentageDirect * 10) / 10;
+      (<any>task).percentageCorrect = Math.round(percentageCorrect * 10) / 10;
 
 
       let averageTime = Math.round(time / this.results.length * 100) / 100;

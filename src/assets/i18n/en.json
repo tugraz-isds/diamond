@@ -129,5 +129,6 @@
     "lastLaunched": "Last Launched",
     "lastEnded": "Last Ended",
     "createdAT": "Created",
-    "export": "Export"
+    "export": "Export",
+    "skipped": "Skipped"
 }

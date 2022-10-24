@@ -48,6 +48,7 @@
           <div *ngIf="!showingMatrix">
 
             <p>{{ "excludedparticipants" | translate }}</p>
+            <p>{{numberIncludedParticipants}} {{"participants" | translate}} ({{totalParticipants}} {{"totalWith" | translate}} {{totalParticipants - numberIncludedParticipants}} {{"excluded" | translate}})</p>
             <button type="button" class="btn btn-warning"  (click)="exportUserData()">{{ "exportuserdata" | translate }}</button>
 
             <button type="button" class="btn btn-warning"  (click)="exportUserDataTransposed()">{{ "exportuserdatatransposed" | translate }}</button>

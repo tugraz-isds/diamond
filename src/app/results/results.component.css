@@ -75,6 +75,7 @@ body {
     }
 
   .skipped{
+      padding-left: 2em !important;
       font-weight: bold;
   }
 .spacer{
@@ -87,7 +88,7 @@ body {
     max-width: 100%;
 }
 .bar-width{
-    width: 70%;
+    width: 50%;
 }
 .percentage{
     margin-left: 4px;
