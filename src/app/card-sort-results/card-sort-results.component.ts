@@ -40,9 +40,6 @@ export class CardSortResultsComponent implements OnInit {
         .subscribe(
           res => {
             this.results = (res as any).result;
-            for (let i = 0; i < this.results.length; i++) {
-              this.results[i].exclude = false;
-            }
             this.test = (res as any).card_sort_test;
             this.prepareResults();
           },
@@ -83,7 +80,7 @@ export class CardSortResultsComponent implements OnInit {
   getIncludeResultNumber() {
     let inc = 0;
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) { inc++; }
+      if (!this.results[i].excluded) { inc++; }
     }
     return inc;
   }
@@ -97,7 +94,7 @@ export class CardSortResultsComponent implements OnInit {
 
     for (let i = 0; i < this.results.length; i++) {
       this.totalParticipants ++;
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         this.numberIncludedParticipants++;
         if (this.results[i].finished) { this.numberCompleted++; }
         else { this.numberLeft++; }
@@ -149,7 +146,7 @@ export class CardSortResultsComponent implements OnInit {
     }
     rows.push(cards);
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         const item = new Array<string>(cards.length);
         for (const group of this.results[i].results){
           for (const cardName of group.group_list) {
@@ -195,7 +192,7 @@ export class CardSortResultsComponent implements OnInit {
     }
     rows.push(cards);
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         const item = new Array<string>(cards.length);
         for (const group of this.results[i].results){
           for (const cardName of group.group_list) {
@@ -235,7 +232,7 @@ export class CardSortResultsComponent implements OnInit {
     rows.push(item);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         // tslint:disable-next-line:no-shadowed-variable
         const item = [
           this.results[i].username,
@@ -260,6 +257,53 @@ export class CardSortResultsComponent implements OnInit {
   }
 
 
+  excludeParticpant(result, index){
+    const temp = {
+      _id: result["_id"],
+      id: result["id"],
+      results: result["results"],
+      finished: result["finished"],
+      username: result["username"],
+      timestamp: result["timestamp"],
+      feedback: result["feedback"],
+      excluded: true
+    };
+    console.log(temp);
+    this.updateParticipantsTest(temp).subscribe(
+        res => {
+          console.log(res);
+          this.results[index].excluded = true;
+          this.prepareResults();
+        },
+        err => {
+          console.log(err);
+        }
+    );
+  }
+  includeParticipant(result, index){
+    const temp = {
+      _id: result["_id"],
+      id: result["id"],
+      results: result["results"],
+      finished: result["finished"],
+      username: result["username"],
+      timestamp: result["timestamp"],
+      feedback: result["feedback"],
+      excluded: false
+    };
+    this.updateParticipantsTest(temp).subscribe(
+        res => {
+          console.log(res);
+          this.results[index].excluded = false;
+          this.prepareResults();
+        },
+        err => {
+          console.log(err);
+        }
+    );
+  }
+
+
   exportUserDataTransposed(){
     let rows = [];
     const item = [
@@ -271,7 +315,7 @@ export class CardSortResultsComponent implements OnInit {
     rows.push(item);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         const item = [
           this.results[i].username,
           this.results[i].timestamp,
@@ -309,9 +353,6 @@ export class CardSortResultsComponent implements OnInit {
           res => {
             this.results = (res as any).result;
             // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < this.results.length; i++) {
-              this.results[i].exclude = false;
-            }
             this.test = (res as any).test[0];
             this.prepareResults();
           },
@@ -337,8 +378,16 @@ export class CardSortResultsComponent implements OnInit {
       })
   };
 
-  // http://localhost:48792
     // tslint:disable-next-line:max-line-length
     return this.http.post(this.userService.serverUrl + '/users/card-sort-result/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
+  }
+  updateParticipantsTest(object){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
+      })
+    };
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-result/edit', object, httpOptions);
   }
 }

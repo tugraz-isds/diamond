@@ -28,6 +28,7 @@ router.post('/results/add', saveResults);
 router.post('/results/feedback', saveFeedback);
 router.post('/results/:id', getResultsById);
 router.post('/result/delete', deleteIndividualResult);
+router.post('/result/edit', editResult);
 
 // Card Sort
 router.post('/card-sort-test/add', addCardSortTest);
@@ -43,7 +44,7 @@ router.post('/card-sort-results/mindset', saveCardSortMindset);
 router.post('/card-sort-results/feedback', saveCardSortFeedback);
 router.post('/card-sort-results/:id', getCardSortResultsById);
 router.post('/card-sort-result/delete', deleteIndividualCardSortResult);
-
+router.post('/card-sort-result/edit', editCardSortResult);
 
 module.exports = router;
 
@@ -163,6 +164,12 @@ function deleteIndividualResult(req, res, next) {
         .catch(err => next(err));
 }
 
+function editResult(req, res, next){
+    userService.editResult(req.body)
+        .then(() => res.json({}))
+        .catch(err => next(err));
+}
+
 function getAllTests(req, res, next) {
     userService.getAllTests(req.body)
         .then((tests) => res.json(tests))
@@ -186,7 +193,11 @@ function saveCardSortResults(req, res, next) {
         .then(() => res.json({}))
         .catch(err => next(err));
 }
-
+function editCardSortResult(req, res, next){
+    userService.editCardSortResult(req.body)
+        .then(() => res.json({}))
+        .catch(err => next(err));
+}
 function saveCardSortMindset(req, res, next){
     userService.saveCardSortMindset(req.body)
         .then(() => res.json({}))

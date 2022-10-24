@@ -184,9 +184,6 @@ export class TestsComponent implements OnInit {
         .subscribe(
           res => {
             this.results = (<any>res).result;
-            for (let i = 0; i < this.results.length; i++) {
-              this.results[i]["exclude"] = false;
-            }
             file = {...test, tests : this.results};
             this.downloadFile(file, id);
             console.log(file);
@@ -220,7 +217,6 @@ export class TestsComponent implements OnInit {
     for(let test of this.tests){
       let number = 0;
       let id = test["id"];
-      console.log('test id ', id);
       this.resultsInformation(id)
         .subscribe(
           res => {
@@ -243,7 +239,7 @@ export class TestsComponent implements OnInit {
 
     const files = input.files;
     
-    // var content = this.csvContent;    
+
     if (files && files.length) {
 
       const fileToRead = files[0];
@@ -290,15 +286,18 @@ export class TestsComponent implements OnInit {
         }
       );
       for(let test of json["tests"]){
+        let exclude = false;
+        if (test["excluded"] !== undefined) { exclude = test["excluded"]};
         const temp = {
           id: randomStudyId,
           results: test["results"],
           finished: test["finished"],
           username: test["username"],
           timestamp: test["timestamp"],
-          feedback: test["feedback"]
+          feedback: test["feedback"],
+          excluded: exclude,
         };
-        //console.log(temp);
+
         this.postTestData(temp)
           .subscribe(
             res => {
@@ -309,8 +308,6 @@ export class TestsComponent implements OnInit {
             }
           );
       }
-        
-      // console.log(study);
       this.getAllTests();
       };
       fileReader.readAsText(input.files[0]);

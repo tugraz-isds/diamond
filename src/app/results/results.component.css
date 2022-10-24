@@ -93,3 +93,7 @@ body {
 .percentage{
     margin-left: 4px;
 }
+.exclude{
+    background: #d2c9c9;
+    color: white;
+}

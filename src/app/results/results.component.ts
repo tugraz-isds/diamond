@@ -67,9 +67,6 @@ export class ResultsComponent implements OnInit {
         .subscribe(
           res => {
             this.results = (<any>res).result;
-            for (let i = 0; i < this.results.length; i++) {
-              this.results[i]["exclude"] = false;
-            }
             this.test = (<any>res).test[0];
             this.tree = (<any>res).test[0].tree;
             this.prepareResults();
@@ -109,7 +106,7 @@ export class ResultsComponent implements OnInit {
   getIncludeResultNumber() {
     let inc = 0;
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) inc++;
+      if (!this.results[i].excluded) inc++;
     }
     return inc;
   }
@@ -148,7 +145,7 @@ export class ResultsComponent implements OnInit {
     for (let i = 0; i < this.results.length; i++) {
       this.totalParticipants ++;
 
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         this.numberIncludedParticipants++;
         if (this.results[i].finished) this.numberCompleted++;
         else this.numberLeft++;
@@ -198,7 +195,7 @@ export class ResultsComponent implements OnInit {
     for (let i = 0; i < this.test.tasks.length; i++) {
       // go through every participant
       for (let j = 0; j < this.results.length; j++) {
-        if (this.results[j] && !this.results[j].exclude) {
+        if (this.results[j] && !this.results[j].excluded) {
           if (this.results[j].results[i]) {
 
             if (this.results[j].results[i].time < minTime) {
@@ -488,7 +485,7 @@ removeKeys(obj, keys){
     for (let k = 0; k < this.test.tasks.length; k++) { 
       // go through every result
       for (let i = 0; i < this.results.length; i++) {
-        if (!this.results[i].exclude) {
+        if (!this.results[i].excluded) {
           if (this.results[i].results[k]) {
             if (!destination[this.results[i].results[k].answer]) {
               destination[this.results[i].results[k].answer] = 1;
@@ -518,7 +515,7 @@ removeKeys(obj, keys){
   getTaskResults() {
     let backtracking = false;
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         for (let j = 0; j < this.results[i].results.length; j++) {
           this.totalTasksDone++;
           if (this.test.tasks[j] && this.results[i].results[j].answer && this.results[i].results[j].answer === this.test.tasks[j].id) {
@@ -577,7 +574,7 @@ removeKeys(obj, keys){
   exportCSV() {
     let rows = [];
     for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].exclude) {
+      if (!this.results[i].excluded) {
         let item = [
           this.results[i].username, 
           this.results[i].timestamp, 
@@ -638,6 +635,51 @@ removeKeys(obj, keys){
        link.click(); // This will download the data file named "my_data.csv".
   }
 
+  excludeParticpant(result, index){
+    const temp = {
+      _id: result["_id"],
+      id: result["id"],
+      results: result["results"],
+      finished: result["finished"],
+      username: result["username"],
+      timestamp: result["timestamp"],
+      feedback: result["feedback"],
+      excluded: true
+    };
+    //console.log(temp);
+    this.updateParticipantsTest(temp).subscribe(
+        res => {
+          console.log(res);
+          this.results[index].excluded = true;
+          this.prepareResults();
+        },
+        err => {
+          console.log(err);
+        }
+    );
+  }
+  includeParticipant(result, index){
+    const temp = {
+      _id: result["_id"],
+      id: result["id"],
+      results: result["results"],
+      finished: result["finished"],
+      username: result["username"],
+      timestamp: result["timestamp"],
+      feedback: result["feedback"],
+      excluded: false
+    };
+    this.updateParticipantsTest(temp).subscribe(
+        res => {
+          console.log(res);
+          this.results[index].excluded = false;
+          this.prepareResults();
+        },
+        err => {
+          console.log(err);
+        }
+    );
+  }
   prepareDeleteParticipantResult() {
     console.log("prepared!!");
     console.log(this.results);
@@ -648,9 +690,6 @@ removeKeys(obj, keys){
         .subscribe(
           res => {
             this.results = (<any>res).result;
-            for (let i = 0; i < this.results.length; i++) {
-              this.results[i]["exclude"] = false;
-            }
             this.test = (<any>res).test[0];
             this.tree = (<any>res).test[0].tree;
             this.prepareResults();
@@ -676,7 +715,17 @@ removeKeys(obj, keys){
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
+
     return this.http.post(this.userService.serverUrl + '/users/result/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
+  }
+
+  updateParticipantsTest(object){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
+      })
+    };
+    return this.http.post(this.userService.serverUrl + '/users/result/edit', object, httpOptions);
   }
 }
