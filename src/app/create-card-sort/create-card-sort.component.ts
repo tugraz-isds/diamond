@@ -242,7 +242,6 @@ export class CreateCardSortComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    // return this.http.post('http://localhost:48792/users/test/add', object,
     return this.http.post(this.userService.serverUrl + '/users/card-sort-test/add', object, httpOptions);
   }
 
@@ -255,7 +254,6 @@ export class CreateCardSortComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    // return this.http.post('http://localhost:48792/users/test/get', id,
     return this.http.post(this.userService.serverUrl + '/users/card-sort-test/get', id, httpOptions);
   }
 
@@ -267,7 +265,6 @@ export class CreateCardSortComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    // return this.http.post('http://localhost:48792/users/test/edit',
     return this.http.post(this.userService.serverUrl +  '/users/card-sort-test/edit', object, httpOptions);
   }
 

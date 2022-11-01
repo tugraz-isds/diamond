@@ -10,20 +10,20 @@ const CardSortStudy = db.CardSortStudy;
 
 module.exports = {
     // Tree Test
-    getResultsById,
-    saveResults,
-    editResult,
-    saveFeedback,
+    getTreeTestsById,
+    saveTreeTests,
+    editTreeTest,
+    saveTreeTestFeedback,
     
-    addTest,
-    getTest,
-    editTest,
-    deleteTest,
-    getAllTests,
+    addTreeStudy,
+    getTreeStudy,
+    editTreeStudy,
+    deleteTreeStudy,
+    getAllTreeStudies,
 
-    deleteIndividualResult,
-    testPassword,
-    passwordRequired,
+    deleteIndividualTreeTest,
+    treeStudyPassword,
+    treeStudypasswordRequired,
 
     // Card Sort
     getCardSortResultsById,
@@ -121,148 +121,147 @@ async function _delete(id) {
 //#######################################
 
 
-async function getResultsById(id) {
-    const result = await TreeTestTest.find({ "id" : id });
-    const test = await TreeTestStudy.find({ "id" : id });
-    const card_sort_test = await CardSortStudy.find({ "id" : id });
+async function getTreeTestsById(id) {
+    const treeTest = await TreeTestTest.find({ "id" : id });
+    const treeStudy = await TreeTestStudy.find({ "id" : id });
     const object = {
-        result: result,
-        test: test,
+        result: treeTest,
+        test: treeStudy,
     }
     return object;
 }
-async function editResult(updatedResult){
-    const result = await TreeTestTest.findOne({ "_id": updatedResult._id });
-    if(updatedResult.excluded !== undefined){
-        result["excluded"] = updatedResult["excluded"];
+async function editTreeTest(updatedTreeTest){
+    const treeTest = await TreeTestTest.findOne({ "_id": updatedTreeTest._id });
+    if(updatedTreeTest.excluded !== undefined){
+        treeTest["excluded"] = updatedTreeTest["excluded"];
     }
 
-    await result.save();
-    return result;
+    await treeTest.save();
+    return treeTest;
 }
-async function saveFeedback(resultParam) {
-    const result = await TreeTestTest.findOne({ username: resultParam.username })
+async function saveTreeTestFeedback(testParam) {
+    const treeTestTest = await TreeTestTest.findOne({ username: testParam.username })
 
-    result.feedback = resultParam.feedback;
+    treeTestTest.feedback = testParam.feedback;
 
-    await result.save();
+    await treeTestTest.save();
 
-    return result;
+    return treeTestTest;
 }
 
 
-async function saveResults(resultParam) {
-    const result = new TreeTestTest(resultParam);
+async function saveTreeTests(resultParam) {
+    const treeTests = new TreeTestTest(resultParam);
     // save user
-    await result.save();
+    await treeTests.save();
 }
 
 
-async function addTest(testParam) {
-    const test = new TreeTestStudy(testParam);
+async function addTreeStudy(testParam) {
+    const treeStudy = new TreeTestStudy(testParam);
     // save user
-    await test.save();
+    await treeStudy.save();
 }
 
-async function getAllTests(data) {
+async function getAllTreeStudies(data) {
 
-    const tests = await TreeTestStudy.find({ "user" : data.user })
-    return tests;
+    const treeStudy = await TreeTestStudy.find({ "user" : data.user })
+    return treeStudy;
 }
 
-async function passwordRequired(studyId) {
+async function treeStudypasswordRequired(studyId) {
 
-    const test = await TreeTestStudy.find({ "id" : studyId });
+    const treeStudy = await TreeTestStudy.find({ "id" : studyId });
 
-    if (!test[0].launched) {
+    if (!treeStudy[0].launched) {
         return 'redirect';
     }
 
-    if (test[0].password && test[0].password.length) {
+    if (treeStudy[0].password && treeStudy[0].password.length) {
        return true;
     } else {
        return false;
     }
 }
 
-async function testPassword(body) {
+async function treeStudyPassword(body) {
 
-    const test = await TreeTestStudy.find({ "id" : body.id });
-    if (test && test[0].password === body.password) {
-        return test[0];
+    const treeStudy = await TreeTestStudy.find({ "id" : body.id });
+    if (treeStudy && treeStudy[0].password === body.password) {
+        return treeStudy[0];
     }
     return false;
 }
 
-async function getTest(id) {
+async function getTreeStudy(id) {
 
-    const test = await TreeTestStudy.find({ "id" : id });
-    return test;
+    const study = await TreeTestStudy.find({ "id" : id });
+    return study;
 }
 
-async function deleteTest(testId) {
-    const test = await TreeTestStudy.find({ "_id" : testId });
-    await test[0].delete();
+async function deleteTreeStudy(testId) {
+    const treeStudy = await TreeTestStudy.find({ "_id" : testId });
+    await treeStudy[0].delete();
     return 1;
 }
 
-async function deleteIndividualResult(resultId) {
-    const result = await TreeTestTest.find({ "_id" : resultId });
-    await result[0].delete();
+async function deleteIndividualTreeTest(resultId) {
+    const treeTest = await TreeTestTest.find({ "_id" : resultId });
+    await treeTest[0].delete();
     return 1;
 }
 
-async function editTest(updatedTest) {
+async function editTreeStudy(updatedTest) {
 
-    const test = await TreeTestStudy.find({ "id" : updatedTest.id });
+    const treeStudy = await TreeTestStudy.find({ "id" : updatedTest.id });
 
     //Object.assign(test, updatedTest);
     if (updatedTest.name) {
-        test[0].name = updatedTest.name;
+        treeStudy[0].name = updatedTest.name;
     }
     if (updatedTest.password) {
         if (updatedTest.password !== "empty") {
-            test[0].password = updatedTest.password;
+            treeStudy[0].password = updatedTest.password;
         } else {
-            test[0].password = "";
+            treeStudy[0].password = "";
         }
     }
     if (updatedTest.tree) {
-        test[0].tree = updatedTest.tree;
+        treeStudy[0].tree = updatedTest.tree;
     }
     if (updatedTest.tasks) {
-        test[0].tasks = updatedTest.tasks;
+        treeStudy[0].tasks = updatedTest.tasks;
     }
     if (updatedTest.welcomeMessage) {
-        test[0].welcomeMessage = updatedTest.welcomeMessage;
+        treeStudy[0].welcomeMessage = updatedTest.welcomeMessage;
     }
     if (updatedTest.instructions) {
-        test[0].instructions = updatedTest.instructions;
+        treeStudy[0].instructions = updatedTest.instructions;
     }
     if (updatedTest.thankYouScreen) {
-        test[0].thankYouScreen = updatedTest.thankYouScreen;
+        treeStudy[0].thankYouScreen = updatedTest.thankYouScreen;
     }
     if (updatedTest.leafNodes !== undefined) {
-        test[0].leafNodes = updatedTest.leafNodes;
+        treeStudy[0].leafNodes = updatedTest.leafNodes;
     }
     if (updatedTest.orderNumbers !== undefined) {
-        test[0].orderNumbers = updatedTest.orderNumbers;
+        treeStudy[0].orderNumbers = updatedTest.orderNumbers;
     }
     if (updatedTest.launched !== undefined) {
-        test[0].launched = updatedTest.launched;
+        treeStudy[0].launched = updatedTest.launched;
     }
     if(updatedTest.lastLaunched){
-        test[0].lastLaunched = updatedTest.lastLaunched
+        treeStudy[0].lastLaunched = updatedTest.lastLaunched
     }
     if(updatedTest.lastEnded){
-        test[0].lastEnded = updatedTest.lastEnded
+        treeStudy[0].lastEnded = updatedTest.lastEnded
     }
     if(updatedTest.isLaunchable !== undefined){
-        test[0].isLaunchable = updatedTest.isLaunchable
+        treeStudy[0].isLaunchable = updatedTest.isLaunchable
     }
-    await test[0].save();
+    await treeStudy[0].save();
 
-    return test[0];
+    return treeStudy[0];
 
 }
 

@@ -92,8 +92,7 @@ export class TestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/test/getbyuserid', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/getbyuserid', object, httpOptions);
   }
 
   getLink(id) {
@@ -160,8 +159,7 @@ export class TestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/test/delete', {id: this.deleteTestId}, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/delete', {id: this.deleteTestId}, httpOptions);
   }
 
   editTest(data) {
@@ -173,7 +171,7 @@ export class TestsComponent implements OnInit {
       })
   };
   //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/test/edit', data, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/edit', data, httpOptions);
   }
 
   export(studyId){
@@ -207,8 +205,7 @@ export class TestsComponent implements OnInit {
         'Content-Type':  'application/json',
       })
   };
-  // return this.http.post('http://localhost:48792/users/results/' + 
-    return this.http.post(this.userService.serverUrl + '/users/results/' + id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + id, "", httpOptions);
   }
 
   setNumberOfParticipants(){
@@ -323,8 +320,8 @@ export class TestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    //return this.http.post('http://localhost:48792/users/test/add', object,
-    return this.http.post(this.userService.serverUrl + '/users/test/add', object, httpOptions);
+    //return this.http.post('http://localhost:48792/users/tree-study/add', object,
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/add', object, httpOptions);
   }
 
   postTestData(object) {
@@ -335,8 +332,7 @@ export class TestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/results/add', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/add', object, httpOptions);
   }
 
   

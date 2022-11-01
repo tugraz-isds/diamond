@@ -100,7 +100,7 @@ export class ResultsComponent implements OnInit {
       })
   };
   // return this.http.post('http://localhost:48792/users/results/' + 
-    return this.http.post(this.userService.serverUrl + '/users/results/' + this.id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
   }
 
   getIncludeResultNumber() {
@@ -715,8 +715,7 @@ removeKeys(obj, keys){
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-
-    return this.http.post(this.userService.serverUrl + '/users/result/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-test/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
   }
 
   updateParticipantsTest(object){
@@ -726,6 +725,6 @@ removeKeys(obj, keys){
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/result/edit', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-test/edit', object, httpOptions);
   }
 }

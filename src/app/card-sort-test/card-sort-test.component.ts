@@ -35,14 +35,12 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
 
 
   getCardSortTestData() {
-    /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
       })
     };
-    //return this.http.post('http://localhost:48792/users/results/' +
-    return this.http.post(this.userService.serverUrl +  '/users/results/' + this.id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl +  '/users/card-sort-results/' + this.id, "", httpOptions);
   }
 
 

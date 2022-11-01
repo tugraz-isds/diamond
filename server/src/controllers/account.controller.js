@@ -15,20 +15,20 @@ router.get('/:id', getById);
 router.put('/:id', update);
 router.post('/:id', _delete);
 
-// Tree Test
-router.post('/test/add', addTest);
-router.post('/test/get', getTest);
-router.post('/test/password', testPassword);
-router.post('/test/passwordrequired', passwordRequired);
-router.post('/test/edit', editTest);
-router.post('/test/delete', deleteTest);
-router.post('/test/getbyuserid', getAllTests);
-
-router.post('/results/add', saveResults);
-router.post('/results/feedback', saveFeedback);
-router.post('/results/:id', getResultsById);
-router.post('/result/delete', deleteIndividualResult);
-router.post('/result/edit', editResult);
+// Tree Study
+router.post('/tree-study/add', addTreeStudy);
+router.post('/tree-study/get', getTreeStudy);
+router.post('/tree-study/password', treeStudyPassword);
+router.post('/tree-study/passwordrequired', treeStudypasswordRequired);
+router.post('/tree-study/edit', editTreeStudy);
+router.post('/tree-study/delete', deleteTreeStudy);
+router.post('/tree-study/getbyuserid', getAllTreeStudies);
+// Tree Tests
+router.post('/tree-tests/add', saveTreeTests);
+router.post('/tree-tests/feedback', saveTreeTestFeedback);
+router.post('/tree-tests/:id', getTreeTestsById);
+router.post('/tree-test/delete', deleteIndividualTreeTest);
+router.post('/tree-test/edit', editTreeTest);
 
 // Card Sort
 router.post('/card-sort-test/add', addCardSortTest);
@@ -104,74 +104,74 @@ function _delete(req, res, next) {
 //##########Tree Test Functions##########
 //#######################################
 
-function getResultsById(req, res, next) {
-    userService.getResultsById(req.params.id)
+function getTreeTestsById(req, res, next) {
+    userService.getTreeTestsById(req.params.id)
         .then(results => results ? res.json(results) : res.sendStatus(404))
         .catch(err => next(err));
 }
 
-function saveResults(req, res, next) {
-    userService.saveResults(req.body)
+function saveTreeTests(req, res, next) {
+    userService.saveTreeTests(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function saveFeedback(req, res, next) {
-    userService.saveFeedback(req.body)
+function saveTreeTestFeedback(req, res, next) {
+    userService.saveTreeTestFeedback(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function addTest(req, res, next) { 
-    userService.addTest(req.body)
+function addTreeStudy(req, res, next) {
+    userService.addTreeStudy(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function getTest(req, res, next) {
-    userService.getTest(req.body.id)
+function getTreeStudy(req, res, next) {
+    userService.getTreeStudy(req.body.id)
         .then((test) => res.json(test[0]))
         .catch(err => next(err));
 }
 
-function passwordRequired(req, res, next) {
-    userService.passwordRequired(req.body.id)
+function treeStudypasswordRequired(req, res, next) {
+    userService.treeStudypasswordRequired(req.body.id)
         .then(bool => res.json(bool))
         .catch(err => next(err));
 }
 
-function testPassword(req, res, next) {
-    userService.testPassword(req.body)
+function treeStudyPassword(req, res, next) {
+    userService.treeStudyPassword(req.body)
         .then((test) => res.json(test))
         .catch(err => next(err));
 }
 
-function editTest(req, res, next) {
-    userService.editTest(req.body)
+function editTreeStudy(req, res, next) {
+    userService.editTreeStudy(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function deleteTest(req, res, next) {
-    userService.deleteTest(req.body.id)
+function deleteTreeStudy(req, res, next) {
+    userService.deleteTreeStudy(req.body.id)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function deleteIndividualResult(req, res, next) {
-    userService.deleteIndividualResult(req.body.id)
+function deleteIndividualTreeTest(req, res, next) {
+    userService.deleteIndividualTreeTest(req.body.id)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function editResult(req, res, next){
-    userService.editResult(req.body)
+function editTreeTest(req, res, next){
+    userService.editTreeTest(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function getAllTests(req, res, next) {
-    userService.getAllTests(req.body)
+function getAllTreeStudies(req, res, next) {
+    userService.getAllTreeStudies(req.body)
         .then((tests) => res.json(tests))
         .catch(err => next(err));
 }
