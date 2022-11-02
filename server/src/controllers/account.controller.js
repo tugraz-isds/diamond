@@ -31,20 +31,20 @@ router.post('/tree-test/delete', deleteIndividualTreeTest);
 router.post('/tree-test/edit', editTreeTest);
 
 // Card Sort
-router.post('/card-sort-test/add', addCardSortTest);
-router.post('/card-sort-test/get', getCardSortTest);
-router.post('/card-sort-test/password', cardSortTestPassword);
-router.post('/card-sort-test/passwordrequired', cardSortPasswordRequired);
-router.post('/card-sort-test/edit', editCardSortTest);
-router.post('/card-sort-test/delete', deleteCardSortTest);
-router.post('/card-sort-test/getbyuserid', getAllCardSortTests);
+router.post('/card-sort-study/add', addCardSortStudy);
+router.post('/card-sort-study/get', getCardSortStudy);
+router.post('/card-sort-study/password', cardSortStudyPassword);
+router.post('/card-sort-study/passwordrequired', cardSortStudyPasswordRequired);
+router.post('/card-sort-study/edit', editCardSortStudy);
+router.post('/card-sort-study/delete', deleteCardSortStudy);
+router.post('/card-sort-study/getbyuserid', getAllCardSortStudies);
 
-router.post('/card-sort-results/add', saveCardSortResults);
-router.post('/card-sort-results/mindset', saveCardSortMindset);
-router.post('/card-sort-results/feedback', saveCardSortFeedback);
-router.post('/card-sort-results/:id', getCardSortResultsById);
-router.post('/card-sort-result/delete', deleteIndividualCardSortResult);
-router.post('/card-sort-result/edit', editCardSortResult);
+router.post('/card-sort-tests/add', saveCardSortTests);
+router.post('/card-sort-tests/mindset', saveCardSortMindset);
+router.post('/card-sort-tests/feedback', saveCardSortFeedback);
+router.post('/card-sort-tests/:id', getCardSortTestsById);
+router.post('/card-sort-test/delete', deleteIndividualCardSortTest);
+router.post('/card-sort-test/edit', editCardSortTest);
 
 module.exports = router;
 
@@ -182,19 +182,19 @@ function getAllTreeStudies(req, res, next) {
 //#######################################
 
 
-function getCardSortResultsById(req, res, next) {
-    userService.getCardSortResultsById(req.params.id)
+function getCardSortTestsById(req, res, next) {
+    userService.getCardSortTestsById(req.params.id)
         .then(results => results ? res.json(results) : res.sendStatus(404))
         .catch(err => next(err));
 }
 
-function saveCardSortResults(req, res, next) {
-    userService.saveCardSortResults(req.body)
+function saveCardSortTests(req, res, next) {
+    userService.saveCardSortTests(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
-function editCardSortResult(req, res, next){
-    userService.editCardSortResult(req.body)
+function editCardSortTest(req, res, next){
+    userService.editCardSortTest(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
@@ -211,50 +211,50 @@ function saveCardSortFeedback(req, res, next) {
 }
 
 
-function cardSortPasswordRequired(req, res, next) {
-    userService.cardSortPasswordRequired(req.body.id)
+function cardSortStudyPasswordRequired(req, res, next) {
+    userService.cardSortStudyPasswordRequired(req.body.id)
         .then(bool => res.json(bool))
         .catch(err => next(err));
 }
 
-function addCardSortTest(req, res, next) {
-    userService.addCardSortTest(req.body)
+function addCardSortStudy(req, res, next) {
+    userService.addCardSortStudy(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function getCardSortTest(req, res, next) {
-    userService.getCardSortTest(req.body.id)
+function getCardSortStudy(req, res, next) {
+    userService.getCardSortStudy(req.body.id)
         .then((test) => res.json(test[0]))
         .catch(err => next(err));
 }
 
-function getAllCardSortTests(req, res, next) {
-    userService.getAllCardSortTests(req.body)
+function getAllCardSortStudies(req, res, next) {
+    userService.getAllCardSortStudies(req.body)
         .then((tests) => res.json(tests))
         .catch(err => next(err));
 }
 
-function cardSortTestPassword(req, res, next) {
-    userService.cardSortTestPassword(req.body)
+function cardSortStudyPassword(req, res, next) {
+    userService.cardSortStudyPassword(req.body)
         .then((test) => res.json(test))
         .catch(err => next(err));
 }
 
-function editCardSortTest(req, res, next) {
-    userService.editCardSortTest(req.body)
+function editCardSortStudy(req, res, next) {
+    userService.editCardSortStudy(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function deleteIndividualCardSortResult(req, res, next) {
-    userService.deleteIndividualCardSortResult(req.body.id)
+function deleteIndividualCardSortTest(req, res, next) {
+    userService.deleteIndividualCardSortTest(req.body.id)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
 
-function deleteCardSortTest(req, res, next) {
-    userService.deleteCardSortTest(req.body.id)
+function deleteCardSortStudy(req, res, next) {
+    userService.deleteCardSortStudy(req.body.id)
         .then(() => res.json({}))
         .catch(err => next(err));
 }

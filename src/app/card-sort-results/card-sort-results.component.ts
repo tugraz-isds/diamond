@@ -74,7 +74,7 @@ export class CardSortResultsComponent implements OnInit {
       })
   };
   // return this.http.post('http://localhost:48792/users/results/' +
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-results/' + this.id, '', httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/' + this.id, '', httpOptions);
   }
 
   getIncludeResultNumber() {
@@ -379,7 +379,7 @@ export class CardSortResultsComponent implements OnInit {
   };
 
     // tslint:disable-next-line:max-line-length
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-result/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
   }
   updateParticipantsTest(object){
     const httpOptions = {
@@ -388,6 +388,6 @@ export class CardSortResultsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-result/edit', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/edit', object, httpOptions);
   }
 }

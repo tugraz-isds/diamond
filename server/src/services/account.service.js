@@ -26,21 +26,21 @@ module.exports = {
     treeStudypasswordRequired,
 
     // Card Sort
-    getCardSortResultsById,
-    editCardSortResult,
-    saveCardSortResults,
+    getCardSortTestsById,
+    editCardSortTest,
+    saveCardSortTests,
     saveCardSortMindset,
     saveCardSortFeedback,
 
-    addCardSortTest,
-    getCardSortTest,
-    editCardSortTest,
-    deleteCardSortTest,
-    getAllCardSortTests,
+    addCardSortStudy,
+    getCardSortStudy,
+    editCardSortStudy,
+    deleteCardSortStudy,
+    getAllCardSortStudies,
 
-    deleteIndividualCardSortResult,
-    cardSortTestPassword,
-    cardSortPasswordRequired,
+    deleteIndividualCardSortTest,
+    cardSortStudyPassword,
+    cardSortStudyPasswordRequired,
 
     // User
     authenticate,
@@ -270,12 +270,12 @@ async function editTreeStudy(updatedTest) {
 //######### Card Sort Functions #########
 //#######################################
 
-async function getCardSortResultsById(id) {
-    const result = await CardSortTest.find({ "id" : id });
-    const card_sort_test = await CardSortStudy.find({ "id" : id });
+async function getCardSortTestsById(id) {
+    const cardSortTest = await CardSortTest.find({ "id" : id });
+    const cardSortStudy = await CardSortStudy.find({ "id" : id });
     const object = {
-        result: result,
-        card_sort_test: card_sort_test,
+        result: cardSortTest,
+        card_sort_test: cardSortStudy,
     }
     return object;
 }
@@ -299,118 +299,114 @@ async function saveCardSortFeedback(resultParam) {
 
     return result;
 }
-async function editCardSortResult(updatedResult){
-    const result = await CardSortTest.findOne({ "_id": updatedResult._id });
-    if(updatedResult.excluded !== undefined){
-        result["excluded"] = updatedResult["excluded"];
+async function editCardSortTest(updatedCardSortTest){
+    const cardSortTest = await CardSortTest.findOne({ "_id": updatedCardSortTest._id });
+    if(updatedCardSortTest.excluded !== undefined){
+        cardSortTest["excluded"] = updatedCardSortTest["excluded"];
     }
 
-    await result.save();
-    return result;
+    await cardSortTest.save();
+    return cardSortTest;
 }
-async function saveCardSortResults(resultParam) {
+async function saveCardSortTests(resultParam) {
     const result = new CardSortTest(resultParam);
     // save user
     await result.save();
 }
 
-async function cardSortPasswordRequired(studyId) {
-
-    const test = await CardSortStudy.find({ "id" : studyId });
-    if (!test[0].launched) {
+async function cardSortStudyPasswordRequired(studyId) {
+    const cardSortStudy = await CardSortStudy.find({ "id" : studyId });
+    if (!cardSortStudy[0].launched) {
         return 'redirect';
     }
-    if (test[0].password && test[0].password.length) {
+    if (cardSortStudy[0].password && cardSortStudy[0].password.length) {
         return true;
     } else {
         return false;
     }
 }
 
-async function addCardSortTest(testParam) {
-    const test = new CardSortStudy(testParam);
+async function addCardSortStudy(testParam) {
+    const cardSortStudy = new CardSortStudy(testParam);
     // save user
-    await test.save();
+    await cardSortStudy.save();
 }
 
-async function getAllCardSortTests(data) {
+async function getAllCardSortStudies(data) {
 
-    const tests = await CardSortStudy.find({ "user" : data.user })
-    return tests;
+    const cardSortStudies = await CardSortStudy.find({ "user" : data.user })
+    return cardSortStudies;
 }
 
-async function cardSortTestPassword(body) {
-
-    const test = await CardSortStudy.find({ "id" : body.id });
-    if (test && test[0].password === body.password) {
-        return test[0];
+async function cardSortStudyPassword(body) {
+    const cardSortStudy = await CardSortStudy.find({ "id" : body.id });
+    if (cardSortStudy && cardSortStudy[0].password === body.password) {
+        return cardSortStudy[0];
     }
     return false;
 }
 
-async function getCardSortTest(id) {
-
-    const test = await CardSortStudy.find({ "id" : id });
-    return test;
+async function getCardSortStudy(id) {
+    const cardSortStudy = await CardSortStudy.find({ "id" : id });
+    return cardSortStudy;
 }
 
-async function deleteCardSortTest(testId) {
-    const test = await CardSortStudy.find({ "_id" : testId });
-    await test[0].delete();
+async function deleteCardSortStudy(studyId) {
+    const cardSortStudy = await CardSortStudy.find({ "_id" : studyId });
+    await cardSortStudy[0].delete();
     return 1;
 }
 
-async function deleteIndividualCardSortResult(resultId) {
-    const result = await CardSortTest.find({ "_id" : resultId });
-    await result[0].delete();
+async function deleteIndividualCardSortTest(resultId) {
+    const cardSortTest = await CardSortTest.find({ "_id" : resultId });
+    await cardSortTest[0].delete();
     return 1;
 }
 
-async function editCardSortTest(updatedTest) {
+async function editCardSortStudy(updatedStudy) {
 
-    const test = await CardSortStudy.find({ "id" : updatedTest.id });
+    const cardSortStudy = await CardSortStudy.find({ "id" : updatedStudy.id });
 
-    //Object.assign(test, updatedTest);
-    if (updatedTest.name) {
-        test[0].name = updatedTest.name;
+    if (updatedStudy.name) {
+        cardSortStudy[0].name = updatedStudy.name;
     }
-    if (updatedTest.password) {
-        if (updatedTest.password !== "empty") {
-            test[0].password = updatedTest.password;
+    if (updatedStudy.password) {
+        if (updatedStudy.password !== "empty") {
+            cardSortStudy[0].password = updatedStudy.password;
         } else {
-            test[0].password = "";
+            cardSortStudy[0].password = "";
         }
     }
-    if (updatedTest.cards) {
-        test[0].cards = updatedTest.cards;
+    if (updatedStudy.cards) {
+        cardSortStudy[0].cards = updatedStudy.cards;
     }
-    if (updatedTest.welcomeMessage) {
-        test[0].welcomeMessage = updatedTest.welcomeMessage;
+    if (updatedStudy.welcomeMessage) {
+        cardSortStudy[0].welcomeMessage = updatedStudy.welcomeMessage;
     }
-    if (updatedTest.instructions) {
-        test[0].instructions = updatedTest.instructions;
+    if (updatedStudy.instructions) {
+        cardSortStudy[0].instructions = updatedStudy.instructions;
     }
-    if (updatedTest.explanation) {
-        test[0].explanation = updatedTest.explanation;
+    if (updatedStudy.explanation) {
+        cardSortStudy[0].explanation = updatedStudy.explanation;
     }
-    if (updatedTest.thankYouScreen) {
-        test[0].thankYouScreen = updatedTest.thankYouScreen;
+    if (updatedStudy.thankYouScreen) {
+        cardSortStudy[0].thankYouScreen = updatedStudy.thankYouScreen;
     }
-    if (updatedTest.subCategories !== undefined) {
-        test[0].subCategories = updatedTest.subCategories;
+    if (updatedStudy.subCategories !== undefined) {
+        cardSortStudy[0].subCategories = updatedStudy.subCategories;
     }
-    if (updatedTest.launched !== undefined) {
-        test[0].launched = updatedTest.launched;
+    if (updatedStudy.launched !== undefined) {
+        cardSortStudy[0].launched = updatedStudy.launched;
     }
-    if(updatedTest.lastLaunched){
-        test[0].lastLaunched = updatedTest.lastLaunched
+    if(updatedStudy.lastLaunched){
+        cardSortStudy[0].lastLaunched = updatedStudy.lastLaunched
     }
-    if(updatedTest.lastEnded){
-        test[0].lastEnded = updatedTest.lastEnded
+    if(updatedStudy.lastEnded){
+        cardSortStudy[0].lastEnded = updatedStudy.lastEnded
     }
     
-    await test[0].save();
+    await cardSortStudy[0].save();
 
-    return test[0];
+    return cardSortStudy[0];
 
 }
