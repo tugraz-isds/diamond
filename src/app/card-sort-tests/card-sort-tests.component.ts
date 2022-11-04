@@ -89,8 +89,7 @@ export class CardSortTestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/getbyuserid', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/getbyuserid', object, httpOptions);
   }
 
   getLink(id) {
@@ -156,8 +155,7 @@ export class CardSortTestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/delete', {id: this.deleteCardSortTestId}, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/delete', {id: this.deleteCardSortTestId}, httpOptions);
   }
 
   editCardSortTest(data) {
@@ -168,8 +166,7 @@ export class CardSortTestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/edit', data, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/edit', data, httpOptions);
   }
 
   // Export Study
@@ -206,8 +203,7 @@ export class CardSortTestsComponent implements OnInit {
           'Content-Type':  'application/json',
         })
     };
-    // return this.http.post('http://localhost:48792/users/results/' +
-      return this.http.post(this.userService.serverUrl + '/users/card-sort-results/' + id, '', httpOptions);
+      return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/' + id, '', httpOptions);
     }
 
     setNumberOfParticipants(){
@@ -321,7 +317,7 @@ export class CardSortTestsComponent implements OnInit {
           Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
         })
       };
-      return this.http.post(this.userService.serverUrl + '/users/card-sort-test/add', object, httpOptions);
+      return this.http.post(this.userService.serverUrl + '/users/card-sort-study/add', object, httpOptions);
     }
 
     postCardSortTestData(object) {
@@ -332,6 +328,6 @@ export class CardSortTestsComponent implements OnInit {
           Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
         })
       };
-      return this.http.post(this.userService.serverUrl + '/users/card-sort-results/add', object, httpOptions);
+      return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/add', object, httpOptions);
     }
 }

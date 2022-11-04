@@ -50,8 +50,7 @@ export class TestComponent implements OnDestroy, OnInit {
         'Content-Type':  'application/json',
       })
   };
-  //return this.http.post('http://localhost:48792/users/results/' + 
-    return this.http.post(this.userService.serverUrl +  '/users/results/' + this.id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl +  '/users/tree-tests/' + this.id, "", httpOptions);
   }
 
   ngOnDestroy() {
@@ -279,7 +278,7 @@ export class TestComponent implements OnDestroy, OnInit {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
       })
   };
-    return this.http.post(this.userService.serverUrl + '/users/test/passwordrequired', id, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/passwordrequired', id, httpOptions);
   }
 
   testInformation(id) {
@@ -291,8 +290,7 @@ export class TestComponent implements OnDestroy, OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/test/get', id, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/get', id, httpOptions);
   }
 
   preparePassword() {
@@ -325,8 +323,7 @@ export class TestComponent implements OnDestroy, OnInit {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
       })
   };
-  //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/test/password', body, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/password', body, httpOptions);
   }
 
   postTestData(object) {
@@ -335,8 +332,7 @@ export class TestComponent implements OnDestroy, OnInit {
         'Content-Type':  'application/json'
       })
     };
-    //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/results/add', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/add', object, httpOptions);
   }
 
   postFeedback(object) {
@@ -345,8 +341,7 @@ export class TestComponent implements OnDestroy, OnInit {
         'Content-Type':  'application/json'
       })
     };
-    //http://localhost:48792
-    return this.http.post(this.userService.serverUrl + '/users/results/feedback', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/feedback', object, httpOptions);
   }
 
 }

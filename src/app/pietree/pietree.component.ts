@@ -52,7 +52,7 @@ export class PietreeComponent implements OnInit {
         'Content-Type':  'application/json',
       })
   };
-    return this.http.post(this.userService.serverUrl + '/users/results/' + this.id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
   }
 
   preparePieTree(index) {

@@ -13,12 +13,12 @@ function jwt() {
             '/users/register',
             /^\/users\/results\/.*/,
             /^\/users\/card-sort-results\/.*/,
-            '/users/test/passwordrequired',
-            '/users/card-sort-test/passwordrequired',
-            '/users/test/password',
-            '/users/card-sort-test/password',
-            '/users/results/add',
-            '/users/card-sort-results/add'
+            '/users/tree-study/passwordrequired',
+            '/users/card-sort-study/passwordrequired',
+            '/users/tree-study/password',
+            '/users/card-sort-study/password',
+            '/users/tree-tests/add',
+            '/users/card-sort-tests/add'
 
         ]
     });

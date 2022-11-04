@@ -35,14 +35,12 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
 
 
   getCardSortTestData() {
-    /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
       })
     };
-    //return this.http.post('http://localhost:48792/users/results/' +
-    return this.http.post(this.userService.serverUrl +  '/users/results/' + this.id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl +  '/users/card-sort-tests/' + this.id, "", httpOptions);
   }
 
 
@@ -144,7 +142,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
         'Content-Type':  'application/json'
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-results/mindset', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/mindset', object, httpOptions);
   }
 
   sendMindset(){
@@ -194,7 +192,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/passwordrequired', id, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/passwordrequired', id, httpOptions);
   }
 
   preparePassword() {
@@ -228,7 +226,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/password', body, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/password', body, httpOptions);
   }
 
   postCardSortTestData(object) {
@@ -237,7 +235,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
         'Content-Type':  'application/json'
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-results/add', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/add', object, httpOptions);
   }
 
 
@@ -247,6 +245,6 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
         'Content-Type':  'application/json'
       })
     };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-results/feedback', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/feedback', object, httpOptions);
   }
 }

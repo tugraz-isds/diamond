@@ -435,8 +435,7 @@ export class CreateTestComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    //return this.http.post('http://localhost:48792/users/test/add', object,
-    return this.http.post(this.userService.serverUrl + '/users/test/add', object, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/add', object, httpOptions);
   }
 
   testInformation(id) {
@@ -448,8 +447,7 @@ export class CreateTestComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  //return this.http.post('http://localhost:48792/users/test/get', id, 
-    return this.http.post(this.userService.serverUrl + '/users/test/get', id, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-study/get', id, httpOptions);
   }
 
   editTest(object) {
@@ -460,8 +458,7 @@ export class CreateTestComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    //return this.http.post('http://localhost:48792/users/test/edit', 
-    return this.http.post(this.userService.serverUrl +  '/users/test/edit', object, httpOptions);
+    return this.http.post(this.userService.serverUrl +  '/users/tree-study/edit', object, httpOptions);
   }
 
 }
