@@ -9,15 +9,15 @@ declare var $: any;
 
 @Component({
   selector: 'app-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css', '../app.component.css']
+  templateUrl: './treetest-study.component.html',
+  styleUrls: ['./treetest-study.component.css', '../app.component.css']
 })
-export class TestComponent implements OnDestroy, OnInit {
+export class TreetestStudyComponent implements OnDestroy, OnInit {
 
 
   taskIndex = 0;
-  results = [];
-  result = {
+  tests = [];
+  test = {
     clicks: [],
     answer: {},
     time: null
@@ -56,16 +56,16 @@ export class TestComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     if (!this.finished) {
       //add results in database
-      const result = {
+      const test = {
         id: this.id,
-        results: this.results,
+        tests: this.tests,
         finished: false,
         username: this.userName,
         timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
         feedback: ""
       };
 
-      this.postTestData(result)
+      this.postTestData(test)
       .subscribe(
         res => {
           console.log(res);
@@ -123,12 +123,12 @@ export class TestComponent implements OnDestroy, OnInit {
   }
 
   sendFeedback() {
-    const result = {
+    const test = {
       username: this.userName,
       feedback: this.feedback
     };
 
-    this.postFeedback(result)
+    this.postFeedback(test)
     .subscribe(
       res => {
         console.log(res);
@@ -144,19 +144,19 @@ export class TestComponent implements OnDestroy, OnInit {
   submitFinalAnswer(index, skipped) {
     const instance = $('#study-tree').jstree(true);
     if (skipped) {
-      this.result['answer'] = null;
+      this.test['answer'] = null;
     } else {
     // tslint:disable-next-line:no-string-literal
-      this.result['answer'] = (instance.get_selected())[0];
+      this.test['answer'] = (instance.get_selected())[0];
     }
     this.endTime = new Date();
     const timeDiff = (this.endTime - this.startTime) / 1000; // in seconds
     // tslint:disable-next-line:no-string-literal
-    this.result['time'] = timeDiff;
+    this.test['time'] = timeDiff;
     this.startTime = undefined;
     this.endTime = undefined;
-    this.results.push(this.result);
-    this.result =  {
+    this.tests.push(this.test);
+    this.test =  {
       clicks: [],
       answer: {},
       time: null
@@ -171,16 +171,16 @@ export class TestComponent implements OnDestroy, OnInit {
     if (this.taskIndex >= this.study.tasks.length) {
       this.finished = true;
       //add results in database
-      const result = {
+      const test = {
         id: this.id,
-        results: this.results,
+        tests: this.tests,
         finished: true,
         username: this.userName,
         timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
         feedback: ""
       };
 
-      this.postTestData(result)
+      this.postTestData(test)
       .subscribe(
         res => {
           console.log(res);
@@ -221,7 +221,7 @@ export class TestComponent implements OnDestroy, OnInit {
         });
         $("#study-tree").bind("open_node.jstree", (event, data) => { 
           if (data.node.id !== 'root') {
-            this.result['clicks'].push(data.node);
+            this.test['clicks'].push(data.node);
           }
           var obj =  data.instance.get_node(data.node, true);
           

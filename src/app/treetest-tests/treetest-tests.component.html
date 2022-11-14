@@ -1,12 +1,12 @@
 <div class="container-fluid mt-30">
-    <div [hidden]="test === undefined" *ngIf="!results.length" class="col-sm-offset-1 col-sm-10">
-      <button *ngIf="test" [routerLink]="['/create-tree-test/' + test.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
+    <div [hidden]="study === undefined" *ngIf="!tests.length" class="col-sm-offset-1 col-sm-10">
+      <button *ngIf="study" [routerLink]="['/create-tree-test/' + study.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
       {{ "noparticipants" | translate }}
     </div>
-    <div [hidden]="!results.length" class="col-sm-offset-1 col-sm-10">
-      <button *ngIf="test" [routerLink]="['/create-tree-test/' + test.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
+    <div [hidden]="!tests.length" class="col-sm-offset-1 col-sm-10">
+      <button *ngIf="study" [routerLink]="['/create-tree-test/' + study.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
       <h3>{{ "study" | translate }}</h3>
-      <h4 *ngIf="test">{{test.name}}</h4>
+      <h4 *ngIf="study">{{study.name}}</h4>
       <ul class="nav nav-tabs mt-50">
         <li class="active"><a data-toggle="tab" href="#overview">{{ "overview" | translate }}</a></li>
         <li><a data-toggle="tab" href="#participants">{{ "participants" | translate }}</a></li>
@@ -38,7 +38,7 @@
                 </h2>
 
                 <div class="text-center mt-30">
-                  {{ "thelongest" | translate }} {{longestSeconds}} {{ "seconds" | translate }} <span *ngIf="results.length > 1">{{ "theshortest" | translate }} {{shortestSeconds}} {{ "seconds" | translate }}.</span>
+                  {{ "thelongest" | translate }} {{longestSeconds}} {{ "seconds" | translate }} <span *ngIf="tests.length > 1">{{ "theshortest" | translate }} {{shortestSeconds}} {{ "seconds" | translate }}.</span>
                 </div>
                 <!-- {{totalSecondsTaken}}
                 {{averageSecondsByUser}} -->
@@ -77,22 +77,22 @@
           <p>{{numberIncludedParticipants}} {{"participants" | translate}} ({{totalParticipants}} {{"totalWith" | translate}} {{totalParticipants - numberIncludedParticipants}} {{"excluded" | translate}})</p>
           <button type="button" class="btn btn-warning"  (click)="exportCSV()">{{ "exportcsv" | translate }}</button>
 
-          <table *ngIf="results.length && test" class="participants table table-bordered mt-30">
+          <table *ngIf="tests.length && study" class="participants table table-bordered mt-30">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>{{ "dateandtime" | translate }}</th>
                 <th>{{ "duration" | translate }} [s]</th>
-                <th style="text-align: center">{{ "taskscompleted" | translate }}<br>({{ "outof" | translate }} {{test.tasks.length}})</th>
-                <th style="text-align: center">{{ "tasksskipped" | translate }}<br>({{ "outof" | translate }} {{test.tasks.length}})</th>
-                <th style="text-align: center">{{ "taskscorrect" | translate }}<br>({{ "outof" | translate }} {{test.tasks.length}})</th>
+                <th style="text-align: center">{{ "taskscompleted" | translate }}<br>({{ "outof" | translate }} {{study.tasks.length}})</th>
+                <th style="text-align: center">{{ "tasksskipped" | translate }}<br>({{ "outof" | translate }} {{study.tasks.length}})</th>
+                <th style="text-align: center">{{ "taskscorrect" | translate }}<br>({{ "outof" | translate }} {{study.tasks.length}})</th>
                 <th>Feedback</th>
                 <th>{{ "exclude" | translate }}</th>
                 <th>{{ "delete" | translate }}</th>
               </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let result of results; let j = index;" [ngClass]="{'exclude': result.excluded === true}">
+                <tr *ngFor="let result of tests; let j = index;" [ngClass]="{'exclude': result.excluded === true}">
                     <td>{{result.username}}</td>
                     <td>{{result.timestamp}}</td>
                     <td class="text-right" style="padding-right: 10px">{{getDuration(result)}}</td>
@@ -119,7 +119,7 @@
         <div id="taskanalysis" class="mt-30 tab-pane fade">
           <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
             <div class="task-analysis-box">
-              {{i+1}}. {{test.tasks[i].text}}
+              {{i+1}}. {{study.tasks[i].text}}
 
               <div class="row mt-20">
                 <div class="col-sm-5">
@@ -159,9 +159,9 @@
           </div>
         </div>
 
-        <div *ngIf="test" id="destinations" class="mt-30 tab-pane fade">
+        <div *ngIf="study" id="destinations" class="mt-30 tab-pane fade">
           <div class="mt-10 mb-10">{{ "tasks" | translate }}:</div>
-          <div *ngFor="let t of test.tasks; let i = index;">
+          <div *ngFor="let t of study.tasks; let i = index;">
             <b>{{i+1}}.</b> {{t.text}}
           </div>
           <div class="mt-30">{{ "destinationsexplanation" | translate }}</div>
@@ -173,11 +173,11 @@
             <div style="margin-left: 25px; vertical-align: middle; display: inline-block; width: 15px; height: 15px; background-color: rgba(218,31,71,0.7)"></div><div style="display: inline-block; padding-left: 5px; vertical-align: middle">{{ "incorrect" | translate }} (>20% {{ "ofallanswers" | translate }})</div>
           </div>
           <button type="button" class="mt-30 btn btn-primary"  (click)="exportDestinationsCSV()">{{ "exportcsv" | translate }}</button>
-          <table *ngIf="results.length" class="table table-bordered mt-30">
+          <table *ngIf="tests.length" class="table table-bordered mt-30">
             <thead>
               <tr>
                 <th style="width: 350px"></th>
-                <th class="text-center" style="width: 25px" *ngFor="let t of test.tasks; let i = index;">{{i+1}}</th>
+                <th class="text-center" style="width: 25px" *ngFor="let t of study.tasks; let i = index;">{{i+1}}</th>
               </tr>
             </thead>
             <tbody>

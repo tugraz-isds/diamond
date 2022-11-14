@@ -71,10 +71,10 @@ export class CardSortResultsComponent implements OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
+         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  // return this.http.post('http://localhost:48792/users/results/' +
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/' + this.id, '', httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/' + this.id, '', httpOptions);
   }
 
   getIncludeResultNumber() {

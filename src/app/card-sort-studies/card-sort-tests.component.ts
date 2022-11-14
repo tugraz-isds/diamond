@@ -82,11 +82,11 @@ export class CardSortTestsComponent implements OnInit {
   }
 
   getCardSortTestData(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
+    //const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
     return this.http.post(this.userService.serverUrl + '/users/card-sort-study/getbyuserid', object, httpOptions);
@@ -201,6 +201,7 @@ export class CardSortTestsComponent implements OnInit {
       const httpOptions = {
           headers: new HttpHeaders({
           'Content-Type':  'application/json',
+           Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
         })
     };
       return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/' + id, '', httpOptions);

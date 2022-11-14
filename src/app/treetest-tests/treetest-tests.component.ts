@@ -12,15 +12,15 @@ declare var $: any;
 
 @Component({
   selector: 'app-results',
-  templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css', '../app.component.css']
+  templateUrl: './treetest-tests.component.html',
+  styleUrls: ['./treetest-tests.component.css', '../app.component.css']
 })
-export class ResultsComponent implements OnInit {
+export class TreetestTestsComponent implements OnInit {
 
   // tslint:disable-next-line:no-string-literal
   id = this.route.snapshot.params['id'];
-  results = [];
-  test;
+  tests = [];
+  study;
   numberCompleted = 0;
   numberLeft = 0;
 
@@ -66,8 +66,8 @@ export class ResultsComponent implements OnInit {
       this.resultsInformation()
         .subscribe(
           res => {
-            this.results = (<any>res).result;
-            this.test = (<any>res).test[0];
+            this.tests = (<any>res).result;
+            this.study = (<any>res).test[0];
             this.tree = (<any>res).test[0].tree;
             this.prepareResults();
           },
@@ -97,16 +97,16 @@ export class ResultsComponent implements OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  // return this.http.post('http://localhost:48792/users/results/' + 
     return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
   }
 
   getIncludeResultNumber() {
     let inc = 0;
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) inc++;
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) inc++;
     }
     return inc;
   }
@@ -142,16 +142,16 @@ export class ResultsComponent implements OnInit {
 
 
 
-    for (let i = 0; i < this.results.length; i++) {
+    for (let i = 0; i < this.tests.length; i++) {
       this.totalParticipants ++;
 
-      if (!this.results[i].excluded) {
+      if (!this.tests[i].excluded) {
         this.numberIncludedParticipants++;
-        if (this.results[i].finished) this.numberCompleted++;
+        if (this.tests[i].finished) this.numberCompleted++;
         else this.numberLeft++;
-        for (let j = 0; j < this.results[i].results.length; j++) {
-          this.totalSecondsTaken += this.results[i].results[j].time;
-          currentTime += this.results[i].results[j].time;
+        for (let j = 0; j < this.tests[i].results.length; j++) {
+          this.totalSecondsTaken += this.tests[i].results[j].time;
+          currentTime += this.tests[i].results[j].time;
         }
 
         if (this.totalLongest < currentTime) {
@@ -192,32 +192,32 @@ export class ResultsComponent implements OnInit {
     let minTime = 100000;
     let maxTime = 0;
     // go through every task
-    for (let i = 0; i < this.test.tasks.length; i++) {
+    for (let i = 0; i < this.study.tasks.length; i++) {
       // go through every participant
-      for (let j = 0; j < this.results.length; j++) {
-        if (this.results[j] && !this.results[j].excluded) {
-          if (this.results[j].results[i]) {
+      for (let j = 0; j < this.tests.length; j++) {
+        if (this.tests[j] && !this.tests[j].excluded) {
+          if (this.tests[j].results[i]) {
 
-            if (this.results[j].results[i].time < minTime) {
-              minTime = this.results[j].results[i].time;
+            if (this.tests[j].results[i].time < minTime) {
+              minTime = this.tests[j].results[i].time;
             }
 
-            if (this.results[j].results[i].time > maxTime) {
-              maxTime = this.results[j].results[i].time;
+            if (this.tests[j].results[i].time > maxTime) {
+              maxTime = this.tests[j].results[i].time;
             }
 
-            time += this.results[j].results[i].time;
-            if (!this.results[j].results[i].answer) {
+            time += this.tests[j].results[i].time;
+            if (!this.tests[j].results[i].answer) {
               skipped++;
             } else {
-              if (!this.isBackTracking(this.results[j].results[i].clicks)) {
-                if (this.results[j].results[i].answer && this.results[j].results[i].answer === this.test.tasks[i].id) { // it is correct
+              if (!this.isBackTracking(this.tests[j].results[i].clicks)) {
+                if (this.tests[j].results[i].answer && this.tests[j].results[i].answer === this.study.tasks[i].id) { // it is correct
                   directSuccess++;
                 } else { // it is incorrect
                   directFailure++;
                 }
               } else { //backtracking 
-                if (this.results[j].results[i].answer && this.results[j].results[i].answer === this.test.tasks[i].id) { // it is correct
+                if (this.tests[j].results[i].answer && this.tests[j].results[i].answer === this.study.tasks[i].id) { // it is correct
                   indirectSuccess++;
                 } else { // it is incorrect
                   indirectFailure++;
@@ -243,7 +243,7 @@ export class ResultsComponent implements OnInit {
       (<any>task).percentageCorrect = Math.round(percentageCorrect * 10) / 10;
 
 
-      let averageTime = Math.round(time / this.results.length * 100) / 100;
+      let averageTime = Math.round(time / this.tests.length * 100) / 100;
 
       (<any>task).averageTime = averageTime;
 
@@ -321,12 +321,12 @@ nodeEnter.append('text')
   getPieTreeData(taskIndex) {
 
     // go through each participant
-    for (let i = 0; i < this.results.length; i++) {
+    for (let i = 0; i < this.tests.length; i++) {
       // go through given task clicks
-      for (let j = 0; j < this.results[i].results[taskIndex].clicks.length; j++) {
+      for (let j = 0; j < this.tests[i].results[taskIndex].clicks.length; j++) {
 
         for (let k = 0; k < this.tree.length; k++) {
-          if (this.tree[k].id === this.results[i].results[taskIndex].clicks[j].id) {
+          if (this.tree[k].id === this.tests[i].results[taskIndex].clicks[j].id) {
             this.tree[k]["name"] = this.tree[k]["text"];
             if (!this.tree[k]["clicked"]) {
               this.tree[k]["clicked"] = true;
@@ -411,11 +411,11 @@ removeKeys(obj, keys){
     let totalCorrect = 0;
     if (!results.length) return "0%";
     for (let i = 0; i < results.length; i++) {
-      if (results[i].answer && results[i].answer === this.test.tasks[i].id) {
+      if (results[i].answer && results[i].answer === this.study.tasks[i].id) {
         totalCorrect++;
       }
     }
-    let percentage = (totalCorrect * 100) / this.test.tasks.length;
+    let percentage = (totalCorrect * 100) / this.study.tasks.length;
 
     return Math.floor(percentage) + "%";
   }
@@ -460,13 +460,13 @@ removeKeys(obj, keys){
   }
 
   getBackgroundColor(taskIndex, treeItemIndex, number, answer) {
-    if (this.test.tasks[taskIndex].id === answer) {
+    if (this.study.tasks[taskIndex].id === answer) {
       return "rgba(161,212,36,0.7)";
     }
     var totalNumberOfAnswers = 0;
     // go through every result
-    for (let i = 0; i < this.results.length; i++) {
-        if (this.results[i].results[taskIndex]) {
+    for (let i = 0; i < this.tests.length; i++) {
+        if (this.tests[i].results[taskIndex]) {
           totalNumberOfAnswers++;
         }
     }
@@ -482,15 +482,15 @@ removeKeys(obj, keys){
     let destination = [];
     
     // go through every task
-    for (let k = 0; k < this.test.tasks.length; k++) { 
+    for (let k = 0; k < this.study.tasks.length; k++) {
       // go through every result
-      for (let i = 0; i < this.results.length; i++) {
-        if (!this.results[i].excluded) {
-          if (this.results[i].results[k]) {
-            if (!destination[this.results[i].results[k].answer]) {
-              destination[this.results[i].results[k].answer] = 1;
+      for (let i = 0; i < this.tests.length; i++) {
+        if (!this.tests[i].excluded) {
+          if (this.tests[i].results[k]) {
+            if (!destination[this.tests[i].results[k].answer]) {
+              destination[this.tests[i].results[k].answer] = 1;
             } else {
-              destination[this.results[i].results[k].answer]++;
+              destination[this.tests[i].results[k].answer]++;
             }
           }
         }
@@ -514,20 +514,20 @@ removeKeys(obj, keys){
 
   getTaskResults() {
     let backtracking = false;
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) {
-        for (let j = 0; j < this.results[i].results.length; j++) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) {
+        for (let j = 0; j < this.tests[i].results.length; j++) {
           this.totalTasksDone++;
-          if (this.test.tasks[j] && this.results[i].results[j].answer && this.results[i].results[j].answer === this.test.tasks[j].id) {
+          if (this.study.tasks[j] && this.tests[i].results[j].answer && this.tests[i].results[j].answer === this.study.tasks[j].id) {
             this.totalTasksCorrect++;
           }
 
           // check directness
-          if (this.results[i].results[j].clicks.length < 2) {
+          if (this.tests[i].results[j].clicks.length < 2) {
             this.totalTasksDirect++;
           } else {
-            for (let k = 1; k < this.results[i].results[j].clicks.length; k++) {
-              if (this.results[i].results[j].clicks[k].parent !== this.results[i].results[j].clicks[k-1].id ) {
+            for (let k = 1; k < this.tests[i].results[j].clicks.length; k++) {
+              if (this.tests[i].results[j].clicks[k].parent !== this.tests[i].results[j].clicks[k-1].id ) {
                 backtracking = true;
                 //k = this.results[i].results[j].clicks.length;
               }
@@ -573,16 +573,16 @@ removeKeys(obj, keys){
 
   exportCSV() {
     let rows = [];
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) {
         let item = [
-          this.results[i].username, 
-          this.results[i].timestamp, 
-          this.getDuration(this.results[i]),
-          this.getCompletedTasks(this.results[i].results),
-          this.getSkippedTasks(this.results[i].results),
-          this.getCorrectTasks(this.results[i].results),
-          this.results[i].feedback
+          this.tests[i].username,
+          this.tests[i].timestamp,
+          this.getDuration(this.tests[i]),
+          this.getCompletedTasks(this.tests[i].results),
+          this.getSkippedTasks(this.tests[i].results),
+          this.getCorrectTasks(this.tests[i].results),
+          this.tests[i].feedback
         ]
         rows.push(item);
       }
@@ -603,7 +603,7 @@ removeKeys(obj, keys){
   exportDestinationsCSV() {
     let rows = [];
     let item = [""];
-    for (let t = 1; t <= this.test.tasks.length; t++) {
+    for (let t = 1; t <= this.study.tasks.length; t++) {
       item.push(t.toString());
     }
     rows.push(item);
@@ -650,7 +650,7 @@ removeKeys(obj, keys){
     this.updateParticipantsTest(temp).subscribe(
         res => {
           console.log(res);
-          this.results[index].excluded = true;
+          this.tests[index].excluded = true;
           this.prepareResults();
         },
         err => {
@@ -672,7 +672,7 @@ removeKeys(obj, keys){
     this.updateParticipantsTest(temp).subscribe(
         res => {
           console.log(res);
-          this.results[index].excluded = false;
+          this.tests[index].excluded = false;
           this.prepareResults();
         },
         err => {
@@ -682,15 +682,15 @@ removeKeys(obj, keys){
   }
   prepareDeleteParticipantResult() {
     console.log("prepared!!");
-    console.log(this.results);
+    console.log(this.tests);
     this.deleteParticipantResult()
     .subscribe(
       res => {
         this.resultsInformation()
         .subscribe(
           res => {
-            this.results = (<any>res).result;
-            this.test = (<any>res).test[0];
+            this.tests = (<any>res).result;
+            this.study = (<any>res).test[0];
             this.tree = (<any>res).test[0].tree;
             this.prepareResults();
           },
@@ -715,7 +715,7 @@ removeKeys(obj, keys){
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-    return this.http.post(this.userService.serverUrl + '/users/tree-test/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-test/delete', {id: this.tests[this.deleteParticipantResultIndex]._id}, httpOptions);
   }
 
   updateParticipantsTest(object){
