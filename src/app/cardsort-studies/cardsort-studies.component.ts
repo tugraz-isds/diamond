@@ -13,14 +13,14 @@ declare var $: any;
 
 @Component({
   selector: 'app-tests',
-  templateUrl: './card-sort-tests.component.html',
-  styleUrls: ['./card-sort-tests.component.css', '../app.component.css']
+  templateUrl: './cardsort-studies.component.html',
+  styleUrls: ['./cardsort-studies.component.css', '../app.component.css']
 })
-export class CardSortTestsComponent implements OnInit {
+export class CardsortStudiesComponent implements OnInit {
   cardSortStudies;
   deleteCardSortTestId;
   baseurl = "";
-  results = [];
+  tests = [];
   numberParticipants = [];
 
   constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
@@ -171,17 +171,17 @@ export class CardSortTestsComponent implements OnInit {
 
   // Export Study
   export(studyId){
-    let study = this.cardSortStudies.find(test => test._id === studyId);
+    let study = this.cardSortStudies.find(study => study._id === studyId);
     let id = study.id;
     let file;
     this.resultsInformation(id)
           .subscribe(
             res => {
-              this.results = (<any>res).result;
-              for (let i = 0; i < this.results.length; i++) {
-                this.results[i]["exclude"] = false;
+              this.tests = (<any>res).result;
+              for (let i = 0; i < this.tests.length; i++) {
+                this.tests[i]["exclude"] = false;
               }
-              file = {...study, tests : this.results};
+              file = {...study, tests : this.tests};
               this.downloadFile(file, id);
               console.log(file);
             },
@@ -216,8 +216,8 @@ export class CardSortTestsComponent implements OnInit {
         this.resultsInformation(id)
           .subscribe(
             res => {
-              let results = (<any>res).result;
-              for (let i = 0; i < results.length; i++) {
+              let tests = (<any>res).result;
+              for (let i = 0; i < tests.length; i++) {
                 number ++;
               }
               obj = {id: id, participants: number}
@@ -279,17 +279,17 @@ export class CardSortTestsComponent implements OnInit {
             console.log(err);
           }
         );
-        for(let test of json["tests"]){
+        for(let study of json["tests"]){
           let exclude = false;
-          if (test["excluded"] !== undefined) { exclude = test["excluded"]};
+          if (study["excluded"] !== undefined) { exclude = study["excluded"]};
           const temp = {
             id: randomStudyId,
-            results: test["results"],
-            finished: test["finished"],
-            username: test["username"],
-            timestamp: test["timestamp"],
-            feedback: test["feedback"],
-            mindset: test["mindset"],
+            results: study["tests"],
+            finished: study["finished"],
+            username: study["username"],
+            timestamp: study["timestamp"],
+            feedback: study["feedback"],
+            mindset: study["mindset"],
             excluded: exclude,
           };
 

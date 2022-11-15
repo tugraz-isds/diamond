@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { TreetestStudiesComponent } from './treetest-studies/treetest-studies.component';
-import { CardSortTestsComponent } from './card-sort-studies/card-sort-tests.component';
+import { CardsortStudiesComponent } from './cardsort-studies/cardsort-studies.component';
 import { RegisterComponent } from './register/register.component';
 
 import { AuthenticationService } from './authentification.service';
@@ -21,7 +21,7 @@ import { UserService } from './user.service';
 import { CreateTestComponent } from './create-tree-test-study/create-tree-test.component';
 import { TreetestStudyComponent } from './treetest-study/treetest-study.component';
 import { TreetestTestsComponent } from './treetest-tests/treetest-tests.component';
-import { CardSortResultsComponent } from './card-sort-tests/card-sort-results.component';
+import { CardsortTestsComponent } from './cardsort-tests/cardsort-tests.component';
 import { PietreeComponent } from './pietree/pietree.component';
 import { AdminComponent } from './admin/admin.component';
 
@@ -29,7 +29,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from './translate.service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateCardSortComponent } from './create-card-sort-study/create-card-sort.component';
-import { CardSortTestComponent } from './card-sort-study/card-sort-test.component';
+import { CardsortStudyComponent } from './cardsort-study/cardsort-study.component';
 import { CardListComponent } from './card-list/card-list.component';
 import { SortingComponent } from './sorting/sorting.component';
 
@@ -46,14 +46,14 @@ const appRoutes: Routes = [
   { path: 'create-card-sort', component: CreateCardSortComponent},
   { path: 'create-tree-test/:id', component: CreateTestComponent},
   { path: 'create-card-sort/:id', component: CreateCardSortComponent},
-  { path: 'card-sort-test/:id', component: CardSortTestComponent},
+  { path: 'card-sort-test/:id', component: CardsortStudyComponent},
   { path: 'test/:id', component: TreetestStudyComponent},
   { path: 'results/:id', component: TreetestTestsComponent},
-  { path: 'card-sort-results/:id', component: CardSortResultsComponent},
+  { path: 'card-sort-results/:id', component: CardsortTestsComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'tests', component: TreetestStudiesComponent},
-  { path: 'card-sort-tests', component: CardSortTestsComponent},
+  { path: 'card-sort-tests', component: CardsortStudiesComponent},
   { path: 'pie-tree/:id/:index', component: PietreeComponent },
   {path: 'study-closed', component: StudyClosedComponent},
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
@@ -65,16 +65,16 @@ const appRoutes: Routes = [
     NavbarComponent,
     LoginComponent,
     TreetestStudiesComponent,
-    CardSortTestsComponent,
+    CardsortStudiesComponent,
     RegisterComponent,
     CreateTestComponent,
     TreetestStudyComponent,
     TreetestTestsComponent,
-    CardSortResultsComponent,
+    CardsortTestsComponent,
     PietreeComponent,
     AdminComponent,
     CreateCardSortComponent,
-    CardSortTestComponent,
+    CardsortStudyComponent,
     CardListComponent,
     TestMatrixComponent,
     SortingComponent,
