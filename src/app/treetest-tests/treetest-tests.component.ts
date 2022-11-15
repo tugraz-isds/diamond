@@ -594,7 +594,7 @@ removeKeys(obj, keys){
        var encodedUri = encodeURI(csvContent);
        var link = document.createElement("a");
        link.setAttribute("href", encodedUri);
-       link.setAttribute("download", "my_data.csv");
+       link.setAttribute("download", "participants.csv");
        document.body.appendChild(link); // Required for FF
        
        link.click(); // This will download the data file named "my_data.csv".
@@ -629,7 +629,7 @@ removeKeys(obj, keys){
        var encodedUri = encodeURI(csvContent);
        var link = document.createElement("a");
        link.setAttribute("href", encodedUri);
-       link.setAttribute("download", "my_data.csv");
+       link.setAttribute("download", "destinations.csv");
        document.body.appendChild(link); // Required for FF
        
        link.click(); // This will download the data file named "my_data.csv".
