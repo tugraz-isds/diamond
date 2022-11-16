@@ -9,10 +9,10 @@ declare var $: any;
 
 @Component({
   selector: 'app-card-sort-test',
-  templateUrl: './card-sort-test.component.html',
-  styleUrls: ['./card-sort-test.component.css', '../app.component.css']
+  templateUrl: './cardsort-study.component.html',
+  styleUrls: ['./cardsort-study.component.css', '../app.component.css']
 })
-export class CardSortTestComponent implements OnDestroy, OnInit {
+export class CardsortStudyComponent implements OnDestroy, OnInit {
   startTime;
   endTime;
   enterPassword = '';
@@ -38,6 +38,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl +  '/users/card-sort-tests/' + this.id, "", httpOptions);
@@ -47,7 +48,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     if (!this.finished) {
       //add results in database
-      const result = {
+      const test = {
         id: this.id,
         results: null,
         finished: false,
@@ -57,7 +58,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
         mindset: ""
       };
 
-      this.postCardSortTestData(result)
+      this.postCardSortTestData(test)
           .subscribe(
               res => {
                 console.log(res);
@@ -115,7 +116,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
   finishSorting(results) {
     this.finished = true;
 
-    const result = {
+    const test = {
       id: this.id,
       results: results,
       finished: true,
@@ -125,7 +126,7 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
       mindset: ""
     };
 
-    this.postCardSortTestData(result)
+    this.postCardSortTestData(test)
         .subscribe(
             res => {
               console.log(res);
@@ -146,12 +147,12 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
   }
 
   sendMindset(){
-    const result = {
+    const test = {
       username: this.userName,
       mindset: this.mindset
     };
 
-    this.postMindset(result)
+    this.postMindset(test)
         .subscribe(
             res => {
               console.log(res);
@@ -166,12 +167,12 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
 
 
   sendFeedback() {
-    const result = {
+    const test = {
       username: this.userName,
       feedback: this.feedback
     };
 
-    this.postFeedback(result)
+    this.postFeedback(test)
         .subscribe(
             res => {
               console.log(res);
@@ -232,7 +233,8 @@ export class CardSortTestComponent implements OnDestroy, OnInit {
   postCardSortTestData(object) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/add', object, httpOptions);

@@ -5,7 +5,7 @@
     
     <div class="row">
       <div class="col-sm-9">
-        <table *ngIf="tests && tests.length && (this.authService.user.study || this.authService.user.email === 'admin')" class="table table-bordered mt-50">
+        <table *ngIf="studies && studies.length && (this.authService.user.study || this.authService.user.email === 'admin')" class="table table-bordered mt-50">
           <thead>
             <tr>
               <th style="width: 150px">Name</th>
@@ -23,7 +23,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let t of tests; let i = index;">
+            <tr *ngFor="let t of studies; let i = index;">
               <td><a [routerLink]="['/results/' + t.id]" class="pointer">{{t.name}}</a></td>
               <td>
                 <input #myInput style="width: 250px; border: 1px solid lightgray; padding-left: 3px; display: inline-block;" type="text" 

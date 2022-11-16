@@ -231,7 +231,7 @@ function getCardSortStudy(req, res, next) {
 
 function getAllCardSortStudies(req, res, next) {
     userService.getAllCardSortStudies(req.body)
-        .then((tests) => res.json(tests))
+        .then((cardSortStudies) => res.json(cardSortStudies))
         .catch(err => next(err));
 }
 

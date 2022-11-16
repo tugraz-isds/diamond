@@ -9,15 +9,15 @@ declare var $: any;
 
 @Component({
   selector: 'app-card-sort-results',
-  templateUrl: './card-sort-results.component.html',
-  styleUrls: ['./card-sort-results.component.css', '../app.component.css']
+  templateUrl: './cardsort-tests.component.html',
+  styleUrls: ['./cardsort-tests.component.css', '../app.component.css']
 })
-export class CardSortResultsComponent implements OnInit {
+export class CardsortTestsComponent implements OnInit {
 
   // tslint:disable-next-line:no-string-literal
   id = this.route.snapshot.params['id'];
-  results = [];
-  test;
+  tests = [];
+  study;
   numberCompleted = 0;
   numberLeft = 0;
 
@@ -39,8 +39,8 @@ export class CardSortResultsComponent implements OnInit {
       this.resultsInformation()
         .subscribe(
           res => {
-            this.results = (res as any).result;
-            this.test = (res as any).card_sort_test;
+            this.tests = (res as any).result;
+            this.study = (res as any).card_sort_test;
             this.prepareResults();
           },
           err => {
@@ -60,7 +60,7 @@ export class CardSortResultsComponent implements OnInit {
 
   showResultMatrix(result){
     this.showingMatrix = true;
-    for (const r of this.results){
+    for (const r of this.tests){
       r.showing = false;
     }
     result.showing = true;
@@ -71,16 +71,16 @@ export class CardSortResultsComponent implements OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
+         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-  // return this.http.post('http://localhost:48792/users/results/' +
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/' + this.id, '', httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/' + this.id, '', httpOptions);
   }
 
   getIncludeResultNumber() {
     let inc = 0;
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) { inc++; }
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) { inc++; }
     }
     return inc;
   }
@@ -92,26 +92,26 @@ export class CardSortResultsComponent implements OnInit {
     this.numberIncludedParticipants = 0;
     this.totalParticipants = 0;
 
-    for (let i = 0; i < this.results.length; i++) {
+    for (let i = 0; i < this.tests.length; i++) {
       this.totalParticipants ++;
-      if (!this.results[i].excluded) {
+      if (!this.tests[i].excluded) {
         this.numberIncludedParticipants++;
-        if (this.results[i].finished) { this.numberCompleted++; }
+        if (this.tests[i].finished) { this.numberCompleted++; }
         else { this.numberLeft++; }
       }
     }
   }
 
 
-  getDuration(results) {
-    if (!results.finished) {
+  getDuration(tests) {
+    if (!tests.finished) {
       return 'Abandoned';
     }
     let totalSeconds = 0;
     const totalMinutes = 0;
     const totalHours = 0;
-    for (let i = 0; i < results.results.length; i++) {
-      totalSeconds += results.results[i].time;
+    for (let i = 0; i < tests.results.length; i++) {
+      totalSeconds += tests.results[i].time;
     }
     return Math.floor(totalSeconds);
   }
@@ -119,7 +119,7 @@ export class CardSortResultsComponent implements OnInit {
 
   closeResultMatrix(){
     this.showingMatrix = false;
-    for (const r of this.results){
+    for (const r of this.tests){
       r.showing = false;
     }
   }
@@ -130,9 +130,9 @@ export class CardSortResultsComponent implements OnInit {
     const cards = [];
     const map = new Map();
     let cardIndex = 0;
-    for (let i = 0; i < this.results.length; i++) {
-      if (this.results[i].finished) {
-        for (const group of this.results[i].results) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (this.tests[i].finished) {
+        for (const group of this.tests[i].results) {
           for (const cardName of group.group_list) {
             const card_string = cardName.replace(/\r?\n|\r/g, '');
 
@@ -145,10 +145,10 @@ export class CardSortResultsComponent implements OnInit {
       }
     }
     rows.push(cards);
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) {
         const item = new Array<string>(cards.length);
-        for (const group of this.results[i].results){
+        for (const group of this.tests[i].results){
           for (const cardName of group.group_list) {
             const card_string = cardName.replace(/\r?\n|\r/g, '');
             const j = map.get(card_string);
@@ -176,9 +176,9 @@ export class CardSortResultsComponent implements OnInit {
     const cards = [];
     const map = new Map();
     let cardIndex = 0;
-    for (let i = 0; i < this.results.length; i++) {
-      if (this.results[i].finished) {
-        for (const group of this.results[i].results) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (this.tests[i].finished) {
+        for (const group of this.tests[i].results) {
           for (const cardName of group.group_list) {
             const card_string = cardName.replace(/\r?\n|\r/g, '');
 
@@ -191,10 +191,10 @@ export class CardSortResultsComponent implements OnInit {
       }
     }
     rows.push(cards);
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) {
         const item = new Array<string>(cards.length);
-        for (const group of this.results[i].results){
+        for (const group of this.tests[i].results){
           for (const cardName of group.group_list) {
             const card_string = cardName.replace(/\r?\n|\r/g, '');
             const j = map.get(card_string);
@@ -231,14 +231,14 @@ export class CardSortResultsComponent implements OnInit {
     ];
     rows.push(item);
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) {
         // tslint:disable-next-line:no-shadowed-variable
         const item = [
-          this.results[i].username,
-          this.results[i].timestamp,
-          this.results[i].feedback.replace(/\r?\n|\r/g, ' '),
-          this.results[i].mindset.replace(/\r?\n|\r/g, ' ')
+          this.tests[i].username,
+          this.tests[i].timestamp,
+          this.tests[i].feedback.replace(/\r?\n|\r/g, ' '),
+          this.tests[i].mindset.replace(/\r?\n|\r/g, ' ')
         ];
         rows.push(item);
       }
@@ -257,22 +257,22 @@ export class CardSortResultsComponent implements OnInit {
   }
 
 
-  excludeParticpant(result, index){
+  excludeParticpant(test, index){
     const temp = {
-      _id: result["_id"],
-      id: result["id"],
-      results: result["results"],
-      finished: result["finished"],
-      username: result["username"],
-      timestamp: result["timestamp"],
-      feedback: result["feedback"],
+      _id: test["_id"],
+      id: test["id"],
+      results: test["results"],
+      finished: test["finished"],
+      username: test["username"],
+      timestamp: test["timestamp"],
+      feedback: test["feedback"],
       excluded: true
     };
     console.log(temp);
     this.updateParticipantsTest(temp).subscribe(
         res => {
           console.log(res);
-          this.results[index].excluded = true;
+          this.tests[index].excluded = true;
           this.prepareResults();
         },
         err => {
@@ -280,21 +280,21 @@ export class CardSortResultsComponent implements OnInit {
         }
     );
   }
-  includeParticipant(result, index){
+  includeParticipant(test, index){
     const temp = {
-      _id: result["_id"],
-      id: result["id"],
-      results: result["results"],
-      finished: result["finished"],
-      username: result["username"],
-      timestamp: result["timestamp"],
-      feedback: result["feedback"],
+      _id: test["_id"],
+      id: test["id"],
+      results: test["results"],
+      finished: test["finished"],
+      username: test["username"],
+      timestamp: test["timestamp"],
+      feedback: test["feedback"],
       excluded: false
     };
     this.updateParticipantsTest(temp).subscribe(
         res => {
           console.log(res);
-          this.results[index].excluded = false;
+          this.tests[index].excluded = false;
           this.prepareResults();
         },
         err => {
@@ -314,13 +314,13 @@ export class CardSortResultsComponent implements OnInit {
     ];
     rows.push(item);
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.results.length; i++) {
-      if (!this.results[i].excluded) {
+    for (let i = 0; i < this.tests.length; i++) {
+      if (!this.tests[i].excluded) {
         const item = [
-          this.results[i].username,
-          this.results[i].timestamp,
-          this.results[i].feedback.replace(/\r?\n|\r/g, ' '),
-          this.results[i].mindset.replace(/\r?\n|\r/g, ' ')
+          this.tests[i].username,
+          this.tests[i].timestamp,
+          this.tests[i].feedback.replace(/\r?\n|\r/g, ' '),
+          this.tests[i].mindset.replace(/\r?\n|\r/g, ' ')
         ];
         rows.push(item);
       }
@@ -351,9 +351,9 @@ export class CardSortResultsComponent implements OnInit {
         this.resultsInformation()
         .subscribe(
           res => {
-            this.results = (res as any).result;
+            this.tests = (res as any).result;
             // tslint:disable-next-line:prefer-for-of
-            this.test = (res as any).test[0];
+            this.study = (res as any).test[0];
             this.prepareResults();
           },
           err => {
@@ -379,7 +379,7 @@ export class CardSortResultsComponent implements OnInit {
   };
 
     // tslint:disable-next-line:max-line-length
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/delete', {id: this.results[this.deleteParticipantResultIndex]._id}, httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/delete', {id: this.tests[this.deleteParticipantResultIndex]._id}, httpOptions);
   }
   updateParticipantsTest(object){
     const httpOptions = {

@@ -13,12 +13,12 @@ declare var $: any;
 
 @Component({
   selector: 'app-tests',
-  templateUrl: './tests.component.html',
-  styleUrls: ['./tests.component.css', '../app.component.css']
+  templateUrl: './treetest-studies.component.html',
+  styleUrls: ['./treetest-studies.component.css', '../app.component.css']
 })
-export class TestsComponent implements OnInit {
-  tests;
-  results = [];
+export class TreetestStudiesComponent implements OnInit {
+  studies;
+  tests = [];
   deleteTestId;
   baseurl = "";
   showModal = false;
@@ -41,7 +41,7 @@ export class TestsComponent implements OnInit {
     this.getTestData(data)
     .subscribe(
       res => {
-        this.tests = res;
+        this.studies = res;
         this.setNumberOfParticipants();
       },
       err => {
@@ -175,14 +175,14 @@ export class TestsComponent implements OnInit {
   }
 
   export(studyId){
-  let test = this.tests.find(test => test._id === studyId);
-  let id = test.id;
+  let study = this.studies.find(study => study._id === studyId);
+  let id = study.id;
   let file;
   this.resultsInformation(id)
         .subscribe(
           res => {
-            this.results = (<any>res).result;
-            file = {...test, tests : this.results};
+            this.tests = (<any>res).result;
+            file = {...study, tests : this.tests};
             this.downloadFile(file, id);
             console.log(file);
           },
@@ -203,6 +203,7 @@ export class TestsComponent implements OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
+         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
     return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + id, "", httpOptions);
@@ -211,14 +212,14 @@ export class TestsComponent implements OnInit {
   setNumberOfParticipants(){
     let obj;
     this.numberParticipants = [];
-    for(let test of this.tests){
+    for(let study of this.studies){
       let number = 0;
-      let id = test["id"];
+      let id = study["id"];
       this.resultsInformation(id)
         .subscribe(
           res => {
-            let results = (<any>res).result;
-            for (let i = 0; i < results.length; i++) {
+            let tests = (<any>res).result;
+            for (let i = 0; i < tests.length; i++) {
               number ++;
             }
             obj = {id: id, participants: number}
@@ -287,7 +288,7 @@ export class TestsComponent implements OnInit {
         if (test["excluded"] !== undefined) { exclude = test["excluded"]};
         const temp = {
           id: randomStudyId,
-          results: test["results"],
+          tests: test["tests"],
           finished: test["finished"],
           username: test["username"],
           timestamp: test["timestamp"],
@@ -320,7 +321,6 @@ export class TestsComponent implements OnInit {
         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
-    //return this.http.post('http://localhost:48792/users/tree-study/add', object,
     return this.http.post(this.userService.serverUrl + '/users/tree-study/add', object, httpOptions);
   }
 

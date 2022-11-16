@@ -1,12 +1,12 @@
 <div class="container-fluid mt-30">
-    <div [hidden]="test === undefined" *ngIf="!results.length" class="col-sm-offset-1 col-sm-10">
-      <button *ngIf="test" [routerLink]="['/create-card-sort/' + test.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
+    <div [hidden]="study === undefined" *ngIf="!tests.length" class="col-sm-offset-1 col-sm-10">
+      <button *ngIf="study" [routerLink]="['/create-card-sort/' + study.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
       {{ "noparticipants" | translate }}
     </div>
-    <div [hidden]="!results.length" class="col-sm-offset-1 col-sm-10">
-      <button *ngIf="test" [routerLink]="['/create-card-sort/' + test.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
+    <div [hidden]="!tests.length" class="col-sm-offset-1 col-sm-10">
+      <button *ngIf="study" [routerLink]="['/create-card-sort/' + study.id]" class="pull-right btn btn-primary">{{ "editstudy" | translate }}</button>
       <h3>{{ "study" | translate }}</h3>
-      <h4 *ngIf="test">{{test.name}}</h4>
+      <h4 *ngIf="study">{{study.name}}</h4>
       <ul class="nav nav-tabs mt-50">
         <li class="active"><a data-toggle="tab" href="#overview">{{ "overview" | translate }}</a></li>
         <li><a data-toggle="tab" href="#participants">{{ "participants" | translate }}</a></li>
@@ -57,7 +57,7 @@
 
             <button type="button" class="btn btn-warning"  (click)="exportSortingDataTransposed()">{{ "exportsortingdatatransposed" | translate }}</button>
 
-            <table *ngIf="results.length && test" class="participants table table-bordered mt-30">
+            <table *ngIf="tests.length && study" class="participants table table-bordered mt-30">
 
               <thead>
                 <tr>
@@ -75,7 +75,7 @@
               </thead>
 
               <tbody>
-                <tr *ngFor="let result of results; let j = index;" [ngClass]="{'exclude': result.excluded === true}">
+                <tr *ngFor="let result of tests; let j = index;" [ngClass]="{'exclude': result.excluded === true}">
                   <td>{{result.username}}</td>
                   <td>{{result.timestamp}}</td>
                   <!--
@@ -99,7 +99,7 @@
             </table>
           </div>
 
-          <tr *ngFor="let result of results; let j = index;">
+          <tr *ngFor="let result of tests; let j = index;">
             <div *ngIf="result.showing">
               <app-result-matrix [result]="result" (output)="closeResultMatrix()"></app-result-matrix>
             </div>
