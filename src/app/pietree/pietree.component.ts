@@ -50,6 +50,7 @@ export class PietreeComponent implements OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
+         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
     return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
