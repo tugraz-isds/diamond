@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 declare var Chart: any;
 import * as d3 from "d3";
@@ -13,7 +13,7 @@ declare var $: any;
 @Component({
   selector: 'app-results',
   templateUrl: './treetest-tests.component.html',
-  styleUrls: ['./treetest-tests.component.css', '../app.component.css']
+  styleUrls: ['./treetest-tests.component.css', '../../app.component.css']
 })
 export class TreetestTestsComponent implements OnInit {
 

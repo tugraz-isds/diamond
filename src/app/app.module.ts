@@ -11,30 +11,30 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
-import { TreetestStudiesComponent } from './treetest-studies/treetest-studies.component';
-import { CardsortStudiesComponent } from './cardsort-studies/cardsort-studies.component';
+import { TreetestStudiesComponent } from './treetest-components/treetest-studies/treetest-studies.component';
+import { CardsortStudiesComponent } from './cardsort-components/cardsort-studies/cardsort-studies.component';
 import { RegisterComponent } from './register/register.component';
 
 import { AuthenticationService } from './authentification.service';
 import { AlertService } from './alert.service';
 import { UserService } from './user.service';
-import { CreateTestComponent } from './create-tree-test-study/create-tree-test.component';
-import { TreetestStudyComponent } from './treetest-study/treetest-study.component';
-import { TreetestTestsComponent } from './treetest-tests/treetest-tests.component';
-import { CardsortTestsComponent } from './cardsort-tests/cardsort-tests.component';
-import { PietreeComponent } from './pietree/pietree.component';
+import { CreateTestComponent } from './treetest-components/create-treetest-study/create-tree-test.component';
+import { TreetestStudyComponent } from './treetest-components/treetest-study/treetest-study.component';
+import { TreetestTestsComponent } from './treetest-components/treetest-tests/treetest-tests.component';
+import { CardsortTestsComponent } from './cardsort-components/cardsort-tests/cardsort-tests.component';
+import { PietreeComponent } from './treetest-components/pietree/pietree.component';
 import { AdminComponent } from './admin/admin.component';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from './translate.service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { CreateCardSortComponent } from './create-card-sort-study/create-card-sort.component';
-import { CardsortStudyComponent } from './cardsort-study/cardsort-study.component';
-import { CardListComponent } from './card-list/card-list.component';
+import { CreateCardSortComponent } from './cardsort-components/create-cardsort-study/create-card-sort.component';
+import { CardsortStudyComponent } from './cardsort-components/cardsort-study/cardsort-study.component';
+import { CardListComponent } from './cardsort-components/card-list/card-list.component';
 import { SortingComponent } from './sorting/sorting.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {CardsortTestMatrixComponent} from './cardsort-test-matrix/cardsort-test-matrix.component';
+import {CardsortTestMatrixComponent} from './cardsort-components/cardsort-test-matrix/cardsort-test-matrix.component';
 
 import {participantsFilterPipe} from 'src/app/pipes/filter.pipe';
 import {datePipe} from './pipes/datePipe.pipe';

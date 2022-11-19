@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 declare var $: any;
 
 @Component({
   selector: 'app-test',
   templateUrl: './treetest-study.component.html',
-  styleUrls: ['./treetest-study.component.css', '../app.component.css']
+  styleUrls: ['./treetest-study.component.css', '../../app.component.css']
 })
 export class TreetestStudyComponent implements OnDestroy, OnInit {
 

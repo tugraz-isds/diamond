@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 import { CardListComponent } from '../card-list/card-list.component';
 
 declare var $: any;
@@ -11,7 +11,7 @@ declare var $: any;
 @Component({
   selector: 'app-create-card-sort',
   templateUrl: './create-card-sort.component.html',
-  styleUrls: ['./create-card-sort.component.css', '../app.component.css']
+  styleUrls: ['./create-card-sort.component.css', '../../app.component.css']
 })
 export class CreateCardSortComponent implements OnInit {
   randomTestId = Math.random().toString(36).substring(2, 15);

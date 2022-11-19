@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 import * as svg from 'save-svg-as-png';
 import * as d3 from "d3";

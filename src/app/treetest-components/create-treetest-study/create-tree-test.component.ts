@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 declare var $: any;
 
 @Component({
   selector: 'app-create-tree-test',
   templateUrl: './create-tree-test.component.html',
-  styleUrls: ['./create-tree-test.component.css', '../app.component.css']
+  styleUrls: ['./create-tree-test.component.css', '../../app.component.css']
 })
 export class CreateTestComponent implements OnInit {
   randomTestId = Math.random().toString(36).substring(2, 15);

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 
 declare var $: any;
@@ -11,7 +11,7 @@ declare var $: any;
 @Component({
   selector: 'app-result-matrix',
   templateUrl: './cardsort-test-matrix.component.html',
-  styleUrls: ['./cardsort-test-matrix.component.css', '../app.component.css']
+  styleUrls: ['./cardsort-test-matrix.component.css', '../../app.component.css']
 })
 
 export class CardsortTestMatrixComponent implements OnInit {

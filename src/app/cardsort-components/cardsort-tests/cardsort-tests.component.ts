@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 declare var $: any;
 
 @Component({
   selector: 'app-card-sort-results',
   templateUrl: './cardsort-tests.component.html',
-  styleUrls: ['./cardsort-tests.component.css', '../app.component.css']
+  styleUrls: ['./cardsort-tests.component.css', '../../app.component.css']
 })
 export class CardsortTestsComponent implements OnInit {
 

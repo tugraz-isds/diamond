@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 declare var $: any;
 
 @Component({
   selector: 'app-card-sort-test',
   templateUrl: './cardsort-study.component.html',
-  styleUrls: ['./cardsort-study.component.css', '../app.component.css']
+  styleUrls: ['./cardsort-study.component.css', '../../app.component.css']
 })
 export class CardsortStudyComponent implements OnDestroy, OnInit {
   startTime;

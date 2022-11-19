@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
-import { UserService } from '../user.service';
-import { AuthenticationService } from '../authentification.service';
+import { UserService } from '../../user.service';
+import { AuthenticationService } from '../../authentification.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -14,7 +14,7 @@ declare var $: any;
 @Component({
   selector: 'app-tests',
   templateUrl: './treetest-studies.component.html',
-  styleUrls: ['./treetest-studies.component.css', '../app.component.css']
+  styleUrls: ['./treetest-studies.component.css', '../../app.component.css']
 })
 export class TreetestStudiesComponent implements OnInit {
   studies;
