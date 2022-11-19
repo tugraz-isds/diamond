@@ -31,7 +31,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateCardSortComponent } from './cardsort-components/create-cardsort-study/create-card-sort.component';
 import { CardsortStudyComponent } from './cardsort-components/cardsort-study/cardsort-study.component';
 import { CardListComponent } from './cardsort-components/card-list/card-list.component';
-import { SortingComponent } from './sorting/sorting.component';
+import { SortingComponent } from './cardsort-components/sorting/sorting.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {CardsortTestMatrixComponent} from './cardsort-components/cardsort-test-matrix/cardsort-test-matrix.component';
