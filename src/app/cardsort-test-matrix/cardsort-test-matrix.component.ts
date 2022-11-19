@@ -10,11 +10,11 @@ declare var $: any;
 
 @Component({
   selector: 'app-result-matrix',
-  templateUrl: './test-matrix.component.html',
-  styleUrls: ['./test-matrix.component.css', '../app.component.css']
+  templateUrl: './cardsort-test-matrix.component.html',
+  styleUrls: ['./cardsort-test-matrix.component.css', '../app.component.css']
 })
 
-export class TestMatrixComponent implements OnInit {
+export class CardsortTestMatrixComponent implements OnInit {
   @Input() result;
   @Output() output = new EventEmitter<any[]>();
 

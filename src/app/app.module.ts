@@ -34,7 +34,7 @@ import { CardListComponent } from './card-list/card-list.component';
 import { SortingComponent } from './sorting/sorting.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {TestMatrixComponent} from './test-matrix/test-matrix.component';
+import {CardsortTestMatrixComponent} from './cardsort-test-matrix/cardsort-test-matrix.component';
 
 import {participantsFilterPipe} from 'src/app/pipes/filter.pipe';
 import {datePipe} from './pipes/datePipe.pipe';
@@ -76,7 +76,7 @@ const appRoutes: Routes = [
     CreateCardSortComponent,
     CardsortStudyComponent,
     CardListComponent,
-    TestMatrixComponent,
+    CardsortTestMatrixComponent,
     SortingComponent,
     participantsFilterPipe,
     datePipe,

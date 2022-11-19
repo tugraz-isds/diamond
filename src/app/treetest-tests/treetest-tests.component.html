@@ -153,7 +153,7 @@
 
               <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pieTree" (click)="preparePieTree(i)">Pie Tree</button> -->
 
-              <button type="button" class="btn btn-warning"  (click)="openPieTree(i)">Path Tree</button>
+              <button type="button" class="btn btn-primary"  (click)="openPieTree(i)">Path Tree</button>
             </div>
 
           </div>
@@ -172,7 +172,7 @@
 
             <div style="margin-left: 25px; vertical-align: middle; display: inline-block; width: 15px; height: 15px; background-color: rgba(218,31,71,0.7)"></div><div style="display: inline-block; padding-left: 5px; vertical-align: middle">{{ "incorrect" | translate }} (>20% {{ "ofallanswers" | translate }})</div>
           </div>
-          <button type="button" class="mt-30 btn btn-primary"  (click)="exportDestinationsCSV()">{{ "exportcsv" | translate }}</button>
+          <button type="button" class="mt-30 btn btn-warning"  (click)="exportDestinationsCSV()">{{ "exportcsv" | translate }}</button>
           <table *ngIf="tests.length" class="table table-bordered mt-30">
             <thead>
               <tr>

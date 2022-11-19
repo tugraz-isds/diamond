@@ -130,5 +130,6 @@
     "lastEnded": "Last Ended",
     "createdAT": "Created",
     "export": "Export",
-    "skipped": "Skipped"
+    "skipped": "Skipped",
+    "back": "Back"
 }
