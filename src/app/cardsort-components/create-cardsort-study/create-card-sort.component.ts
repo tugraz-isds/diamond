@@ -52,7 +52,7 @@ export class CreateCardSortComponent implements OnInit {
       const body = {
         id: this.id
       };
-
+      console.log(this.route.snapshot.params);
       // console.log('id: ' + this.cardName);
 
       this.testInformation(body)

@@ -40,7 +40,7 @@ export class CardsortTestsComponent implements OnInit {
         .subscribe(
           res => {
             this.tests = (res as any).result;
-            this.study = (res as any).card_sort_test;
+            this.study = (res as any).card_sort_test[0];
             this.prepareResults();
           },
           err => {
