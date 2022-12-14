@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 /report/*.pdf
+/deploy
 
 # System Files
 .DS_Store

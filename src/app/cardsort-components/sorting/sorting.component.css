@@ -126,3 +126,17 @@ h2 {
 .btn-move {
     font-size: 90%;
 }
+
+
+.dm-add-group-form .form-control {
+    font-size: 90%;
+    height: 30px;
+}
+
+.dm-btn-finish {
+    float: right;
+}
+
+.dm-add-group-wrapper {
+    float: left;
+}

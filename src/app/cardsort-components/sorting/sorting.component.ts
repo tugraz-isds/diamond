@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import {CdkDragDrop, CdkDropListGroup, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {$} from 'protractor';
 import {printLine} from 'tslint/lib/verify/lines';
@@ -20,6 +20,24 @@ export class SortingComponent {
   @Output() output = new EventEmitter<any[]>();
   groupName = '';
   iteratorGroups = 0;
+  showGroupNameInput = false;
+
+  @ViewChild('inputGroupName') inputGroupNameElementRef: ElementRef;
+
+  openAddGroupModal() {
+    // TODO: clear input
+    this.groupName = '';
+    this.showGroupNameInput = true;
+
+    // TODO: focus
+    setTimeout(() => {
+      this.inputGroupNameElementRef.nativeElement.focus();
+    }, 0);
+    
+
+    // TODO: close on focus out or on ESC
+
+  }
 
   addGroup()
   {

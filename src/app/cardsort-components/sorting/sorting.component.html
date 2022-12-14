@@ -1,10 +1,23 @@
 <div cdkDropListGroup>
 
-    <div class="col-md-12 mt-10 mb-10 text-center">
-            <button type="button" class="btn btn-control btn-primary" data-toggle="modal" data-target="#create_group">
+    <div class="col-md-12 mt-10 mb-10 clearfix">
+        
+        <div class="dm-add-group-wrapper">
+            <button type="button" class="btn btn-control btn-primary" *ngIf="!showGroupNameInput" (click)="openAddGroupModal()">
                 {{ "Add Group" | translate }}
             </button>
-        <button type="button" class="btn btn-control btn-success mr-5" [disabled]="ungrouped_cards.length"
+
+            <form *ngIf="showGroupNameInput" class="dm-add-group-form form-inline">
+                <!--label for="inputGroupName">{{ "Add Group" | translate }}</label-->
+                <input class="form-control" name="inputGroupName" [placeholder]="'Enter Group Name' | translate" type="text" 
+                    #inputGroupName [(ngModel)]="groupName" type="text" 
+                    (keyup.escape)="showGroupNameInput = false">
+                <button (click)="addGroup()" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></button>
+                <button (click)="showGroupNameInput = false" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+            </form>
+        </div>        
+
+        <button type="button" class="btn btn-control btn-success mr-5 dm-btn-finish" [disabled]="ungrouped_cards.length"
                 (click)="finish()">{{ "finish" | translate }}</button>
     </div>
 
@@ -96,26 +109,5 @@
                 </div>
             </div>
         </ng-container>
-    </div>
-</div>
-
-
-<div id="create_group" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h3 class="modal-title">Add Group</h3>
-            </div>
-            <div class="modal-body">
-                <input class="form-control" type="text" [(ngModel)]="groupName" type="text" (keyup.enter)="addGroup()">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-control" (click)="addGroup()"
-                        data-dismiss="modal">{{ "Add Group" | translate }}</button>
-                <button type="button" class="btn btn-danger btn-control" data-dismiss="modal" aria-label="Close">
-                    {{"Close" | translate}}
-                </button>
-            </div>
-        </div>
     </div>
 </div>
