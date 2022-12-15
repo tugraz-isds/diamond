@@ -288,7 +288,7 @@ export class TreetestStudiesComponent implements OnInit {
         if (test["excluded"] !== undefined) { exclude = test["excluded"]};
         const temp = {
           id: randomStudyId,
-          tests: test["tests"],
+          results: test["results"],
           finished: test["finished"],
           username: test["username"],
           timestamp: test["timestamp"],
