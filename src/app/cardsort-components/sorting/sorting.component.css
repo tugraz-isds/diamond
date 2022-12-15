@@ -140,3 +140,15 @@ h2 {
 .dm-add-group-wrapper {
     float: left;
 }
+
+button:disabled {
+    cursor: not-allowed;
+    pointer-events: all !important;
+}
+
+.btn.disabled, .btn[disabled],
+.btn.disabled:hover,
+.btn:disabled:hover {
+    box-shadow: none;
+    opacity: 0.5;
+}
