@@ -49,7 +49,7 @@ export class CardsortStudiesComponent implements OnInit {
   copyToClipboard(studyId) {
 
     $('#copyboardtest').append('<textarea id="copyboard"></textarea>');
-    $('#copyboard').val(this.baseurl + "/#/card-sort-test/" + studyId);
+    $('#copyboard').val(this.baseurl + "/#/cardsort-test/" + studyId);
 
     const input = document.getElementById('copyboard');
     const isiOSDevice = navigator.userAgent.match(/ipad|iphone/i);
@@ -93,7 +93,7 @@ export class CardsortStudiesComponent implements OnInit {
   }
 
   getLink(id) {
-    return this.baseurl + "/#/card-sort-test/" + id;
+    return this.baseurl + "/#/cardsort-test/" + id;
   }
 
   launchCardSortTest(studyId, preview?) {
