@@ -86,7 +86,6 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
       },
       err => {
         console.log(err);
-        this.router.navigate(['study-closed']);
       }
     );
 
