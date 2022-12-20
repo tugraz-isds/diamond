@@ -589,7 +589,7 @@ removeKeys(obj, keys){
     }
   
     let csvContent = "data:text/csv;charset=utf-8," 
-       + rows.map(e => e.join(",")).join("\n");
+       + rows.map(e => e.join("|")).join("\n");
 
        var encodedUri = encodeURI(csvContent);
        var link = document.createElement("a");

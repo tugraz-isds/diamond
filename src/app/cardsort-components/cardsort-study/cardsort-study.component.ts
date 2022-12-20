@@ -80,7 +80,6 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
             },
             err => {
               console.log(err);
-                this.router.navigate(['study-closed']);
             }
         );
   
