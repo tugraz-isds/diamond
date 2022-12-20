@@ -1,0 +1,19 @@
+:host {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+}
+
+:host #pietreesvg {
+    margin: 0 auto;
+    max-width: 90vh;
+    max-height: 90vh;
+}
+
+:host #link {
+    font-size: 1.5rem;
+}
+
+/*:host ::ng-deep svg text {*/
+/*    font-size: 10px;*/
+/*}*/

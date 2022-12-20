@@ -123,7 +123,7 @@ export class PietreeComponent implements OnInit {
   nodeEnter.append('text')
     .attr("dy", "-10px")
     .attr("x", "12px")
-    .style("font-size", "6px")
+    .style("font-size", "8px")
     .attr("text-anchor", "middle")
     .text(function(d) { return d.data.name + " (" + (<any>d).data.clicks + ")" });
 
