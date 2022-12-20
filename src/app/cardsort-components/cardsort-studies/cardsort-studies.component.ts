@@ -107,7 +107,7 @@ export class CardsortStudiesComponent implements OnInit {
       res => {
         this.getAllCardSortTests();
         if (preview) {
-          this.router.navigate(['cardsort-test/' + studyId]);
+          this.router.navigate(['cardsort/' + studyId]);
         }
       },
       err => {
