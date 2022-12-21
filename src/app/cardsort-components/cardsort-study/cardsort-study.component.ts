@@ -89,12 +89,11 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
     this.passwordRequired(body)
         .subscribe(
             res => {
-              console.log('RES');
               console.log(res);
 
               if (res === 'redirect') {
                 console.log('redirect');
-                this.router.navigate(['tests']);
+                this.router.navigate(['study-closed']);
               } else {
                 console.log('NO REDIRECT');
               }
@@ -106,9 +105,9 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
               }
             },
             err => {
-              console.log('ERR');
               console.log(err);
               this.password = false;
+                this.router.navigate(['study-closed']);
             }
         );
   }
@@ -140,7 +139,8 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   postMindset(object){
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/mindset', object, httpOptions);
@@ -190,7 +190,8 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/card-sort-study/passwordrequired', id, httpOptions);
@@ -224,7 +225,8 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/card-sort-study/password', body, httpOptions);
@@ -244,7 +246,8 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   postFeedback(object) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/feedback', object, httpOptions);

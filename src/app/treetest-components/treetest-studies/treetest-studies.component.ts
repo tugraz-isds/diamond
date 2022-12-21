@@ -52,7 +52,7 @@ export class TreetestStudiesComponent implements OnInit {
   copyToClipboard(studyId) {
 
     $('#copyboardtest').append('<textarea id="copyboard"></textarea>');
-    $('#copyboard').val(this.baseurl + "/#/test/" + studyId);
+    $('#copyboard').val(this.baseurl + "/#/treetest/" + studyId);
 
     const input = document.getElementById('copyboard');
     const isiOSDevice = navigator.userAgent.match(/ipad|iphone/i);
@@ -96,7 +96,7 @@ export class TreetestStudiesComponent implements OnInit {
   }
 
   getLink(id) {
-    return this.baseurl + "/#/test/" + id;
+    return this.baseurl + "/#/treetest/" + id;
   }
 
   launchTest(studyId, preview?) {
@@ -110,7 +110,7 @@ export class TreetestStudiesComponent implements OnInit {
       res => {
         this.getAllTests();
         if (preview) {
-          this.router.navigate(['test/' + studyId]);
+          this.router.navigate(['treetest/' + studyId]);
         }
       },
       err => {
@@ -288,7 +288,7 @@ export class TreetestStudiesComponent implements OnInit {
         if (test["excluded"] !== undefined) { exclude = test["excluded"]};
         const temp = {
           id: randomStudyId,
-          tests: test["tests"],
+          results: test["results"],
           finished: test["finished"],
           username: test["username"],
           timestamp: test["timestamp"],

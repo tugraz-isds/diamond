@@ -98,7 +98,6 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     this.passwordRequired(body)
       .subscribe(
         res => {
-          console.log('RES');
           console.log(res);
 
           if (res === 'redirect') {
@@ -115,7 +114,6 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
           }
         },
         err => {
-          console.log('ERR');
           console.log(err);
           this.password = false;
         }
@@ -275,7 +273,8 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
     return this.http.post(this.userService.serverUrl + '/users/tree-study/passwordrequired', id, httpOptions);
