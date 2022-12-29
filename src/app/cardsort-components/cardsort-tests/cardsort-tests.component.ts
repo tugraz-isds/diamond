@@ -5,9 +5,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '../../user.service';
 
+import { Parser } from '@json2csv/plainjs';
+
 declare var $: any;
 
-const { Parser } = require('json2csv');
 
 @Component({
   selector: 'app-card-sort-results',
