@@ -6,9 +6,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../user.service';
 
 declare var Chart: any;
-import * as d3 from "d3";
+import * as d3 from 'd3';
 
 declare var $: any;
+
+const { Parser } = require('json2csv');
 
 @Component({
   selector: 'app-results',
@@ -25,7 +27,7 @@ export class TreetestTestsComponent implements OnInit {
   numberLeft = 0;
 
   totalParticipants = 0;
-  numberIncludedParticipants =0;
+  numberIncludedParticipants = 0;
 
   totalSecondsTaken = 0;
   averageSecondsByUser;
@@ -66,9 +68,9 @@ export class TreetestTestsComponent implements OnInit {
       this.resultsInformation()
         .subscribe(
           res => {
-            this.tests = (<any>res).result;
-            this.study = (<any>res).test[0];
-            this.tree = (<any>res).test[0].tree;
+            this.tests = (res as any).result;
+            this.study = (res as any).test[0];
+            this.tree = (res as any).test[0].tree;
             this.prepareResults();
           },
           err => {
@@ -82,8 +84,8 @@ export class TreetestTestsComponent implements OnInit {
   }
 
   openPieTree(index) {
-    let url = location.origin + "/#/pie-tree/" + this.id + "/" + index;
-    window.open(url, "_blank");
+    const url = location.origin + '/#/pie-tree/' + this.id + '/' + index;
+    window.open(url, '_blank');
   }
 
   updateResultParticipants(index) {
@@ -100,13 +102,13 @@ export class TreetestTestsComponent implements OnInit {
           Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
-    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
+    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, '', httpOptions);
   }
 
   getIncludeResultNumber() {
     let inc = 0;
     for (let i = 0; i < this.tests.length; i++) {
-      if (!this.tests[i].excluded) inc++;
+      if (!this.tests[i].excluded) { inc++; }
     }
     return inc;
   }
@@ -119,7 +121,7 @@ export class TreetestTestsComponent implements OnInit {
     this.numberLeft = 0;
 
     this.totalParticipants = 0;
-    this.numberIncludedParticipants =0;
+    this.numberIncludedParticipants = 0;
 
     this.totalSecondsTaken = 0;
     this.averageSecondsByUser;
@@ -147,8 +149,8 @@ export class TreetestTestsComponent implements OnInit {
 
       if (!this.tests[i].excluded) {
         this.numberIncludedParticipants++;
-        if (this.tests[i].finished) this.numberCompleted++;
-        else this.numberLeft++;
+        if (this.tests[i].finished) { this.numberCompleted++; }
+        else { this.numberLeft++; }
         for (let j = 0; j < this.tests[i].results.length; j++) {
           this.totalSecondsTaken += this.tests[i].results[j].time;
           currentTime += this.tests[i].results[j].time;
@@ -164,7 +166,7 @@ export class TreetestTestsComponent implements OnInit {
 
         currentTime = 0;
       }
-      
+
     }
 
     this.averageSecondsByUser = Math.floor(this.totalSecondsTaken / this.getIncludeResultNumber());
@@ -180,7 +182,7 @@ export class TreetestTestsComponent implements OnInit {
   }
 
   prepareTaskAnalysis() {
-    let tasks = [];
+    const tasks = [];
     let task = {};
 
     let directSuccess = 0;
@@ -216,7 +218,7 @@ export class TreetestTestsComponent implements OnInit {
                 } else { // it is incorrect
                   directFailure++;
                 }
-              } else { //backtracking 
+              } else { // backtracking
                 if (this.tests[j].results[i].answer && this.tests[j].results[i].answer === this.study.tasks[i].id) { // it is correct
                   indirectSuccess++;
                 } else { // it is incorrect
@@ -228,24 +230,24 @@ export class TreetestTestsComponent implements OnInit {
           }
         }
       }
-      (<any>task).skipped = skipped;
-      (<any>task).directSuccess = directSuccess;
-      (<any>task).indirectSuccess = indirectSuccess;
-      (<any>task).directFailure = directFailure;
-      (<any>task).indirectFailure = indirectFailure;
+      (task as any).skipped = skipped;
+      (task as any).directSuccess = directSuccess;
+      (task as any).indirectSuccess = indirectSuccess;
+      (task as any).directFailure = directFailure;
+      (task as any).indirectFailure = indirectFailure;
 
-      (<any>task).minTime = minTime;
-      (<any>task).maxTime = maxTime;
+      (task as any).minTime = minTime;
+      (task as any).maxTime = maxTime;
 
-      let percentageDirect = Math.round((directSuccess + directFailure)*100 / this.numberIncludedParticipants * 100) / 100;
-      let percentageCorrect = Math.round((directSuccess + indirectSuccess)*100 / this.numberIncludedParticipants * 100) / 100;
-      (<any>task).percentageDirect = Math.round(percentageDirect * 10) / 10;
-      (<any>task).percentageCorrect = Math.round(percentageCorrect * 10) / 10;
+      const percentageDirect = Math.round((directSuccess + directFailure) * 100 / this.numberIncludedParticipants * 100) / 100;
+      const percentageCorrect = Math.round((directSuccess + indirectSuccess) * 100 / this.numberIncludedParticipants * 100) / 100;
+      (task as any).percentageDirect = Math.round(percentageDirect * 10) / 10;
+      (task as any).percentageCorrect = Math.round(percentageCorrect * 10) / 10;
 
 
-      let averageTime = Math.round(time / this.tests.length * 100) / 100;
+      const averageTime = Math.round(time / this.tests.length * 100) / 100;
 
-      (<any>task).averageTime = averageTime;
+      (task as any).averageTime = averageTime;
 
       tasks[i] = task;
       task = {};
@@ -265,54 +267,54 @@ export class TreetestTestsComponent implements OnInit {
   }
 
   preparePieTree(index) {
-    
-    var data = this.getPieTreeData(index);
-    data = this.removeKeys(data, ["parent", "id"]);
+
+    let data = this.getPieTreeData(index);
+    data = this.removeKeys(data, ['parent', 'id']);
 
     // set the dimensions and margins of the graph
-    var width = 460;
-    var height = 460;
+    const width = 460;
+    const height = 460;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#pietreesvg")
-      .append("svg")
-        .attr('viewBox','-70 0 900 900')
+    const svg = d3.select('#pietreesvg')
+      .append('svg')
+        .attr('viewBox', '-70 0 900 900')
         .attr('preserveAspectRatio', 'xMinYMin')
-        .attr("id", "mysvg")
-      .append("g")
-        
+        .attr('id', 'mysvg')
+      .append('g');
+
 
       // Create the cluster layout:
-      var cluster = d3.cluster()
+    const cluster = d3.cluster()
         .size([height, width - 100]);  // 100 is the margin I will have on the right side
 
       // Give the data to this cluster layout:
-      var root = d3.hierarchy(data);
-      cluster(root);
+    const root = d3.hierarchy(data);
+    cluster(root);
 
 
   // worked with text
-  var node = svg.selectAll('g')
+    const node = svg.selectAll('g')
   .data(root.descendants());
 
 // Enter any new modes at the parent's previous position.
-var nodeEnter = node.enter().append('g')
+    const nodeEnter = node.enter().append('g');
 
 // Add Circle for the nodes
-nodeEnter.append('circle')
-.attr("r", 7)
-.style("fill", "#69b3a2")
-.attr("stroke", "black")
-.style("stroke-width", 2)
+    nodeEnter.append('circle')
+.attr('r', 7)
+.style('fill', '#69b3a2')
+.attr('stroke', 'black')
+.style('stroke-width', 2);
 
 // Add labels for the nodes
-nodeEnter.append('text')
-  .attr("dy", ".35em")
-  .attr("x", function(d) {
+    nodeEnter.append('text')
+  .attr('dy', '.35em')
+  .attr('x', function(d) {
       return d.children || d.children ? -13 : 13;
   })
-  .attr("text-anchor", function(d) {
-      return d.children || d.children ? "end" : "start";
+  .attr('text-anchor', function(d) {
+      return d.children || d.children ? 'end' : 'start';
   })
   .text(function(d) { return d.data.name; });
 
@@ -327,12 +329,12 @@ nodeEnter.append('text')
 
         for (let k = 0; k < this.tree.length; k++) {
           if (this.tree[k].id === this.tests[i].results[taskIndex].clicks[j].id) {
-            this.tree[k]["name"] = this.tree[k]["text"];
-            if (!this.tree[k]["clicked"]) {
-              this.tree[k]["clicked"] = true;
-              this.tree[k]["clickNumbers"] = 1;
+            this.tree[k].name = this.tree[k].text;
+            if (!this.tree[k].clicked) {
+              this.tree[k].clicked = true;
+              this.tree[k].clickNumbers = 1;
             } else {
-              this.tree[k]["clickNumbers"]++;
+              this.tree[k].clickNumbers++;
             }
 
           }
@@ -340,58 +342,58 @@ nodeEnter.append('text')
       }
     }
 
-    let newTree = [];
+    const newTree = [];
 
     for (let k = 0; k < this.tree.length; k++) {
       if (this.tree[k].clicked) {
-        //newTree.push(this.tree[k]);
+        // newTree.push(this.tree[k]);
         newTree.push({
-          "name": this.tree[k].text,
-          "parent": this.tree[k].parent,
-          "id": this.tree[k].id
+          name: this.tree[k].text,
+          parent: this.tree[k].parent,
+          id: this.tree[k].id
         });
       }
     }
 
-    var data = {
-      "name": this.tree[0].text,
-      "children": this.getNestedChildren(newTree, "root")
+    const data = {
+      name: this.tree[0].text,
+      children: this.getNestedChildren(newTree, 'root')
     };
 
-      return data;
+    return data;
   }
 
   getNestedChildren(arr, parent) {
-    var out = []
-    for(var i in arr) {
-        if(arr[i].parent == parent) {
-            var children = this.getNestedChildren(arr, arr[i].id)
+    const out = [];
+    for (const i in arr) {
+        if (arr[i].parent == parent) {
+            const children = this.getNestedChildren(arr, arr[i].id);
 
-            if(children.length) {
-                arr[i].children = children
+            if (children.length) {
+                arr[i].children = children;
             }
             out.push(arr[i]);
         }
     }
-    return out
+    return out;
 }
 
 removeKeys(obj, keys){
-  var index;
-  for (var prop in obj) {
+  let index;
+  for (const prop in obj) {
       // important check that this is objects own property
       // not from prototype prop inherited
-      if(obj.hasOwnProperty(prop)){
-          switch(typeof(obj[prop])){
+      if (obj.hasOwnProperty(prop)){
+          switch (typeof(obj[prop])){
               case 'string':
                   index = keys.indexOf(prop);
-                  if(index > -1){
+                  if (index > -1){
                       delete obj[prop];
                   }
                   break;
               case 'object':
                   index = keys.indexOf(prop);
-                  if(index > -1){
+                  if (index > -1){
                       delete obj[prop];
                   }else{
                       this.removeKeys(obj[prop], keys);
@@ -409,50 +411,50 @@ removeKeys(obj, keys){
 
   getCorrectTasks(results) {
     let totalCorrect = 0;
-    if (!results.length) return "0%";
+    if (!results.length) { return '0%'; }
     for (let i = 0; i < results.length; i++) {
       if (results[i].answer && results[i].answer === this.study.tasks[i].id) {
         totalCorrect++;
       }
     }
-    let percentage = (totalCorrect * 100) / this.study.tasks.length;
+    const percentage = (totalCorrect * 100) / this.study.tasks.length;
 
-    return Math.floor(percentage) + "%";
+    return Math.floor(percentage) + '%';
   }
 
   getSkippedTasks(results) {
-    let totalSkipped = 0;;
-    if (!results.length) return "0%";
+    let totalSkipped = 0;
+    if (!results.length) { return '0%'; }
     for (let i = 0; i < results.length; i++) {
       if (!results[i].answer) {
         totalSkipped++;
       }
     }
-    let percentage = (totalSkipped * 100) / this.tasks.length;
+    const percentage = (totalSkipped * 100) / this.tasks.length;
 
-    return Math.floor(percentage) + "%";
+    return Math.floor(percentage) + '%';
   }
 
   getCompletedTasks(results) {
-    let totalCompleted = 0;;
-    if (!results.length) return "0%";
+    let totalCompleted = 0;
+    if (!results.length) { return '0%'; }
     for (let i = 0; i < results.length; i++) {
       if (results[i].answer) {
         totalCompleted++;
       }
     }
-    let percentage = (totalCompleted * 100) / this.tasks.length;
+    const percentage = (totalCompleted * 100) / this.tasks.length;
 
-    return Math.floor(percentage) + "%";
+    return Math.floor(percentage) + '%';
   }
 
   getDuration(results) {
     if (!results.finished) {
-      return "Abandoned";
+      return 'Abandoned';
     }
     let totalSeconds = 0;
-    let totalMinutes = 0;
-    let totalHours = 0;
+    const totalMinutes = 0;
+    const totalHours = 0;
     for (let i = 0; i < results.results.length; i++) {
       totalSeconds += results.results[i].time;
     }
@@ -461,9 +463,9 @@ removeKeys(obj, keys){
 
   getBackgroundColor(taskIndex, treeItemIndex, number, answer) {
     if (this.study.tasks[taskIndex].id === answer) {
-      return "rgba(161,212,36,0.7)";
+      return 'rgba(161,212,36,0.7)';
     }
-    var totalNumberOfAnswers = 0;
+    let totalNumberOfAnswers = 0;
     // go through every result
     for (let i = 0; i < this.tests.length; i++) {
         if (this.tests[i].results[taskIndex]) {
@@ -471,16 +473,16 @@ removeKeys(obj, keys){
         }
     }
 
-    var percentage = (number * 100) / totalNumberOfAnswers;
-    if (percentage >=20) { return "rgba(218,31,71,0.7)"; }
+    const percentage = (number * 100) / totalNumberOfAnswers;
+    if (percentage >= 20) { return 'rgba(218,31,71,0.7)'; }
 
-    return "rgba(245,98,0,0.7)";
+    return 'rgba(245,98,0,0.7)';
   }
 
   destinationTable() {
     this.destinations = [];
     let destination = [];
-    
+
     // go through every task
     for (let k = 0; k < this.study.tasks.length; k++) {
       // go through every result
@@ -505,7 +507,7 @@ removeKeys(obj, keys){
       return false;
     }
     for (let k = 1; k < clicks.length; k++) {
-      if (clicks[k].parent !== clicks[k-1].id ) {
+      if (clicks[k].parent !== clicks[k - 1].id ) {
         return true;
       }
     }
@@ -527,9 +529,9 @@ removeKeys(obj, keys){
             this.totalTasksDirect++;
           } else {
             for (let k = 1; k < this.tests[i].results[j].clicks.length; k++) {
-              if (this.tests[i].results[j].clicks[k].parent !== this.tests[i].results[j].clicks[k-1].id ) {
+              if (this.tests[i].results[j].clicks[k].parent !== this.tests[i].results[j].clicks[k - 1].id ) {
                 backtracking = true;
-                //k = this.results[i].results[j].clicks.length;
+                // k = this.results[i].results[j].clicks.length;
               }
             }
             if (!backtracking) {
@@ -545,108 +547,122 @@ removeKeys(obj, keys){
   }
 
   getSvg() {
-    //get svg element.
-    var svg = document.getElementById("mysvg");
+    // get svg element.
+    const svg = document.getElementById('mysvg');
 
-    //get svg source.
-    var serializer = new XMLSerializer();
-    var source = serializer.serializeToString(svg);
+    // get svg source.
+    const serializer = new XMLSerializer();
+    let source = serializer.serializeToString(svg);
 
-    //add name spaces.
-    if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+    // add name spaces.
+    if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
         source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
     }
-    if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+    if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
 
-    //add xml declaration
+    // add xml declaration
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
-    //convert svg source to URI data scheme.
-    var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+    // convert svg source to URI data scheme.
+    const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source);
 
-    //set url value to a element's href attribute.
-    (<any>document).getElementById("link").href = url;
-    //you can download svg file by right click menu.
+    // set url value to a element's href attribute.
+    (document as any).getElementById('link').href = url;
+    // you can download svg file by right click menu.
   }
 
-  exportCSV() {
-    let rows = [];
-    for (let i = 0; i < this.tests.length; i++) {
+  exportcsv(){
+    const rows = [];
+    for(let i = 0; i < this.tests.length; i++) {
       if (!this.tests[i].excluded) {
-        let item = [
-          this.tests[i].username,
-          this.tests[i].timestamp,
-          this.getDuration(this.tests[i]),
-          this.getCompletedTasks(this.tests[i].results),
-          this.getSkippedTasks(this.tests[i].results),
-          this.getCorrectTasks(this.tests[i].results),
-          this.tests[i].feedback
-        ]
+        const item = {
+          Username: this.tests[i].username,
+          Timestam: this.tests[i].timestamp,
+          Duration: this.getDuration(this.tests[i]),
+          'Completed Tasks': this.getCompletedTasks(this.tests[i].results),
+          'Skipped Tasks': this.getSkippedTasks(this.tests[i].results),
+          'Correct Tasks': this.getCorrectTasks(this.tests[i].results),
+          Feedback: this.tests[i].feedback
+        };
         rows.push(item);
       }
     }
-  
-    let csvContent = "data:text/csv;charset=utf-8," 
-       + rows.map(e => e.join("|")).join("\n");
 
-       var encodedUri = encodeURI(csvContent);
-       var link = document.createElement("a");
-       link.setAttribute("href", encodedUri);
-       link.setAttribute("download", "participants.csv");
-       document.body.appendChild(link); // Required for FF
-       
-       link.click(); // This will download the data file named "my_data.csv".
+    const json2csvParser = new Parser();
+    const csvContent = 'data:text/csv;charset=utf-8,' + json2csvParser.parse(rows);
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'participants.csv');
+    document.body.appendChild(link); // Required for FF
+
+    link.click(); // This will download the data file named "my_data.csv".
   }
 
   exportDestinationsCSV() {
-    let rows = [];
-    let item = [""];
+    const rows = [];
+    let item = [''];
+    let depth=0;
+    for(let i = 0; i < this.tree.length; i++){
+      if(this.tree[i].data.index>depth){
+        depth= this.tree[i].data.index;
+        item.push('');
+      }
+    }
     for (let t = 1; t <= this.study.tasks.length; t++) {
       item.push(t.toString());
     }
     rows.push(item);
-
     for (let i = 0; i < this.tree.length; i++) {
-      let item = [];
+      const item = [];
       if (this.tree[i].data) {
         for (let j = 0; j < this.tree[i].data.index; j++) {
-          item.push("");
+          item.push('');
         }
       }
       item.push(this.tree[i].text);
-
+      while (item.length<=depth){
+        item.push('');
+      }
       for (let k = 0; k < this.destinations.length; k++) {
         item.push(this.destinations[k][this.tree[i].id]);
       }
       rows.push(item);
     }
-  
-    let csvContent = "data:text/csv;charset=utf-8," 
-       + rows.map(e => e.join(",")).join("\n");
+    item=[];
+    item.push('Skipped');
+    while (item.length<=depth){
+      item.push('');
+    }
+    this.tasks.forEach(task => item.push(task.skipped));
+    rows.push(item);
+    const csvContent = 'data:text/csv;charset=utf-8,'
+       + rows.map(e => e.join(',')).join('\n');
 
-       var encodedUri = encodeURI(csvContent);
-       var link = document.createElement("a");
-       link.setAttribute("href", encodedUri);
-       link.setAttribute("download", "destinations.csv");
-       document.body.appendChild(link); // Required for FF
-       
-       link.click(); // This will download the data file named "my_data.csv".
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'destinations.csv');
+    document.body.appendChild(link); // Required for FF
+
+    link.click(); // This will download the data file named "my_data.csv".
   }
 
   excludeParticpant(result, index){
     const temp = {
-      _id: result["_id"],
-      id: result["id"],
-      results: result["results"],
-      finished: result["finished"],
-      username: result["username"],
-      timestamp: result["timestamp"],
-      feedback: result["feedback"],
+      _id: result._id,
+      id: result.id,
+      results: result.results,
+      finished: result.finished,
+      username: result.username,
+      timestamp: result.timestamp,
+      feedback: result.feedback,
       excluded: true
     };
-    //console.log(temp);
+    // console.log(temp);
     this.updateParticipantsTest(temp).subscribe(
         res => {
           console.log(res);
@@ -660,13 +676,13 @@ removeKeys(obj, keys){
   }
   includeParticipant(result, index){
     const temp = {
-      _id: result["_id"],
-      id: result["id"],
-      results: result["results"],
-      finished: result["finished"],
-      username: result["username"],
-      timestamp: result["timestamp"],
-      feedback: result["feedback"],
+      _id: result._id,
+      id: result.id,
+      results: result.results,
+      finished: result.finished,
+      username: result.username,
+      timestamp: result.timestamp,
+      feedback: result.feedback,
       excluded: false
     };
     this.updateParticipantsTest(temp).subscribe(
@@ -681,7 +697,7 @@ removeKeys(obj, keys){
     );
   }
   prepareDeleteParticipantResult() {
-    console.log("prepared!!");
+    console.log('prepared!!');
     console.log(this.tests);
     this.deleteParticipantResult()
     .subscribe(
@@ -689,19 +705,19 @@ removeKeys(obj, keys){
         this.resultsInformation()
         .subscribe(
           res => {
-            this.tests = (<any>res).result;
-            this.study = (<any>res).test[0];
-            this.tree = (<any>res).test[0].tree;
+            this.tests = (res as any).result;
+            this.study = (res as any).test[0];
+            this.tree = (res as any).test[0].tree;
             this.prepareResults();
           },
           err => {
             console.log(err);
           }
         );
-        $("#myModal10").modal('hide');
+        $('#myModal10').modal('hide');
       },
       err => {
-        $("#myModal10").modal('hide');
+        $('#myModal10').modal('hide');
         alert('An error occured. Please try again later.');
       }
     );

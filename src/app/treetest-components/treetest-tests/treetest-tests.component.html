@@ -75,7 +75,7 @@
           
           <p>{{ "excludedparticipants" | translate }}</p>
           <p>{{numberIncludedParticipants}} {{"participants" | translate}} ({{totalParticipants}} {{"totalWith" | translate}} {{totalParticipants - numberIncludedParticipants}} {{"excluded" | translate}})</p>
-          <button type="button" class="btn btn-warning"  (click)="exportCSV()">{{ "exportcsv" | translate }}</button>
+          <button type="button" class="btn btn-warning"  (click)="exportcsv()">{{ "exportcsv" | translate }}</button>
 
           <table *ngIf="tests.length && study" class="participants table table-bordered mt-30">
             <thead>

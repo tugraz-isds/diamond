@@ -7,6 +7,8 @@ import { UserService } from '../../user.service';
 
 declare var $: any;
 
+const { Parser } = require('json2csv');
+
 @Component({
   selector: 'app-card-sort-results',
   templateUrl: './cardsort-tests.component.html',
@@ -134,7 +136,7 @@ export class CardsortTestsComponent implements OnInit {
       if (this.tests[i].finished) {
         for (const group of this.tests[i].results) {
           for (const cardName of group.group_list) {
-            const card_string = cardName.replace(/\r?\n|\r/g, '');
+            const card_string = cardName;
 
             cards.push(card_string);
             map.set(card_string, cardIndex);
@@ -150,7 +152,7 @@ export class CardsortTestsComponent implements OnInit {
         const item = new Array<string>(cards.length);
         for (const group of this.tests[i].results){
           for (const cardName of group.group_list) {
-            const card_string = cardName.replace(/\r?\n|\r/g, '');
+            const card_string = cardName;
             const j = map.get(card_string);
             item[j] = group.group_name;
           }
@@ -158,9 +160,9 @@ export class CardsortTestsComponent implements OnInit {
         rows.push(item);
       }
     }
-
-    const csvContent = 'data:text/csv;charset=utf-8,'
-        + rows.map(e => e.join(',')).join('\n');
+    const opt = {header: false};
+    const json2csvParser = new Parser(opt);
+    const csvContent = 'data:text/csv;charset=utf-8,' + json2csvParser.parse(rows);
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
@@ -207,9 +209,9 @@ export class CardsortTestsComponent implements OnInit {
 
     // transpose
     rows = rows[0].map((_, colIndex) => rows.map(row => row[colIndex]));
-
-    const csvContent = 'data:text/csv;charset=utf-8,'
-        + rows.map(e => e.join(',')).join('\n');
+    const opt = {header: false};
+    const json2csvParser = new Parser(opt);
+    const csvContent = 'data:text/csv;charset=utf-8,' + json2csvParser.parse(rows);
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
@@ -223,29 +225,28 @@ export class CardsortTestsComponent implements OnInit {
 
   exportUserData() {
     const rows = [];
-    const item = [
-      'Username',
-      'Timestamp',
-      'Explanation',
-      'Feedback'
-    ];
-    rows.push(item);
+    // const item = [
+    //   'Username',
+    //   'Timestamp',
+    //   'Explanation',
+    //   'Feedback'
+    // ];
+    // rows.push(item);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.tests.length; i++) {
       if (!this.tests[i].excluded) {
         // tslint:disable-next-line:no-shadowed-variable
-        const item = [
-          this.tests[i].username,
-          this.tests[i].timestamp,
-          this.tests[i].feedback.replace(/\r?\n|\r/g, ' '),
-          this.tests[i].mindset.replace(/\r?\n|\r/g, ' ')
-        ];
+        const item = {
+          Username: this.tests[i].username,
+          Timestamp: this.tests[i].timestamp,
+          Explanation: this.tests[i].feedback,
+          Feedback: this.tests[i].mindset
+        };
         rows.push(item);
       }
     }
-
-    const csvContent = 'data:text/csv;charset=utf-8,'
-       + rows.map(e => e.join(',')).join('\n');
+    const json2csvParser = new Parser();
+    const csvContent = 'data:text/csv;charset=utf-8,' + json2csvParser.parse(rows);
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
@@ -268,7 +269,7 @@ export class CardsortTestsComponent implements OnInit {
       feedback: test["feedback"],
       excluded: true
     };
-    console.log(temp);
+
     this.updateParticipantsTest(temp).subscribe(
         res => {
           console.log(res);
@@ -319,8 +320,8 @@ export class CardsortTestsComponent implements OnInit {
         const item = [
           this.tests[i].username,
           this.tests[i].timestamp,
-          this.tests[i].feedback.replace(/\r?\n|\r/g, ' '),
-          this.tests[i].mindset.replace(/\r?\n|\r/g, ' ')
+          this.tests[i].feedback,
+          this.tests[i].mindset
         ];
         rows.push(item);
       }
@@ -328,9 +329,9 @@ export class CardsortTestsComponent implements OnInit {
 
     // transpose
     rows = rows[0].map((_, colIndex) => rows.map(row => row[colIndex]));
-
-    const csvContent = 'data:text/csv;charset=utf-8,'
-        + rows.map(e => e.join(',')).join('\n');
+    const opt = {header: false};
+    const json2csvParser = new Parser(opt);
+    const csvContent = 'data:text/csv;charset=utf-8,' + json2csvParser.parse(rows);
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
