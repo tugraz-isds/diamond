@@ -48,6 +48,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
     return this.http.post(this.userService.serverUrl +  '/users/tree-tests/' + this.id, "", httpOptions);
@@ -319,7 +320,8 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     const httpOptions = {
         headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
   };
     return this.http.post(this.userService.serverUrl + '/users/tree-study/password', body, httpOptions);
@@ -328,7 +330,8 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   postTestData(object) {
     const httpOptions = {
         headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/tree-tests/add', object, httpOptions);
@@ -337,7 +340,8 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   postFeedback(object) {
     const httpOptions = {
         headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
       })
     };
     return this.http.post(this.userService.serverUrl + '/users/tree-tests/feedback', object, httpOptions);

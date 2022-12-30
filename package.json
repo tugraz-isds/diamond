@@ -22,6 +22,7 @@
     "@angular/platform-browser": "~12.2.14",
     "@angular/platform-browser-dynamic": "~12.2.14",
     "@angular/router": "~12.2.14",
+    "@json2csv/plainjs": "^6.1.2",
     "@material/button": "^13.0.0",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
