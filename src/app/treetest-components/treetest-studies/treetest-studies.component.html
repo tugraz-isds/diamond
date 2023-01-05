@@ -31,7 +31,8 @@
                 >
                 <i (click)="copyToClipboard(t.id); myInput.select();" class="glyphicon glyphicon-copy"></i></td>
               <td class="text-center">
-                <button [routerLink]="['/create-tree-test/' + t.id]" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" style="padding-right: 5px;" ></span></button>
+                <button  [routerLink]="['/create-tree-test/' + t.id]" class="btn btn-primary"
+                [disabled]="t.launched" ><span class="glyphicon glyphicon-pencil" style="padding-right: 5px;" ></span></button>
               </td>
               <td class="text-center">
                   <button *ngIf="!t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="launchTest(t.id)"
