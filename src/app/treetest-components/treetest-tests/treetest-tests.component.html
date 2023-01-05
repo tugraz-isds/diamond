@@ -173,6 +173,10 @@
             <div style="margin-left: 25px; vertical-align: middle; display: inline-block; width: 15px; height: 15px; background-color: rgba(218,31,71,0.7)"></div><div style="display: inline-block; padding-left: 5px; vertical-align: middle">{{ "incorrect" | translate }} (>20% {{ "ofallanswers" | translate }})</div>
           </div>
           <button type="button" class="mt-30 btn btn-warning"  (click)="exportDestinationsCSV()">{{ "exportcsv" | translate }}</button>
+          <button type="button" class="mt-30 btn btn-primary"  (click)="toggleIrrelevantItems()">
+              {{ (irrelevantItemsCollapsed ? "expand" : "collapse") | translate }}
+          </button>
+
           <table *ngIf="tests.length" class="table table-bordered mt-30">
             <thead>
               <tr>
@@ -181,14 +185,15 @@
               </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of tree; let j = index;" >
-                    <td *ngIf="item.data" [style.padding-left.px]="item.data.index*25 + 5">{{item.text}}</td>
-                    <td *ngIf="!item.data">{{item.text}}</td>
-                    <td class="text-center" *ngFor="let task of destinations; let k = index;">
-                      <div  [ngStyle]="{ 'background-color' : getBackgroundColor(k, j, task[item.id], item.id)}">{{task[item.id]}}</div>
-                    </td>
-                </tr>
-
+                <ng-container *ngFor="let item of treemap.getDepthFirstArray(); let j = index;" >
+                    <tr *ngIf="!irrelevantItemDisabled(item)">
+                        <td *ngIf="item.data.data" [style.padding-left.px]="item.data.data.index*25 + 5">{{item.data.text}}</td>
+                        <td *ngIf="!item.data.data">{{item.data.text}}</td>
+                        <td class="text-center" *ngFor="let task of destinations; let k = index;">
+                            <div  [ngStyle]="{ 'background-color' : getBackgroundColor(k, j, task[item.data.id], item.data.id)}">{{task[item.data.id]}}</div>
+                        </td>
+                    </tr>
+                </ng-container>
             </tbody>
           </table>
 
