@@ -88,7 +88,7 @@ export class TreetestTestsComponent implements OnInit {
     console.log(this.id);
   }
 
-  openPieTree(index) {
+  openPathTree(index) {
     const url = location.origin + '/#/pie-tree/' + this.id + '/' + index;
     window.open(url, '_blank');
   }
@@ -271,9 +271,9 @@ export class TreetestTestsComponent implements OnInit {
     this.destinationTable();
   }
 
-  preparePieTree(index) {
+  preparePathTree(index) {
 
-    let data = this.getPieTreeData(index);
+    let data = this.getPathTreeData(index);
     data = this.removeKeys(data, ['parent', 'id']);
 
     // set the dimensions and margins of the graph
@@ -281,7 +281,7 @@ export class TreetestTestsComponent implements OnInit {
     const height = 460;
 
     // append the svg object to the body of the page
-    const svg = d3.select('#pietreesvg')
+    const svg = d3.select('#pathtreesvg')
       .append('svg')
         .attr('viewBox', '-70 0 900 900')
         .attr('preserveAspectRatio', 'xMinYMin')
@@ -325,7 +325,7 @@ export class TreetestTestsComponent implements OnInit {
 
   }
 
-  getPieTreeData(taskIndex) {
+  getPathTreeData(taskIndex) {
 
     // go through each participant
     for (let i = 0; i < this.tests.length; i++) {

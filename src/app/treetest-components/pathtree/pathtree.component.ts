@@ -9,11 +9,11 @@ import * as svg from 'save-svg-as-png';
 import * as d3 from "d3";
 
 @Component({
-  selector: 'app-pietree',
-  templateUrl: './pietree.component.html',
-  styleUrls: ['./pietree.component.css']
+  selector: 'app-pathtree',
+  templateUrl: './pathtree.component.html',
+  styleUrls: ['./pathtree.component.css']
 })
-export class PietreeComponent implements OnInit {
+export class PathtreeComponent implements OnInit {
 
   id = this.route.snapshot.params['id'];
   index = this.route.snapshot.params['index'];
@@ -35,7 +35,7 @@ export class PietreeComponent implements OnInit {
             }
             this.test = (<any>res).test[0];
             this.tree = (<any>res).test[0].tree;
-            this.preparePieTree(this.index);
+            this.preparePathTree(this.index);
           },
           err => {
             console.log(err);
@@ -56,15 +56,15 @@ export class PietreeComponent implements OnInit {
     return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
   }
 
-  preparePieTree(index) {
+  preparePathTree(index) {
     
-    var data = this.getPieTreeData(index);
+    var data = this.getPathTreeData(index);
 
     var width = 450;
     var height = 360;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#pietreesvg")
+    var svg = d3.select("#pathtreesvg")
       .append("svg")
       .attr("viewBox", "-20 0 " + width + " " + height )
         .attr('preserveAspectRatio', 'xMinYMin')
@@ -154,7 +154,7 @@ export class PietreeComponent implements OnInit {
 
   }
 
-  getPieTreeData(taskIndex) {
+  getPathTreeData(taskIndex) {
     // go through each participant
     for (let i = 0; i < this.results.length; i++) {
       if (this.results[i].finished) {
