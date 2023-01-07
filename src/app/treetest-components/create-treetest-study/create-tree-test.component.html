@@ -51,8 +51,10 @@
                   translate }}</button>
           <button [disabled]="tasks.length" type="button" class="btn btn-primary mr-5" (click)="renameNode()">{{ "rename" | translate }}</button>
           <button [disabled]="tasks.length" type="button" class="btn btn-primary" (click)="deleteSelectedNode()">{{ "delete" | translate }}</button>
-          <label style="font-size: 10px !important; text-transform: initial !important;" for="file" class="btn btn-primary">{{ "importcsv" | translate }}</label>
-          <input style="display: none;" type="file" id="file" (change)="onFileSelect($event.target)">
+          
+          <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importcsv" | translate }}</button>
+          <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
+
         </div>
         <div [ngClass]="{'tree-disabled': tasks.length}" id="test-tree"></div>
         <button type="button" class="btn btn-primary mt-30" (click)="open('tasks'); saveTest();">{{ "nextstep" | translate }}</button>
