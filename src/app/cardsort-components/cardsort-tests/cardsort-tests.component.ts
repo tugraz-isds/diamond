@@ -238,8 +238,8 @@ export class CardsortTestsComponent implements OnInit {
       if (!this.tests[i].excluded) {
         // tslint:disable-next-line:no-shadowed-variable
         const item = {
-          Username: this.tests[i].username,
-          Timestamp: this.tests[i].timestamp,
+          Name: this.tests[i].username,
+          'Date and Time': this.tests[i].timestamp,
           Explanation: this.tests[i].feedback,
           Feedback: this.tests[i].mindset
         };
@@ -309,8 +309,8 @@ export class CardsortTestsComponent implements OnInit {
   exportUserDataTransposed(){
     let rows = [];
     const item = [
-      'Username',
-      'Timestamp',
+      'Name',
+      'Date and Time',
       'Explanation',
       'Feedback'
     ];
