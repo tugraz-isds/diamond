@@ -14,7 +14,8 @@ export class NavbarComponent {
     private readonly langService: LanguageService
   ) { }
 
-  logout() {
+  onLogout($event?: MouseEvent | KeyboardEvent) {
+    $event?.preventDefault();
     this.authService.logout();
     location.reload();
   }
