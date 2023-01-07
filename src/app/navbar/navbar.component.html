@@ -29,7 +29,7 @@
         <li [class.dm-active-lang]="isCurrentLang('de')">
           <a href="#" (click)="changeLanguage('de', $event)">DE</a>
         </li>
-        <li *ngIf="authService.loggedIn" class="pointer"><a (click)="logout()">{{ "logout" | translate }}</a></li>
+        <li *ngIf="authService.loggedIn" class="pointer"><a href="#" (click)="onLogout($event)">{{ "logout" | translate }}</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

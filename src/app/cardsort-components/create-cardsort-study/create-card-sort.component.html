@@ -37,8 +37,10 @@
                     <button type="button" class="btn btn-primary mr-5" (click)="addCard()">{{ "addcard" | translate }}</button>
                     <button type="button" class="btn btn-primary mr-5" (click)="renameCard()">{{ "rename" | translate }}</button>
                     <button type="button" class="btn btn-primary" (click)="deleteSelectedCard()">{{ "delete" | translate }}</button>
-                    <label style="font-size: 10px !important; text-transform: initial !important;" for="file" class="btn btn-primary">{{ "importcsv" | translate }}</label>
-                    <input style="display: none;" type="file" id="file" (change)="onFileSelect($event.target)">
+                                       
+                    <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importcsv" | translate }}</button>
+                    <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
+
                 </div>
                 <input class="cardName form-control" [(ngModel)]="cardName" type="text" (keyup.enter)="addCard()">
                 <app-card-list [cards]="cards" (selectedEvent)="selectCard($event)"></app-card-list>

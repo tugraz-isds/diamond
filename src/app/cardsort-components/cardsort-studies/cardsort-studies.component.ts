@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { UserService } from '../../user.service';
 import { AuthenticationService } from '../../authentification.service';
 
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { saveAs } from 'file-saver'
 
@@ -229,7 +229,6 @@ export class CardsortStudiesComponent implements OnInit {
           );
       }
     }
-
 
     // Import Study
     onFileSelect(input) {
