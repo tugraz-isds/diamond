@@ -105,6 +105,9 @@ export class TreetestStudiesComponent implements OnInit {
       launched: true,
       lastLaunched: new Date()
   };
+    if (!preview && !confirm('Continue? Study will not be changeable after launch!')) {
+      return;
+    }
     this.editTest(data)
     .subscribe(
       res => {
