@@ -23,10 +23,12 @@
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="authService.user && authService.user.email === 'admin'" class="pointer" routerLink="/admin"><a>Admin Panel</a></li>
         <li *ngIf="authService.user"><a style="cursor: initial !important;">{{authService.user.email}}</a></li>
-
-        <li class="lang-en" (click)="translationService.changeLanguage('en', $event)"><a style="padding-right: 0">EN</a></li>
-
-        <li class="lang-de" (click)="translationService.changeLanguage('de', $event)"><a>DE</a></li>
+        <li [class.dm-active-lang]="isCurrentLang('en')">
+          <a href="#" (click)="changeLanguage('en', $event)">EN</a>
+        </li>
+        <li [class.dm-active-lang]="isCurrentLang('de')">
+          <a href="#" (click)="changeLanguage('de', $event)">DE</a>
+        </li>
         <li *ngIf="authService.loggedIn" class="pointer"><a (click)="logout()">{{ "logout" | translate }}</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
