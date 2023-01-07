@@ -9,6 +9,7 @@ import { Parser } from '@json2csv/plainjs';
 
 declare var Chart: any;
 import * as d3 from 'd3';
+import TreeNode from "./TreeNode";
 
 declare var $: any;
 
@@ -53,12 +54,13 @@ export class TreetestTestsComponent implements OnInit {
 
   tree = [];
   destinations;
-  treemap;
+  treemap: TreeNode;
   root;
   svg;
   duration = 750;
   i = 0;
   deleteParticipantResultIndex;
+  irrelevantItemsCollapsed = false;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
@@ -71,6 +73,9 @@ export class TreetestTestsComponent implements OnInit {
             this.tests = (res as any).result;
             this.study = (res as any).test[0];
             this.tree = (res as any).test[0].tree;
+            this.treemap = new TreeNode(this.tree, this.tree[0], 1);
+            this.treemap.fillTree(this.tests);
+            const treemapArray = this.treemap.getDepthFirstArray();
             this.prepareResults();
           },
           err => {
@@ -737,4 +742,11 @@ removeKeys(obj, keys){
     };
     return this.http.post(this.userService.serverUrl + '/users/tree-test/edit', object, httpOptions);
   }
+
+  toggleIrrelevantItems() {
+    this.irrelevantItemsCollapsed = !this.irrelevantItemsCollapsed;
+  }
+
+  irrelevantItemDisabled(item: TreeNode) {
+    return this.irrelevantItemsCollapsed && !item.hasAnswerInPath(); }
 }
