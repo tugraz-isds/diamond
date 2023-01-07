@@ -411,41 +411,35 @@ removeKeys(obj, keys){
 
   getCorrectTasks(results) {
     let totalCorrect = 0;
-    if (!results.length) { return '0%'; }
+    if (!results.length) { return totalCorrect; }
     for (let i = 0; i < results.length; i++) {
       if (results[i].answer && results[i].answer === this.study.tasks[i].id) {
         totalCorrect++;
       }
     }
-    const percentage = (totalCorrect * 100) / this.study.tasks.length;
-
-    return Math.floor(percentage) + '%';
+    return totalCorrect;
   }
 
   getSkippedTasks(results) {
     let totalSkipped = 0;
-    if (!results.length) { return '0%'; }
+    if (!results.length) { return totalSkipped; }
     for (let i = 0; i < results.length; i++) {
       if (!results[i].answer) {
         totalSkipped++;
       }
     }
-    const percentage = (totalSkipped * 100) / this.tasks.length;
-
-    return Math.floor(percentage) + '%';
+    return totalSkipped;
   }
 
   getCompletedTasks(results) {
     let totalCompleted = 0;
-    if (!results.length) { return '0%'; }
+    if (!results.length) { return totalCompleted; }
     for (let i = 0; i < results.length; i++) {
       if (results[i].answer) {
         totalCompleted++;
       }
     }
-    const percentage = (totalCompleted * 100) / this.tasks.length;
-
-    return Math.floor(percentage) + '%';
+    return totalCompleted;
   }
 
   getDuration(results) {
@@ -578,12 +572,12 @@ removeKeys(obj, keys){
     for(let i = 0; i < this.tests.length; i++) {
       if (!this.tests[i].excluded) {
         const item = {
-          Username: this.tests[i].username,
-          Timestam: this.tests[i].timestamp,
+          Name: this.tests[i].username,
+          'Date and Time': this.tests[i].timestamp,
           Duration: this.getDuration(this.tests[i]),
-          'Completed Tasks': this.getCompletedTasks(this.tests[i].results),
-          'Skipped Tasks': this.getSkippedTasks(this.tests[i].results),
-          'Correct Tasks': this.getCorrectTasks(this.tests[i].results),
+          [`Tasks Completed (out of ${this.tasks.length})`]: this.getCompletedTasks(this.tests[i].results),
+          [`Tasks Skipped (out of ${this.tasks.length})`]: this.getSkippedTasks(this.tests[i].results),
+          [`Tasks Correct (out of ${this.tasks.length})`]: this.getCorrectTasks(this.tests[i].results),
           Feedback: this.tests[i].feedback
         };
         rows.push(item);
