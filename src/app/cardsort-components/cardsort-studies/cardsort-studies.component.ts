@@ -1,15 +1,17 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
-
-import { UserService } from '../../user.service';
-import { AuthenticationService } from '../../authentification.service';
-
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { saveAs } from 'file-saver'
+import { AuthenticationService, ILoginResponse } from '../../authentification.service';
+import { CardSortStudyService, ICardSortStudy, ICardSortStudyEdit } from '../card-sort-study.service';
+import { CardSortTestService, ICardSortTest } from '../card-sort-test.service';
+import { forkJoin, Observable } from 'rxjs';
 
 declare var $: any;
+
+interface IParticipant {
+  id: string;
+  participants: number;
+}
 
 @Component({
   selector: 'app-tests',
@@ -17,33 +19,40 @@ declare var $: any;
   styleUrls: ['./cardsort-studies.component.css', '../../app.component.css']
 })
 export class CardsortStudiesComponent implements OnInit {
-  cardSortStudies;
-  deleteCardSortTestId;
-  baseurl = "";
-  tests = [];
-  numberParticipants = [];
 
-  constructor(private http: HttpClient, private userService: UserService, public authService: AuthenticationService, private router: Router) { }
+  public cardSortStudies: Array<ICardSortStudy>;
 
-  ngOnInit() {
+  public deleteCardSortTestId: string;
+  
+  private baseurl: string = '';
+
+  private tests: Array<any> = [];
+  
+  public numberParticipants: Array<IParticipant> = [];
+
+  private currentUser: ILoginResponse;
+
+  constructor(
+    private cardSortStudyService: CardSortStudyService,
+    private cardSortTestSerice: CardSortTestService,
+    public authService: AuthenticationService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
+    this.currentUser = this.authService.getCurrentUser();
     this.getAllCardSortTests();
   }
 
-  getAllCardSortTests() {
-    const data = {
-        user: JSON.parse(localStorage.getItem('currentUser')).email
-    };
-    this.getCardSortTestData(data)
-    .subscribe(
-      res => {
+  getAllCardSortTests() {    
+    this.cardSortStudyService
+      .getAllByUserId(this.currentUser?.email)
+      .subscribe(res => {
         this.cardSortStudies = res;
         this.setNumberOfParticipants();
-      },
-      err => {
-      }
-    );
+      });
   }
 
   copyToClipboard(studyId) {
@@ -81,114 +90,72 @@ export class CardsortStudiesComponent implements OnInit {
 
   }
 
-  getCardSortTestData(object) {
-    //const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/getbyuserid', object, httpOptions);
+  getLink(id: string): string {
+    return `${this.baseurl}/#/cardsort/${id}`;
   }
 
-  getLink(id) {
-    return this.baseurl + "/#/cardsort/" + id;
-  }
+  launchCardSortTest(studyId: string, preview?: boolean): void {
 
-  launchCardSortTest(studyId, preview?) {
-    const data = {
+    const data: ICardSortStudyEdit = {
       id: studyId,
       launched: true,
       lastLaunched: new Date()
-  };
-    this.editCardSortTest(data)
-    .subscribe(
-      res => {
-        this.getAllCardSortTests();
+    };
+
+    this.cardSortStudyService
+      .edit(data)
+      .subscribe(res => {        
         if (preview) {
           this.router.navigate(['cardsort/' + studyId]);
+        } else {
+          this.getAllCardSortTests();
         }
-      },
-      err => {
+      }, err => {
         alert('An error occured. Please try again later.');
-      }
-    );
+      });
   }
 
-  stopCardSortTest(studyId) {
-    const data = {
+  stopCardSortTest(studyId: string): void {
+
+    const data: ICardSortStudyEdit = {
       id: studyId,
       launched: false,
       lastEnded: new Date()
     };
-    this.editCardSortTest(data)
-    .subscribe(
-      res => {
-        this.getAllCardSortTests();
-      },
-      err => {
-        alert('An error occured. Please try again later.');
-      }
-    );
+
+    this.cardSortStudyService
+      .edit(data)
+      .subscribe(
+        res => this.getAllCardSortTests(),
+        err => alert('An error occured. Please try again later.')
+      );
   }
 
   prepareDeleteStudy() {
-    this.deleteStudy()
-    .subscribe(
-      res => {
-        this.getAllCardSortTests();
-        $("#myModal").modal('hide');
-      },
-      err => {
-        $("#myModal").modal('hide');
-        alert('An error occured. Please try again later.');
-      }
-    );
-  }
-
-  deleteStudy() {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/delete', {id: this.deleteCardSortTestId}, httpOptions);
-  }
-
-  editCardSortTest(data) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/edit', data, httpOptions);
+    this.cardSortStudyService
+      .delete(this.deleteCardSortTestId)
+      .subscribe(
+        res => this.getAllCardSortTests(),
+        err => alert('An error occured. Please try again later.')
+      )
+      .add(() => $("#myModal").modal('hide'));
   }
 
   // Export Study
-  export(studyId){
+  export(studyId: string){
     let study = this.cardSortStudies.find(study => study._id === studyId);
     let id = study.id;
     let file;
-    this.resultsInformation(id)
-          .subscribe(
-            res => {
-              this.tests = (<any>res).result;
-              for (let i = 0; i < this.tests.length; i++) {
-                this.tests[i]["exclude"] = false;
-              }
-              file = {...study, tests : this.tests};
-              this.downloadFile(file, id);
-              console.log(file);
-            },
-            err => {
-              console.log(err);
-            }
-          );
+    this.cardSortTestSerice
+      .getById(id)
+      .subscribe(res => {
+        this.tests = res.result;
+        for (let i = 0; i < this.tests.length; i++) {
+          this.tests[i]["exclude"] = false;
+        }
+        file = {...study, tests: this.tests};
+        this.downloadFile(file, id);
+      });
     }
 
     private downloadFile(data, fileName) {
@@ -196,37 +163,18 @@ export class CardsortStudiesComponent implements OnInit {
       saveAs(blob, `study-${fileName}.json`);
     }
 
-    resultsInformation(id) {
-      /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
-      const httpOptions = {
-          headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-           Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-        })
-    };
-      return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/' + id, '', httpOptions);
-    }
-
-    setNumberOfParticipants(){
-      let obj;
+    setNumberOfParticipants() {
+      
+      // FIXME: this should be done on the backend when fetching data from db
       this.numberParticipants = [];
-      for(let study of this.cardSortStudies){
-        let number = 0;
+
+      for(let study of this.cardSortStudies) {
         let id = study["id"];
-        this.resultsInformation(id)
-          .subscribe(
-            res => {
-              let tests = (<any>res).result;
-              for (let i = 0; i < tests.length; i++) {
-                number ++;
-              }
-              obj = {id: id, participants: number}
-              this.numberParticipants.push(obj)
-            },
-            err => {
-              console.log(err);
-            }
-          );
+        this.cardSortTestSerice
+          .getById(id)
+          .subscribe(res => {
+            this.numberParticipants.push({ id, participants: res.result.length });
+          });
       }
     }
 
@@ -248,9 +196,10 @@ export class CardsortStudiesComponent implements OnInit {
         const fileReader = new FileReader();
         let json = null;
         fileReader.onload = (e) => {
+
           json = JSON.parse(e.target.result.toString());
           const randomStudyId = Math.random().toString(36).substring(2, 15);
-          const study = {
+          const study: ICardSortStudy = {
             cards: json["cards"],
             name: json["name"],
             launched: false,
@@ -265,69 +214,42 @@ export class CardsortStudiesComponent implements OnInit {
             subCategories: json["subCategories"],
             lastEnded: new Date(),
             lastLaunched: new Date()
-        };
-        
-  
-        this.postCardSortStudyData(study)
-        .subscribe(
-          res => {
-            $("#success").modal('show');
-          },
-          err => {
-            alert("Error: " + err);
-            console.log(err);
-          }
-        );
-        for(let study of json["tests"]){
-          let exclude = false;
-          if (study["excluded"] !== undefined) { exclude = study["excluded"]};
-          const temp = {
-            id: randomStudyId,
-            results: study["tests"],
-            finished: study["finished"],
-            username: study["username"],
-            timestamp: study["timestamp"],
-            feedback: study["feedback"],
-            mindset: study["mindset"],
-            excluded: exclude,
           };
-
-          this.postCardSortTestData(temp)
-            .subscribe(
-              res => {
-                console.log(res);
-              },
-              err => {
-                console.log(err);
-              }
-            );
-        }
-        this.getAllCardSortTests();
-        };
-        fileReader.readAsText(input.files[0]);
         
+          this.cardSortStudyService
+            .add(study)
+            .subscribe(
+              res => $("#success").modal('show'),
+              err => alert("Error: " + err)
+            );
+
+          let subs: Array<Observable<void>> = [];
+
+          for(let study of json["tests"]) {
+            let exclude = false;
+            if (study["excluded"] !== undefined) { exclude = study["excluded"]};
+
+            const temp: ICardSortTest = {
+              id: randomStudyId,
+              results: study["tests"],
+              finished: study["finished"],
+              username: study["username"],
+              timestamp: study["timestamp"],
+              feedback: study["feedback"],
+              mindset: study["mindset"],
+              excluded: exclude,
+            };
+
+            subs.push(this.cardSortTestSerice.add(temp));
+          }
+
+          forkJoin(subs)
+            .subscribe(res => {
+              this.getAllCardSortTests();
+            });
+        };
+
+        fileReader.readAsText(input.files[0]);        
       }
-    }
-
-    postCardSortStudyData(object) {
-      const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-        })
-      };
-      return this.http.post(this.userService.serverUrl + '/users/card-sort-study/add', object, httpOptions);
-    }
-
-    postCardSortTestData(object) {
-      const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-        })
-      };
-      return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/add', object, httpOptions);
     }
 }
