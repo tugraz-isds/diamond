@@ -283,7 +283,7 @@ export class CardsortStudiesComponent implements OnInit {
           if (study["excluded"] !== undefined) { exclude = study["excluded"]};
           const temp = {
             id: randomStudyId,
-            results: study["tests"],
+            results: study["results"],
             finished: study["finished"],
             username: study["username"],
             timestamp: study["timestamp"],
