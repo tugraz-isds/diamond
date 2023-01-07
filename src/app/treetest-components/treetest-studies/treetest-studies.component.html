@@ -75,10 +75,9 @@
 
 
     <div *ngIf="(this.authService.user.study || this.authService.user.email === 'admin')">
-      <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-tree-test">{{ "createstudy" | translate }}</button>
-      <!-- <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary">{{ "importstudy" | translate }}</button> -->
-      <label style="font-size: 10px !important; text-transform: initial !important;" for="file" class="btn btn-primary">{{ "importstudy" | translate }}</label>
-      <input style="display: none;" type="file" id="file" (change)="onFileSelect($event.target)">
+      <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-tree-test">{{ "createstudy" | translate }}</button>            
+      <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importstudy" | translate }}</button>
+      <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
     </div>
   </div>
 </div>
