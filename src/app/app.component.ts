@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
       }
     }
   }
+  
 
   getRequest() {
     // return this.http.get('http://localhost:48792/');

@@ -26,7 +26,6 @@ import { PietreeComponent } from './treetest-components/pietree/pietree.componen
 import { AdminComponent } from './admin/admin.component';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslationService } from './translate.service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateCardSortComponent } from './cardsort-components/create-cardsort-study/create-card-sort.component';
 import { CardsortStudyComponent } from './cardsort-components/cardsort-study/cardsort-study.component';
@@ -39,6 +38,7 @@ import {CardsortTestMatrixComponent} from './cardsort-components/cardsort-test-m
 import {participantsFilterPipe} from 'src/app/pipes/filter.pipe';
 import {datePipe} from './pipes/datePipe.pipe';
 import { StudyClosedComponent } from './study-closed/study-closed.component';
+import { LanguageService } from './language.service';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent},
@@ -103,7 +103,8 @@ const appRoutes: Routes = [
     AlertService,
     UserService,
     {provide: LocationStrategy, useClass: HashLocationStrategy},
-    TranslationService,
+    // TranslationService,
+    LanguageService,
   ],
   bootstrap: [AppComponent]
 })

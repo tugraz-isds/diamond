@@ -1,7 +1,5 @@
-.lang-en {
+.dm-active-lang a {
     opacity: 1;
+    font-weight: bold;
 }
-
-.lang-de {
-    opacity: 0.5;
-}
+  
