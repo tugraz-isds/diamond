@@ -231,7 +231,7 @@ export class CardsortStudiesComponent implements OnInit {
 
             const temp: ICardSortTest = {
               id: randomStudyId,
-              results: study["tests"],
+              results: study["results"],
               finished: study["finished"],
               username: study["username"],
               timestamp: study["timestamp"],
