@@ -249,66 +249,72 @@ export class TreetestStudiesComponent implements OnInit {
 
       const fileReader = new FileReader();
       let json = null;
+
       fileReader.onload = (e) => {
-        json = JSON.parse(e.target.result.toString());
-        //console.log(json);
-        const randomStudyId = Math.random().toString(36).substring(2, 15);
-        let launchable: boolean = json["tasks"].length > 0 ? true : false; 
-        const study = {
-          name: json["name"],
-          launched: false,
-          password: json["password"],
-          id: randomStudyId,
-          tree: json["tree"],
-          tasks: json["tasks"],
-          user: JSON.parse(localStorage.getItem('currentUser')).email,
-          welcomeMessage: json["welcomeMessage"],
-          instructions: json["instructions"],
-          thankYouScreen: json["thankYouScreen"],
-          leaveFeedback: json["leaveFeedback"],
-          leafNodes: json["leafNodes"],
-          orderNumbers: json["orderNumbers"],
-          lastEnded: new Date(),
-          lastLaunched: new Date(),
-          isLaunchable: launchable
-      };
-
-      this.postStudyData(study)
-      .subscribe(
-        res => {
-          $("#success").modal('show');
-        },
-        err => {
-          alert("Error: " + err);
-          console.log(err);
+        let study;
+        try {
+          json = JSON.parse(e.target.result.toString());
+          const randomStudyId = Math.random().toString(36).substring(2, 15);
+          const launchable: boolean = json["tasks"].length > 0;
+          study = {
+            name: json["name"],
+            launched: false,
+            password: json["password"],
+            id: randomStudyId,
+            tree: json["tree"],
+            tasks: json["tasks"],
+            user: JSON.parse(localStorage.getItem('currentUser')).email,
+            welcomeMessage: json["welcomeMessage"],
+            instructions: json["instructions"],
+            thankYouScreen: json["thankYouScreen"],
+            leaveFeedback: json["leaveFeedback"],
+            leafNodes: json["leafNodes"],
+            orderNumbers: json["orderNumbers"],
+            lastEnded: new Date(),
+            lastLaunched: new Date(),
+            isLaunchable: launchable
+          };
+        } catch (e) {
+          alert(`Error while importing!\n${e.message}`);
+          return;
         }
-      );
-      for(let test of json["tests"]){
-        let exclude = false;
-        if (test["excluded"] !== undefined) { exclude = test["excluded"]};
-        const temp = {
-          id: randomStudyId,
-          results: test["results"],
-          finished: test["finished"],
-          username: test["username"],
-          timestamp: test["timestamp"],
-          feedback: test["feedback"],
-          excluded: exclude,
-        };
 
-        this.postTestData(temp)
-          .subscribe(
-            res => {
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
-          );
-      }
-      this.getAllTests();
-      };
-      fileReader.readAsText(input.files[0]);
+        this.postStudyData(study)
+        .subscribe(
+          res => {
+            $("#success").modal('show');
+          },
+          err => {
+            alert("Error: " + err);
+            console.log(err);
+          }
+        );
+        for(let test of json["tests"]){
+          let exclude = false;
+          if (test["excluded"] !== undefined) { exclude = test["excluded"]};
+          const temp = {
+            id: study.randomStudyId,
+            results: test["results"],
+            finished: test["finished"],
+            username: test["username"],
+            timestamp: test["timestamp"],
+            feedback: test["feedback"],
+            excluded: exclude,
+          };
+
+          this.postTestData(temp)
+            .subscribe(
+              res => {
+                console.log(res);
+              },
+              err => {
+                console.log(err);
+              }
+            );
+        }
+        this.getAllTests();
+        };
+        fileReader.readAsText(input.files[0]);
       
     }
   }
