@@ -20,12 +20,27 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/bootstrap/fonts/",
+                "output": "./assets/bootstrap/fonts/"
+              }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/mdbootstrap/css/mdb.min.css",
+              "node_modules/mdbootstrap/css/style.css",
+              "node_modules/jstree/dist/themes/default/style.min.css",
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/mdbootstrap/js/jquery-3.3.1.min.js",
+              "node_modules/mdbootstrap/js/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/mdbootstrap/js/mdb.min.js",
+              "node_modules/jstree/dist/jstree.min.js"
+            ],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
