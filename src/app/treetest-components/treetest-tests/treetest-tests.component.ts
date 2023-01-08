@@ -574,7 +574,7 @@ removeKeys(obj, keys){
         const item = {
           Name: this.tests[i].username,
           'Date and Time': this.tests[i].timestamp,
-          Duration: this.getDuration(this.tests[i]),
+          'Duration [s]': this.getDuration(this.tests[i]),
           [`Tasks Completed (out of ${this.tasks.length})`]: this.getCompletedTasks(this.tests[i].results),
           [`Tasks Skipped (out of ${this.tasks.length})`]: this.getSkippedTasks(this.tests[i].results),
           [`Tasks Correct (out of ${this.tasks.length})`]: this.getCorrectTasks(this.tests[i].results),
