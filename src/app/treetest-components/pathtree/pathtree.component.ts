@@ -63,6 +63,8 @@ export class PathtreeComponent implements OnInit {
     var width = 450;
     var height = 360;
 
+    const maxClicks = Math.max(...data.children.map(child => child.clicks));
+
     // append the svg object to the body of the page
     var svg = d3.select("#pathtreesvg")
       .append("svg")
@@ -97,7 +99,7 @@ export class PathtreeComponent implements OnInit {
           return this.getColor(d)
         })
         .attr("stroke-width", (d) => {
-          return this.getWidth(d)
+          return this.getWidth(d, maxClicks);
         })
 
 
@@ -130,8 +132,11 @@ export class PathtreeComponent implements OnInit {
 
   this.getSvg();
   }
-  getWidth(node) {
-    return node.data.clicks/1.5 + "px";
+  getWidth(node, maxClicks) {
+    const maxLog = maxClicks;
+    const valLog = node.data.clicks;
+    const maxStrokeWidth = 15;
+    return valLog / maxLog * maxStrokeWidth + "px";
   }
 
   getColor(node) {
