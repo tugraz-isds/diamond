@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
 import {HttpHeaders} from '@angular/common/http';
@@ -16,6 +16,9 @@ import PathTreeGenerator from "./PathTreeGenerator";
 })
 export class PathtreeComponent implements OnInit {
 
+    @Input()  margin = {top: 20, right: 100, bottom: 20, left: 30};
+    @Input()  fontSize = 10;
+
     id = this.route.snapshot.params['id'];
     index = this.route.snapshot.params['index'];
 
@@ -23,6 +26,7 @@ export class PathtreeComponent implements OnInit {
     results = [];
     tree = [];
     nodeEnter;
+    private newTree: any[];
 
     constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) {
     }
@@ -38,6 +42,7 @@ export class PathtreeComponent implements OnInit {
                         }
                         this.test = (<any>res).test[0];
                         this.tree = (<any>res).test[0].tree;
+                        this.preparePathTreeData(this.index);
                         this.preparePathTree(this.index);
                     },
                     err => {
@@ -61,7 +66,7 @@ export class PathtreeComponent implements OnInit {
 
     preparePathTree(index) {
         const data = this.getPathTreeData(index);
-        const pathTreeGenerator = new PathTreeGenerator({data});
+        const pathTreeGenerator = new PathTreeGenerator({data, margin: this.margin, fontSize: this.fontSize});
         pathTreeGenerator.addSvgToDOM();
         pathTreeGenerator.addLinksToDOM(this.test, this.index, this.tree);
         pathTreeGenerator.addNodesToDOM();
@@ -70,11 +75,12 @@ export class PathtreeComponent implements OnInit {
         this.getSvg();
     }
 
-    getPathTreeData(taskIndex) {
+    preparePathTreeData(taskIndex) {
         // go through each participant
         for (let i = 0; i < this.results.length; i++) {
             if (this.results[i].finished) {
                 // go through given task clicks
+                console.log(this.results[i].results, taskIndex);
                 for (let j = 0; j < this.results[i].results[taskIndex].clicks.length; j++) {
 
                     for (let k = 0; k < this.tree.length; k++) {
@@ -116,12 +122,14 @@ export class PathtreeComponent implements OnInit {
                 });
             }
         }
+        this.newTree = newTree;
+    }
 
-        var data = {
+    getPathTreeData(taskIndex) {
+        return {
             "name": this.tree[0].text,
-            "children": this.getNestedChildren(newTree, "root")
+            "children": this.getNestedChildren(this.newTree, "root")
         };
-        return data;
     }
 
     getNestedChildren(arr, parent) {
@@ -190,4 +198,18 @@ export class PathtreeComponent implements OnInit {
         (<any>document).getElementById("link").href = url;
     }
 
+    onMarginChange(e: any) {
+        switch (e.target.id) {
+            case "margin-top" : this.margin = this.margin = {...this.margin, top: Number(e.target.value)}; break;
+            case "margin-right" : this.margin = this.margin = {...this.margin, right: Number(e.target.value)}; break;
+            case "margin-bottom" : this.margin = this.margin = {...this.margin, bottom: Number(e.target.value)}; break;
+            case "margin-left" : this.margin = this.margin = {...this.margin, left: Number(e.target.value)}; break;
+        }
+        this.preparePathTree(this.index);
+    }
+
+    onFontSizeChange(e: any) {
+        this.fontSize = Number(e.target.value);
+        this.preparePathTree(this.index);
+    }
 }

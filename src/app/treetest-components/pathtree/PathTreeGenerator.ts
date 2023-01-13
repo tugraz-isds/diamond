@@ -10,6 +10,7 @@ interface PathTreeGeneratorOptions {
         bottom: number,
         left: number
     };
+    fontSize?: number;
     circleRadius?: number;
     circleStroke?: number;
 }
@@ -20,6 +21,7 @@ export default class PathTreeGenerator {
     private data: any;
     private maxClicks = 0;
     private margin = {top: 0, right: 0, bottom: 0, left: 0};
+    private fontSize = 0;
     private circleRadius = 0;
     private circleStroke = 0;
     private root: d3.HierarchyNode<any>;
@@ -29,11 +31,12 @@ export default class PathTreeGenerator {
     private enteredNodes: d3.Selection<SVGGElement, d3.HierarchyNode<any>, SVGGElement, unknown>;
     constructor(options: PathTreeGeneratorOptions) {
         const {radius = 450, angle = 360, data, circleRadius = 7, circleStroke = 1,
-            margin = {top: 20, left: 30, bottom: 20, right: 100}} = options;
+            margin = {top: 20, left: 30, bottom: 20, right: 100}, fontSize = 7} = options;
         this.radius = radius;
         this.angle = angle;
         this.data = data;
         this.margin = margin;
+        this.fontSize = fontSize;
         this.circleRadius = circleRadius;
         this.circleStroke = circleStroke;
         this.maxClicks = Math.max(...data.children.map(child => child.clicks));
@@ -66,6 +69,11 @@ export default class PathTreeGenerator {
 
     public addSvgToDOM() {
         // append the svg object to the body of the page
+        const container = document.getElementById("pathtreesvg");
+        if (container?.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+
         const {maxX, minX, maxY, minY} = this.retrieveBoundaries();
         const width = maxX - minX + this.margin.left + this.margin.right + 2 * this.circleRadius + 2 * this.circleStroke;
         const height = maxY - minY + this.margin.top + this.margin.bottom + 2 * this.circleRadius + 2 * this.circleStroke;
@@ -125,9 +133,12 @@ export default class PathTreeGenerator {
         this.enteredNodes.append('text')
             .attr("dy", "-10")
             .attr("x", "12")
-            .style("font-size", "10px")
+            .attr("font-size", this.fontSize.toString())
             .attr("text-anchor", "middle")
-            .text((d) => { return d.data.name + " (" + (<any>d).data.clicks + ")" });
+            .text((d) => {
+                const clicks = (<any>d).data.clicks !== undefined ? (<any>d).data.clicks : 0;
+                return d.data.name + " (" + clicks + ")"
+            });
 
 
     }
