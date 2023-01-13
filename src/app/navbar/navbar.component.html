@@ -15,9 +15,9 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li *ngIf="(authService.loggedIn && authService.studyAccess) || authService.user.email === 'admin'" routerLink="/tests" class="pointer"><a>{{ "TreeTest Studies" | translate }}</a></li>
-        <li *ngIf="(authService.loggedIn && authService.studyAccess) || authService.user.email === 'admin'" routerLink="/card-sort-tests" class="pointer"><a>{{ "CardSort Studies" | translate }}</a></li>
+      <ul class="nav navbar-nav navbar-left">
+        <li *ngIf="(authService.loggedIn && authService.studyAccess) || authService.user.email === 'admin'" routerLink="/tests" class="pointer"><a [class]="treeHighlighted">{{ " TreeTest Studies" | translate }}</a></li>
+        <li *ngIf="(authService.loggedIn && authService.studyAccess) || authService.user.email === 'admin'" routerLink="/card-sort-tests" class="pointer"><a [class]="cardHighlighted">{{ "CardSort Studies" | translate }}</a></li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
