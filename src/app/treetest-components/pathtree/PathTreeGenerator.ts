@@ -105,7 +105,11 @@ export default class PathTreeGenerator {
             })
             .attr("stroke-width", (d) => {
                 return this.getWidth(d);
-            });
+            })
+            .attr("opacity", (d) => {
+                return d.data.clicks / this.maxClicks * 1.5 + 0.25;
+            })
+        ;
     }
 
     public addNodesToDOM() {
@@ -166,8 +170,9 @@ export default class PathTreeGenerator {
     private getWidth(node) {
         const maxLog = this.maxClicks;
         const valLog = node.data.clicks;
-        const maxStrokeWidth = 15;
-        return (valLog / maxLog * maxStrokeWidth).toString();
+        const variableStrokeWidth = 10;
+        const minStrokeWidth = 2;
+        return (valLog / maxLog * variableStrokeWidth + minStrokeWidth).toString();
     }
 
     private finalPositionX(positionX: number) { return positionX + this.circleRadius + this.circleStroke; }
