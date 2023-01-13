@@ -7,7 +7,7 @@
 :host #pathtreesvg {
     margin: 0 auto;
     max-width: 80vw;
-    height: 75vh;
+    height: 73vh;
 }
 
 :host ::ng-deep #pathtreesvg #mysvg {
