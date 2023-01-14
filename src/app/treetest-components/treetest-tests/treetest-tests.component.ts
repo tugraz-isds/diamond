@@ -602,42 +602,32 @@ removeKeys(obj, keys){
   }
 
   exportDestinationsCSV() {
+    const treemapArray = this.treemap.getDepthFirstArray();
+    const maxLevel = treemapArray.reduce((currentLevel, node) => node.level > currentLevel ? node.level : currentLevel, 0);
+    const tasksCount = this.study.tasks.length;
+
     const rows = [];
-    let item = [''];
-    let depth=0;
-    for(let i = 0; i < this.tree.length; i++){
-      if(this.tree[i].data.index>depth){
-        depth= this.tree[i].data.index;
-        item.push('');
-      }
+    const firstRow = [];
+    for (let i = 1; i <= maxLevel; i++) { firstRow.push(""); }
+    for (let t = 1; t <= tasksCount; t++) { firstRow.push(t.toString()); }
+    rows.push(firstRow);
+
+    for (const node of treemapArray) {
+      if (this.irrelevantItemsCollapsed && !node.hasAnswerInPath()) { continue; }
+      const row = [];
+      for (let i = 1; i < node.level; i++) { row.push(""); }
+      row.push(node.data.text);
+      for (let i = node.level + 1; i <= maxLevel; i++) { row.push(""); }
+      node.answerCount.forEach(count => {
+        row.push(count === 0 ? undefined : count);
+      });
+      rows.push(row);
     }
-    for (let t = 1; t <= this.study.tasks.length; t++) {
-      item.push(t.toString());
-    }
-    rows.push(item);
-    for (let i = 0; i < this.tree.length; i++) {
-      const item = [];
-      if (this.tree[i].data) {
-        for (let j = 0; j < this.tree[i].data.index; j++) {
-          item.push('');
-        }
-      }
-      item.push(this.tree[i].text);
-      while (item.length<=depth){
-        item.push('');
-      }
-      for (let k = 0; k < this.destinations.length; k++) {
-        item.push(this.destinations[k][this.tree[i].id]);
-      }
-      rows.push(item);
-    }
-    item=[];
-    item.push('Skipped');
-    while (item.length<=depth){
-      item.push('');
-    }
-    this.tasks.forEach(task => item.push(task.skipped));
-    rows.push(item);
+
+    const lastrow = [ "Skipped" ];
+    for (let i = 2; i <= maxLevel; i++) { lastrow.push(""); }
+    this.tasks.forEach(task => lastrow.push(task.skipped));
+    rows.push(lastrow);
     const csvContent = 'data:text/csv;charset=utf-8,'
        + rows.map(e => e.join(',')).join('\n');
 
