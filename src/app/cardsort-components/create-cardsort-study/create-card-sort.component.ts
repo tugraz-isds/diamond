@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../../user.service';
-import { CardListComponent } from '../card-list/card-list.component';
+import { CardSortStudyService, ICardSortStudy } from '../card-sort-study.service';
 
 declare var $: any;
 
@@ -14,67 +11,58 @@ declare var $: any;
   styleUrls: ['./create-card-sort.component.css', '../../app.component.css']
 })
 export class CreateCardSortComponent implements OnInit {
-  randomTestId = Math.random().toString(36).substring(2, 15);
-  testName = '';
-  studyPassword = '';
+  public randomTestId = Math.random().toString(36).substring(2, 15);
+  public testName = '';
+  public studyPassword = '';
 
   // tslint:disable-next-line:no-string-literal
-  id = this.route.snapshot.params['id'];
+  public id = this.route.snapshot.params['id'];
 
-  welcomeMessage = 'Welcome to this card sorting study!';
-  instructions = 'Please group the provided cards as you see fit.';
-  explanation = 'Please explain how you decided on the way the cards should be sorted.';
-  thankYouScreen = 'Thank you for your participation.';
-  leaveFeedback = 'Your results are saved. You can give us your feedback (optional).';
+  public welcomeMessage = 'Welcome to this card sorting study!';
+  public instructions = 'Please group the provided cards as you see fit.';
+  public explanation = 'Please explain how you decided on the way the cards should be sorted.';
+  public thankYouScreen = 'Thank you for your participation.';
+  public leaveFeedback = 'Your results are saved. You can give us your feedback (optional).';
 
-  subCategories = true;
+  private subCategories = true;
 
-  cardName = '';
-  cards: string[] = [];
+  public cardName = '';
+  public cards: string[] = [];
 
-  currentlySelectedCard = '';
+  private currentlySelectedCard = '';  
 
-  canSave = false;
+  private csvContent: string;
+  public baseurl: string = '';  
 
-
-  csvContent;
-  baseurl = '';
-
-  //itemsFinal;
-
-  constructor(private http: HttpClient, private route: ActivatedRoute, 
-    private userService: UserService, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router,
+    private cardSortStudyService: CardSortStudyService
+  ) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
     if (this.id) {
-      const body = {
-        id: this.id
-      };
-      console.log(this.route.snapshot.params);
-      // console.log('id: ' + this.cardName);
-
-      this.testInformation(body)
-          .subscribe(
-              res => {
-                // tslint:disable-next-line:no-angle-bracket-type-assertion
-                this.testName = (res as any).name;
-                this.studyPassword = (res as any).password;
-                this.cardName = (res as any).cardName;
-                this.cards = (res as any).cards;
-                this.welcomeMessage = (res as any).welcomeMessage;
-                this.instructions = (res as any).instructions;
-                this.explanation = (res as any).explanation;
-                this.thankYouScreen = (res as any).thankYouScreen;
-                this.leaveFeedback = (res as any).leaveFeedback;
-                if ((res as any).subCategories !== undefined) {
-                  this.subCategories = (res as any).subCategories;
-                }
-              },
-              err => {
-              }
-          );
+      this.cardSortStudyService
+        .get(this.id)      
+        .subscribe(
+          res => {
+            
+            this.testName = res.name;
+            this.studyPassword = res.password;
+            // this.cardName = res.cardName;
+            this.cards = res.cards;
+            this.welcomeMessage = res.welcomeMessage;
+            this.instructions = res.instructions;
+            this.explanation = res.explanation;
+            this.thankYouScreen = res.thankYouScreen;
+            this.leaveFeedback = res.leaveFeedback;
+            if (res.subCategories !== undefined) {
+              this.subCategories = res.subCategories;
+            }
+          }
+        );
       // get it from database
       this.randomTestId = this.id;
       // this.testName = t
@@ -88,7 +76,7 @@ export class CreateCardSortComponent implements OnInit {
     }
   }
 
-  open(link) {
+  open(link: string): void {
     $('a[href="#' + link + '"]').click();
   }
 
@@ -176,14 +164,14 @@ export class CreateCardSortComponent implements OnInit {
     }
   }
 
-  saveTest(showPopup?) {
+  saveTest(showPopup?: boolean): void {
     let passTmp = '';
     if (this.studyPassword === '') {
       passTmp = 'empty';
     } else {
       passTmp = this.studyPassword;
     }
-    const test = {
+    const study: ICardSortStudy = {
       name: this.testName,
       launched: false,
       password: passTmp,
@@ -210,62 +198,14 @@ export class CreateCardSortComponent implements OnInit {
       }
       this.router.navigate(['/card-sort-tests']);
     }
-    if (!this.id) { // new test
-      this.postTestData(test)
-          .subscribe(
-              res => {
-                console.log(res);
-                this.id = this.randomTestId;
-              },
-              err => {
-                console.log(err);
-              }
-          );
-    } else { // edit existing test
-      this.editTest(test)
-          .subscribe(
-              res => {
-                console.log(res);
-              },
-              err => {
-                console.log(err);
-              }
-          );
+    if (!this.id) {
+      this.cardSortStudyService
+        .add(study)
+        .subscribe(res => this.id = this.randomTestId);
+    } else {
+      this.cardSortStudyService
+        .edit(study)
+        .subscribe();
     }
   }
-
-  postTestData(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/add', object, httpOptions);
-  }
-
-  testInformation(id) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/get', id, httpOptions);
-  }
-
-  editTest(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl +  '/users/card-sort-study/edit', object, httpOptions);
-  }
-
 }
