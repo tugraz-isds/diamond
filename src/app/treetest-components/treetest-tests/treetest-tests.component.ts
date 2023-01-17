@@ -88,7 +88,7 @@ export class TreetestTestsComponent implements OnInit {
     console.log(this.id);
   }
 
-  openPieTree(index) {
+  openPathTree(index) {
     const url = location.origin + '/#/pie-tree/' + this.id + '/' + index;
     window.open(url, '_blank');
   }
@@ -271,9 +271,9 @@ export class TreetestTestsComponent implements OnInit {
     this.destinationTable();
   }
 
-  preparePieTree(index) {
+  preparePathTree(index) {
 
-    let data = this.getPieTreeData(index);
+    let data = this.getPathTreeData(index);
     data = this.removeKeys(data, ['parent', 'id']);
 
     // set the dimensions and margins of the graph
@@ -281,7 +281,7 @@ export class TreetestTestsComponent implements OnInit {
     const height = 460;
 
     // append the svg object to the body of the page
-    const svg = d3.select('#pietreesvg')
+    const svg = d3.select('#pathtreesvg')
       .append('svg')
         .attr('viewBox', '-70 0 900 900')
         .attr('preserveAspectRatio', 'xMinYMin')
@@ -325,7 +325,7 @@ export class TreetestTestsComponent implements OnInit {
 
   }
 
-  getPieTreeData(taskIndex) {
+  getPathTreeData(taskIndex) {
 
     // go through each participant
     for (let i = 0; i < this.tests.length; i++) {
@@ -579,7 +579,7 @@ removeKeys(obj, keys){
         const item = {
           Name: this.tests[i].username,
           'Date and Time': this.tests[i].timestamp,
-          Duration: this.getDuration(this.tests[i]),
+          'Duration [s]': this.getDuration(this.tests[i]),
           [`Tasks Completed (out of ${this.tasks.length})`]: this.getCompletedTasks(this.tests[i].results),
           [`Tasks Skipped (out of ${this.tasks.length})`]: this.getSkippedTasks(this.tests[i].results),
           [`Tasks Correct (out of ${this.tasks.length})`]: this.getCorrectTasks(this.tests[i].results),
@@ -602,42 +602,32 @@ removeKeys(obj, keys){
   }
 
   exportDestinationsCSV() {
+    const treemapArray = this.treemap.getDepthFirstArray();
+    const maxLevel = treemapArray.reduce((currentLevel, node) => node.level > currentLevel ? node.level : currentLevel, 0);
+    const tasksCount = this.study.tasks.length;
+
     const rows = [];
-    let item = [''];
-    let depth=0;
-    for(let i = 0; i < this.tree.length; i++){
-      if(this.tree[i].data.index>depth){
-        depth= this.tree[i].data.index;
-        item.push('');
-      }
+    const firstRow = [];
+    for (let i = 1; i <= maxLevel; i++) { firstRow.push(""); }
+    for (let t = 1; t <= tasksCount; t++) { firstRow.push(t.toString()); }
+    rows.push(firstRow);
+
+    for (const node of treemapArray) {
+      if (this.irrelevantItemsCollapsed && !node.hasAnswerInPath()) { continue; }
+      const row = [];
+      for (let i = 1; i < node.level; i++) { row.push(""); }
+      row.push(node.data.text);
+      for (let i = node.level + 1; i <= maxLevel; i++) { row.push(""); }
+      node.answerCount.forEach(count => {
+        row.push(count === 0 ? undefined : count);
+      });
+      rows.push(row);
     }
-    for (let t = 1; t <= this.study.tasks.length; t++) {
-      item.push(t.toString());
-    }
-    rows.push(item);
-    for (let i = 0; i < this.tree.length; i++) {
-      const item = [];
-      if (this.tree[i].data) {
-        for (let j = 0; j < this.tree[i].data.index; j++) {
-          item.push('');
-        }
-      }
-      item.push(this.tree[i].text);
-      while (item.length<=depth){
-        item.push('');
-      }
-      for (let k = 0; k < this.destinations.length; k++) {
-        item.push(this.destinations[k][this.tree[i].id]);
-      }
-      rows.push(item);
-    }
-    item=[];
-    item.push('Skipped');
-    while (item.length<=depth){
-      item.push('');
-    }
-    this.tasks.forEach(task => item.push(task.skipped));
-    rows.push(item);
+
+    const lastrow = [ "Skipped" ];
+    for (let i = 2; i <= maxLevel; i++) { lastrow.push(""); }
+    this.tasks.forEach(task => lastrow.push(task.skipped));
+    rows.push(lastrow);
     const csvContent = 'data:text/csv;charset=utf-8,'
        + rows.map(e => e.join(',')).join('\n');
 

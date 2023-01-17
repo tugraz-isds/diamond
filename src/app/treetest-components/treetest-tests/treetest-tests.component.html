@@ -151,9 +151,9 @@
               </div>
               </div>
 
-              <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pieTree" (click)="preparePieTree(i)">Pie Tree</button> -->
+              <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pathTree" (click)="preparePathTree(i)">Path Tree</button> -->
 
-              <button type="button" class="btn btn-primary"  (click)="openPieTree(i)">Path Tree</button>
+              <button type="button" class="btn btn-primary"  (click)="openPathTree(i)">Path Tree</button>
             </div>
 
           </div>
@@ -216,13 +216,13 @@
 
 
   <!-- Modal -->
-<div id="pieTree" class="modal fade" role="dialog">
+<div id="pathTree" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       PIE TREE
-      <div id="pietreesvg"></div>
+      <div id="pathtreesvg"></div>
       <button (click)="getSvg()">Get SVG link in console</button>
       <a id="link">download svg</a>
     </div>

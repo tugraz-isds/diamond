@@ -22,7 +22,7 @@ import { CreateTestComponent } from './treetest-components/create-treetest-study
 import { TreetestStudyComponent } from './treetest-components/treetest-study/treetest-study.component';
 import { TreetestTestsComponent } from './treetest-components/treetest-tests/treetest-tests.component';
 import { CardsortTestsComponent } from './cardsort-components/cardsort-tests/cardsort-tests.component';
-import { PietreeComponent } from './treetest-components/pietree/pietree.component';
+import { PathtreeComponent } from './treetest-components/pathtree/pathtree.component';
 import { AdminComponent } from './admin/admin.component';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -55,7 +55,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'tests', component: TreetestStudiesComponent},
   { path: 'card-sort-tests', component: CardsortStudiesComponent},
-  { path: 'pie-tree/:id/:index', component: PietreeComponent },
+  { path: 'pie-tree/:id/:index', component: PathtreeComponent },
   {path: 'study-closed', component: StudyClosedComponent},
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
@@ -72,7 +72,7 @@ const appRoutes: Routes = [
     TreetestStudyComponent,
     TreetestTestsComponent,
     CardsortTestsComponent,
-    PietreeComponent,
+    PathtreeComponent,
     AdminComponent,
     CreateCardSortComponent,
     CardsortStudyComponent,

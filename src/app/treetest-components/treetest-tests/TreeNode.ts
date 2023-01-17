@@ -1,6 +1,6 @@
 class TreeNode {
   children: TreeNode[] = [];
-  answerCount = 0;
+  answerCount: number[] = [];
 
   constructor(trees: any[], public data: any, public level: number) {
     const [directChildren, rest] = trees.reduce((result, node) => {
@@ -13,8 +13,13 @@ class TreeNode {
 
   fillTree(tests: any[]) {
     for (const test of tests) {
-      const countNodeSelectedInTest = test.results.filter(result => result.answer === this.data.id).length;
-      this.answerCount += countNodeSelectedInTest;
+      if (test.excluded) continue;
+      while (test.results.length > this.answerCount.length) {
+        this.answerCount.push(0);
+      }
+      test.results.forEach((result, index) => {
+        if (result.answer === this.data.id) this.answerCount[index]++;
+      });
     }
     this.children.forEach(child => {
       child.fillTree(tests);
@@ -22,7 +27,9 @@ class TreeNode {
   }
 
   hasAnswerInPath() {
-    if (this.answerCount > 0) { return true; }
+    for (const count of this.answerCount) {
+      if (count > 0) return true;
+    }
 
     for (const child of this.children) {
       if (child.hasAnswerInPath()) { return true; }
