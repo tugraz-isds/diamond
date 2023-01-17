@@ -93,7 +93,7 @@ async function create(userParam) {
 }
 
 async function update(userParam) {
-    const user = await Account.findById(userParam.userid);
+    const user = await Account.findById(userParam.id);
 
     // validate
     if (!user) throw 'User not found';

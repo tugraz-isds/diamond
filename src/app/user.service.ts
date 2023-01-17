@@ -1,61 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import * as UserPaths from '../../server/user-paths.js';
+import { Observable } from 'rxjs';
 
 export class User {
-    id: number;
-    email: string;
-    password: string;
+    id?: string;
+    email?: string;
+    password?: string;
+    study?: boolean;
 }
 
 @Injectable()
 export class UserService {
 
-    serverUrl = UserPaths.server_url;
+    public serverUrl = UserPaths.server_url;
 
     constructor(private http: HttpClient) { }
 
-    getAll() {
-        const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-        const httpOptions = {
-            headers: new HttpHeaders({
-            'Content-Type':  'application/json',
-            Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-          })
-      };
-      // http://localhost:48792
-        return this.http.post(this.serverUrl + '/users', {}, httpOptions);
-
-
-        // http://localhost:48792
-        // return this.http.get<User[]>(this.serverUrl + `/users`);
+    getAll(): Observable<Array<User>> {
+        return this.http.post<Array<User>>(this.serverUrl + '/users', {});
     }
 
-    getById(id: number) {
-        // http://localhost:48792
-        return this.http.get(this.serverUrl + `/users/` + id);
+    getById(id: string): Observable<User> {
+        return this.http.get<User>(this.serverUrl + `/users/` + id);
     }
 
-    register(user) {
-        // http://localhost:48792
+    register(user: User): Observable<void> {
         user.study = true;
-        return this.http.post(this.serverUrl + `/users/register`, user);
+        return this.http.post<void>(this.serverUrl + `/users/register`, user);
     }
 
-    update(user) {
-        const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-        const httpOptions = {
-            headers: new HttpHeaders({
-            'Content-Type':  'application/json',
-            Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-          })
-      };
-        // http://localhost:48792
-        return this.http.put(this.serverUrl + `/users/` + user.email, user, httpOptions);
+    update(user: User) {
+        return this.http.put(this.serverUrl + `/users`, user);
     }
 
-    delete(id: number) {
-        // http://localhost:48792
-        return this.http.delete(`/users/` + id);
+    delete(id: string): Observable<void> {
+        const payload: User = { id };
+        return this.http.post<void>(`/users`, payload);
     }
 }

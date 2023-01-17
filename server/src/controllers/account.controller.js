@@ -12,8 +12,8 @@ router.post('/register', register);
 router.post('/', getAll);
 router.get('/current', getCurrent);
 router.get('/:id', getById);
-router.put('/:id', update);
-router.post('/:id', _delete);
+router.put('/', update);
+router.post('/', _delete);
 
 // Tree Study
 router.post('/tree-study/add', addTreeStudy);
