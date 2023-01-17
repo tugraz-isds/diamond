@@ -247,7 +247,7 @@ function editCardSortStudy(req, res, next) {
         .catch(err => next(err));
 }
 
-function deleteIndividualCardSortTest(req, res, next) {    
+function deleteIndividualCardSortTest(req, res, next) {
     userService.deleteIndividualCardSortTest(req.body.id)
         .then(() => res.json({}))
         .catch(err => next(err));
