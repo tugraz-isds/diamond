@@ -37,7 +37,8 @@
     "downloadsvg": "Download SVG",
     "duration": "Duration",
     "edit": "Edit",
-    "editstudy": "Edit Study",
+    "editcardstudy": "Edit Card Sorting Study",
+    "edittreestudy": "Edit Tree Test Study",
     "emailrwquired": "Email is required",
     "enable": "Enable",
     "english": "English",
@@ -67,8 +68,9 @@
     "logout": "Logout",
     "messages": "Messages",
     "nextstep": "Next Step",
+    "newcardstudy": "New Card Sorting Study",
+    "newtreestudy": "New Tree Test Study",
     "newpassword": "New Pasword",
-    "newstudy": "New Study",
     "no": "No",
     "noparticipants": "There are no participants in this study yet.",
     "notasks": "This study does not have any tasks.",
@@ -136,5 +138,7 @@
     "createdAT": "Created",
     "export": "Export",
     "skipped": "Skipped",
-    "back": "Back"
+    "back": "Back",
+    "copy": "Copy",
+    "new": "New"
 }

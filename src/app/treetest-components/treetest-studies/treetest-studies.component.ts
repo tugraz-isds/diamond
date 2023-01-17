@@ -177,6 +177,27 @@ export class TreetestStudiesComponent implements OnInit {
     return this.http.post(this.userService.serverUrl + '/users/tree-study/edit', data, httpOptions);
   }
 
+  createCopy(study) {
+    
+    let variant = { ...study }
+    delete variant._id;
+    variant.lastEnded = new Date();
+    variant.lastLaunched = new Date();
+    variant.id = this.generateRandomStudyId();
+
+    this.postStudyData(variant)
+      .subscribe(
+        res => {
+          this.getAllTests();
+          $("#success").modal('show');
+        },
+        err => {
+          alert("Error: " + err);
+          console.log(err);
+        }
+      );
+  }
+
   export(studyId){
   let study = this.studies.find(study => study._id === studyId);
   let id = study.id;
@@ -234,6 +255,10 @@ export class TreetestStudiesComponent implements OnInit {
         );
     }
   }
+
+  generateRandomStudyId() {
+    return Math.random().toString(36).substring(2, 15);
+  }
   
 
   onFileSelect(input) {
@@ -257,7 +282,7 @@ export class TreetestStudiesComponent implements OnInit {
         let study;
         try {
           json = JSON.parse(e.target.result.toString());
-          const randomStudyId = Math.random().toString(36).substring(2, 15);
+          const randomStudyId = this.generateRandomStudyId();
           const launchable: boolean = json["tasks"].length > 0;
           study = {
             name: json["name"],

@@ -2,4 +2,8 @@
     opacity: 1;
     font-weight: bold;
 }
-  
+
+#bs-example-navbar-collapse-1 .navbar-left .highlighted {
+    text-decoration: underline;
+    font-weight: bolder;
+}

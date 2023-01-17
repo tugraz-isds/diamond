@@ -141,6 +141,28 @@ export class CardsortStudiesComponent implements OnInit {
       .add(() => $("#myModal").modal('hide'));
   }
 
+  createCopy(study: ICardSortStudy) {
+    
+    let variant: ICardSortStudy = { ...study };
+    delete variant._id;
+    variant.lastEnded = new Date();
+    variant.lastLaunched = new Date();
+    variant.id = this.generateRandomStudyId();
+
+    this.cardSortStudyService
+      .add(variant)
+      .subscribe(
+        res => {
+          this.getAllCardSortTests();
+          $("#success").modal('show');
+        },
+        err => {
+          alert("Error: " + err);
+          console.log(err);
+        }
+      );
+  }
+
   // Export Study
   export(studyId: string){
     let study = this.cardSortStudies.find(study => study._id === studyId);
@@ -178,6 +200,10 @@ export class CardsortStudiesComponent implements OnInit {
       }
     }
 
+    generateRandomStudyId() {
+      return Math.random().toString(36).substring(2, 15);
+    }
+
     // Import Study
     onFileSelect(input) {
 
@@ -198,7 +224,7 @@ export class CardsortStudiesComponent implements OnInit {
         fileReader.onload = (e) => {
 
           json = JSON.parse(e.target.result.toString());
-          const randomStudyId = Math.random().toString(36).substring(2, 15);
+          const randomStudyId = this.generateRandomStudyId();
           const study: ICardSortStudy = {
             cards: json["cards"],
             name: json["name"],

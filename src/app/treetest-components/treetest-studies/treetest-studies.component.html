@@ -11,6 +11,7 @@
               <th style="width: 150px">Name</th>
               <th style="width: 300px;">URL</th>
               <th class="text-center">{{ "edit" | translate }}</th>
+              <th class="text-center">{{ "copy" | translate }}</th>
               <th class="text-center">{{ "action" | translate }}</th>
               <th class="text-center">{{ "delete" | translate }}</th>
               <th class="text-center">{{ "preview" | translate }}</th>
@@ -35,13 +36,19 @@
                 [disabled]="t.launched" ><span class="glyphicon glyphicon-pencil" style="padding-right: 5px;" ></span></button>
               </td>
               <td class="text-center">
-                  <button *ngIf="!t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="launchTest(t.id)"
-                  [disabled] = "!t.isLaunchable ? 'disabled' : null">
-                    <span style="padding-right: 5px" class="glyphicon glyphicon-play"></span>
-                    {{ "launch" | translate }}</button>
-                  <button *ngIf="t.launched" style="margin-left: 5px; width: 105px !important;" type="button" class="btn btn-primary" (click)="stopTest(t.id)">
-                    <span style="padding-right: 1px" class="glyphicon glyphicon-pause"></span>
-                    {{ "endstudy" | translate }}</button>
+                <button (click)="createCopy(t)" class="btn btn-primary">
+                  {{ "new" | translate }}
+                </button>
+              </td>
+              <td class="text-center">
+                <button *ngIf="!t.launched" style="margin-left: 5px; width: 105px !important;" type="button"
+                  class="btn btn-primary" (click)="launchTest(t.id)" [disabled]="!t.isLaunchable ? 'disabled' : null">
+                  <span style="padding-right: 5px" class="glyphicon glyphicon-play"></span>
+                  {{ "launch" | translate }}</button>
+                <button *ngIf="t.launched" style="margin-left: 5px; width: 105px !important;" type="button"
+                  class="btn btn-primary" (click)="stopTest(t.id)">
+                  <span style="padding-right: 1px" class="glyphicon glyphicon-pause"></span>
+                  {{ "endstudy" | translate }}</button>
               </td>
               <td class="text-center">
                 <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal" (click)="deleteTestId = t._id"> 

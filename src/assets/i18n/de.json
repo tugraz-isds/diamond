@@ -37,7 +37,8 @@
     "downloadsvg": "SVG herunterladen",
     "duration": "Dauer",
     "edit": "Bearbeiten",
-    "editstudy": "Studie bearbeiten",
+    "editcardstudy": "Card Sorting Studie bearbeiten",
+    "edittreestudy": "Tree Test Studie bearbeiten",
     "enable": "Aktivieren",
     "english": "Englisch",
     "emailrwquired": "E-Mail ist erforderlich",
@@ -68,7 +69,8 @@
     "messages": "Mitteilungen",
     "nextstep": "Nächster Schritt",
     "newpassword": "Neues Passwort",
-    "newstudy": "Neue Studie",
+    "newcardstudy": "Neue Card Sorting Studie",
+    "newtreestudy": "Neue Tree Test Studie",
     "no": "Nein",
     "noparticipants": "Es gibt noch keine Teilnehmer an dieser Studie.",
     "notasks": "Diese Studie hat keine Aufgaben.",
@@ -136,5 +138,7 @@
     "createdAT": "Erstellt",
     "export": "Exportieren",
     "skipped": "Übersprungen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "copy": "Kopie",
+    "new": "Neu"
 }
