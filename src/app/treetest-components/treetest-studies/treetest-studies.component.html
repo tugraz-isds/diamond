@@ -11,7 +11,7 @@
               <th style="width: 150px">Name</th>
               <th style="width: 300px;">URL</th>
               <th class="text-center">{{ "edit" | translate }}</th>
-              <th class="text-center">{{ "variant" | translate }}</th>
+              <th class="text-center">{{ "copy" | translate }}</th>
               <th class="text-center">{{ "action" | translate }}</th>
               <th class="text-center">{{ "delete" | translate }}</th>
               <th class="text-center">{{ "preview" | translate }}</th>
@@ -36,7 +36,7 @@
                 [disabled]="t.launched" ><span class="glyphicon glyphicon-pencil" style="padding-right: 5px;" ></span></button>
               </td>
               <td class="text-center">
-                <button (click)="createVariant(t)" class="btn btn-primary">
+                <button (click)="createCopy(t)" class="btn btn-primary">
                   {{ "new" | translate }}
                 </button>
               </td>

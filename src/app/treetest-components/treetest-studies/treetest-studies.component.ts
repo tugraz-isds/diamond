@@ -177,7 +177,7 @@ export class TreetestStudiesComponent implements OnInit {
     return this.http.post(this.userService.serverUrl + '/users/tree-study/edit', data, httpOptions);
   }
 
-  createVariant(study) {
+  createCopy(study) {
     
     let variant = { ...study }
     delete variant._id;
