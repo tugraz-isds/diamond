@@ -1,51 +1,51 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Routes, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
 
 
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { LoginComponent } from './login/login.component';
-import { TreetestStudiesComponent } from './treetest-components/treetest-studies/treetest-studies.component';
 import { CardsortStudiesComponent } from './cardsort-components/cardsort-studies/cardsort-studies.component';
+import { LoginComponent } from './login/login.component';
+import { NavbarComponent } from './navbar/navbar.component';
 import { RegisterComponent } from './register/register.component';
+import { TreetestStudiesComponent } from './treetest-components/treetest-studies/treetest-studies.component';
 
-import { AuthenticationService } from './authentification.service';
+import { AdminComponent } from './admin/admin.component';
 import { AlertService } from './alert.service';
-import { UserService } from './user.service';
+import { AuthenticationService } from './authentification.service';
+import { CardsortTestsComponent } from './cardsort-components/cardsort-tests/cardsort-tests.component';
 import { CreateTestComponent } from './treetest-components/create-treetest-study/create-tree-test.component';
+import { PathtreeComponent } from './treetest-components/pathtree/pathtree.component';
 import { TreetestStudyComponent } from './treetest-components/treetest-study/treetest-study.component';
 import { TreetestTestsComponent } from './treetest-components/treetest-tests/treetest-tests.component';
-import { CardsortTestsComponent } from './cardsort-components/cardsort-tests/cardsort-tests.component';
-import { PathtreeComponent } from './treetest-components/pathtree/pathtree.component';
-import { AdminComponent } from './admin/admin.component';
+import { UserService } from './user.service';
 
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { CreateCardSortComponent } from './cardsort-components/create-cardsort-study/create-card-sort.component';
-import { CardsortStudyComponent } from './cardsort-components/cardsort-study/cardsort-study.component';
 import { CardListComponent } from './cardsort-components/card-list/card-list.component';
+import { CardsortStudyComponent } from './cardsort-components/cardsort-study/cardsort-study.component';
+import { CreateCardSortComponent } from './cardsort-components/create-cardsort-study/create-card-sort.component';
 import { SortingComponent } from './cardsort-components/sorting/sorting.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {CardsortTestMatrixComponent} from './cardsort-components/cardsort-test-matrix/cardsort-test-matrix.component';
+import { CardsortTestMatrixComponent } from './cardsort-components/cardsort-test-matrix/cardsort-test-matrix.component';
 
-import {participantsFilterPipe} from 'src/app/pipes/filter.pipe';
-import {datePipe} from './pipes/datePipe.pipe';
-import { StudyClosedComponent } from './study-closed/study-closed.component';
+import { participantsFilterPipe } from 'src/app/pipes/filter.pipe';
+import { PendingChangesGuard } from './guard';
 import { LanguageService } from './language.service';
 import { JwtInterceptor } from './jwt.interceptor';
+import { datePipe } from './pipes/datePipe.pipe';
+import { StudyClosedComponent } from './study-closed/study-closed.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent},
-  { path: 'create-tree-test', component: CreateTestComponent},
+  { path: 'create-tree-test', component: CreateTestComponent, canDeactivate: [PendingChangesGuard]},
   { path: 'create-card-sort', component: CreateCardSortComponent},
-  { path: 'create-tree-test/:id', component: CreateTestComponent},
+  { path: 'create-tree-test/:id', component: CreateTestComponent, canDeactivate: [PendingChangesGuard]},
   { path: 'create-card-sort/:id', component: CreateCardSortComponent},
   { path: 'cardsort/:id', component: CardsortStudyComponent},
   { path: 'cardsort-preview/:id', component: CardsortStudyComponent},
@@ -108,7 +108,8 @@ const appRoutes: Routes = [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     // TranslationService,
     LanguageService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    PendingChangesGuard,
   ],
   bootstrap: [AppComponent]
 })

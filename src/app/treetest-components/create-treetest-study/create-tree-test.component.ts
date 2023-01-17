@@ -1,7 +1,7 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EditComponent } from 'src/app/guard';
 
 import { UserService } from '../../user.service';
 
@@ -12,7 +12,8 @@ declare var $: any;
   templateUrl: './create-tree-test.component.html',
   styleUrls: ['./create-tree-test.component.css', '../../app.component.css']
 })
-export class CreateTestComponent implements OnInit {
+export class CreateTestComponent implements OnInit, EditComponent {
+
   randomTestId = Math.random().toString(36).substring(2, 15);
   testName = '';
   studyPassword = '';
@@ -42,6 +43,8 @@ export class CreateTestComponent implements OnInit {
 
   itemsFinal;
 
+  originalTest = null;
+
   constructor(private http: HttpClient, 
     private route: ActivatedRoute,
     private userService: UserService,
@@ -70,6 +73,7 @@ export class CreateTestComponent implements OnInit {
               this.leafNodes = (res as any).leafNodes;
               this.orderNumbers = (res as any).orderNumbers;
             }
+            this.originalTest = this.createTestData();
           },
           err => {
           }
@@ -84,7 +88,44 @@ export class CreateTestComponent implements OnInit {
           },}
       ];
         this.createTree('test-tree', arrayCollection);
+        this.originalTest = this.createTestData();
     }
+  }
+
+  createTestData() {
+    return {
+      testName: this.testName,
+      studyPassword: this.studyPassword,
+      tasks: this.tasks,
+      welcomeMessage: this.welcomeMessage,
+      instructions: this.instructions,
+      thankYouScreen: this.thankYouScreen,
+      leaveFeedback: this.leaveFeedback,
+      leafNodes: this.leafNodes,
+      orderNumbers: this.orderNumbers,
+    };
+  }
+
+  reset() {
+    this.testName = this.originalTest.testName;
+    this.studyPassword = this.originalTest.studyPassword;
+    this.tasks = this.originalTest.tasks;
+    this.welcomeMessage = this.originalTest.welcomeMessage;
+    this.instructions = this.originalTest.instructions;
+    this.thankYouScreen = this.originalTest.thankYouScreen;
+    this.leaveFeedback = this.originalTest.leaveFeedback;
+    this.leafNodes = this.originalTest.leafNodes;
+    this.orderNumbers = this.originalTest.orderNumbers;
+  }
+
+  hasChanges() {
+    const originalTest = JSON.stringify(this.originalTest);
+    const testAfterEditing = JSON.stringify(this.createTestData());
+    return testAfterEditing != originalTest;
+  }
+
+  get isEditMode() {
+    return !!this.id;
   }
 
   open(link) {;
@@ -367,7 +408,8 @@ export class CreateTestComponent implements OnInit {
     this.tasks.splice(index, 1);
   }
 
-  saveTest(showPopup?) {
+  createTest() {
+
     let passTmp = "";
     if (this.studyPassword === "") {
       passTmp = "empty";
@@ -375,32 +417,40 @@ export class CreateTestComponent implements OnInit {
       passTmp = this.studyPassword;
     }
     const launchable: boolean = this.tasks.length > 0 ? true : false; 
-    const test = {
-        name: this.testName,
-        launched: false,
-        password: passTmp,
-        id: this.randomTestId,
-        tree: $('#test-tree').jstree(true).get_json('#', {flat: true}),
-        tasks: this.tasks,
-        user: JSON.parse(localStorage.getItem('currentUser')).email,
-        welcomeMessage: this.welcomeMessage,
-        instructions: this.instructions,
-        thankYouScreen: this.thankYouScreen,
-        leaveFeedback: this.leaveFeedback,
-        leafNodes: this.leafNodes,
-        orderNumbers: this.orderNumbers,
-        lastEnded: new Date(),
-        lastLaunched: new Date(),
-        isLaunchable: launchable
-    };
 
+    return {
+      name: this.testName,
+      launched: false,
+      password: passTmp,
+      id: this.randomTestId,
+      tree: $('#test-tree').jstree(true).get_json('#', {flat: true}),
+      tasks: this.tasks,
+      user: JSON.parse(localStorage.getItem('currentUser')).email,
+      welcomeMessage: this.welcomeMessage,
+      instructions: this.instructions,
+      thankYouScreen: this.thankYouScreen,
+      leaveFeedback: this.leaveFeedback,
+      leafNodes: this.leafNodes,
+      orderNumbers: this.orderNumbers,
+      lastEnded: new Date(),
+      lastLaunched: new Date(),
+      isLaunchable: launchable
+    };
+  }
+
+  cancel() {
+    this.reset();
+    this.router.navigate(['/tests']);
+  }
+
+  saveTest(showPopup?) {
+    const test = this.createTest();
     if(showPopup) {
       let lang = localStorage.getItem('tt-language');
       if (lang === 'en')
         alert("Saved!");
         else 
         alert("Gespeichert!");
-      this.router.navigate(['/tests']);
       }
     if (!this.id) { // new test
       this.postTestData(test)
@@ -408,7 +458,8 @@ export class CreateTestComponent implements OnInit {
         res => {
           console.log(res);
           this.id = this.randomTestId;
-          
+          this.reset();
+          this.router.navigate(['/tests']);
         },
         err => {
           console.log(err);
@@ -419,6 +470,8 @@ export class CreateTestComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
+          this.reset();
+          this.router.navigate(['/tests']);
         },
         err => {
           console.log(err);
