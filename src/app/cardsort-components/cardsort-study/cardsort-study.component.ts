@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../../user.service';
+import { CardSortTestService, ICardSortTest, IResultGroup } from '../card-sort-test.service';
+import { CardSortStudyService, ICardSortStudy } from '../card-sort-study.service';
 
 declare var $: any;
 
@@ -13,42 +12,31 @@ declare var $: any;
   styleUrls: ['./cardsort-study.component.css', '../../app.component.css']
 })
 export class CardsortStudyComponent implements OnDestroy, OnInit {
-  startTime;
-  endTime;
-  enterPassword = '';
-  study;
-  password = true;
-  mindsetDone = false;
-  finished = false;
-  id = this.route.snapshot.params['id'];
-  intro = true;
-  userName = "";
-  feedback = "";
-  mindset = "";
-  feedbackDone = false;
-  ungrouped_cards: string[] = [];
+  public enterPassword = '';
+  public study: ICardSortStudy;
+  public password = true;
+  public mindsetDone = false;
+  public finished = false;
+  private id = this.route.snapshot.params['id'];
+  public intro = true;
+  public userName = '';
+  public feedback = '';
+  public mindset = '';
+  public feedbackDone = false;
+  public ungrouped_cards: string[] = [];
 
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) {
-    var date = (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " ");
-  }
+  constructor(    
+    private route: ActivatedRoute, 
+    private router: Router,    
+    private cardSortTestService: CardSortTestService,
+    private cardSortStudyService: CardSortStudyService
+  ) { }
 
-
-  getCardSortTestData() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl +  '/users/card-sort-tests/' + this.id, "", httpOptions);
-  }
-
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (!this.finished) {
       //add results in database
-      const test = {
+      const test: ICardSortTest = {
         id: this.id,
         results: null,
         finished: false,
@@ -58,198 +46,91 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
         mindset: ""
       };
 
-      this.postCardSortTestData(test)
-          .subscribe(
-              res => {
-                console.log(res);
-              },
-              err => {
-                console.log(err);
-              }
-          );
+      this.cardSortTestService
+        .add(test)    
+        .subscribe(
+          res => console.log(res),
+          err => console.log(err)
+        );
     }
   }
 
-
-  ngOnInit() {
-    $('[data-toggle="tooltip"]').tooltip();
-    this.getCardSortTestData()
-        .subscribe(
-            res => {
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
-        );
-  
-    const body = {
-      id: this.id
-    };
-    this.passwordRequired(body)
-        .subscribe(
-            res => {
-              console.log(res);
-
-              if (res === 'redirect') {
-                console.log('redirect');
-                this.router.navigate(['study-closed']);
-              } else {
-                console.log('NO REDIRECT');
-              }
-              if (res) {
-                this.password = true;
-              } else {
-                this.password = false;
-                this.preparePassword();
-              }
-            },
-            err => {
-              console.log(err);
-              this.password = false;
-                this.router.navigate(['study-closed']);
-            }
-        );
+  ngOnInit(): void {
+    $('[data-toggle="tooltip"]').tooltip();  
+    this.cardSortStudyService
+      .passwordRequired(this.id)    
+      .subscribe(
+        res => {           
+          if (res === 'redirect') {
+            console.log('redirect');
+            this.router.navigate(['study-closed']);
+          } else {
+            console.log('NO REDIRECT');
+          }
+          if (res) {
+            this.password = true;
+          } else {
+            this.password = false;
+            this.preparePassword();
+          }
+        },
+        err => {              
+          this.password = false;
+          this.router.navigate(['study-closed']);
+        }
+      );
   }
 
-  finishSorting(results) {
+  onFinishSorting(results: Array<IResultGroup>): void {
     this.finished = true;
 
-    const test = {
+    const test: ICardSortTest = {
       id: this.id,
       results: results,
       finished: true,
       username: this.userName,
       timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
-      feedback: "",
-      mindset: ""
+      feedback: '',
+      mindset: ''
     };
 
-    this.postCardSortTestData(test)
-        .subscribe(
-            res => {
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
-        );
+    this.cardSortTestService
+      .add(test)    
+      .subscribe(
+        res => console.log(res),
+        err => console.log(err)
+      );
   }
 
-  postMindset(object){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/mindset', object, httpOptions);
+  sendMindset(): void {
+    this.cardSortTestService
+      .mindset(this.userName, this.mindset)
+      .subscribe()
+      .add(() => this.mindsetDone = true);
   }
 
-  sendMindset(){
-    const test = {
-      username: this.userName,
-      mindset: this.mindset
-    };
-
-    this.postMindset(test)
-        .subscribe(
-            res => {
-              console.log(res);
-              this.mindsetDone = true;
-            },
-            err => {
-              this.mindsetDone = true;
-              console.log(err);
-            }
-        );
+  sendFeedback(): void {
+    this.cardSortTestService
+      .feedback(this.userName, this.feedback)
+      .subscribe()
+      .add(() => this.mindsetDone = true);            
   }
 
-
-  sendFeedback() {
-    const test = {
-      username: this.userName,
-      feedback: this.feedback
-    };
-
-    this.postFeedback(test)
-        .subscribe(
-            res => {
-              console.log(res);
-              this.feedbackDone = true;
-            },
-            err => {
-              this.feedbackDone = true;
-              console.log(err);
-            }
-        );
-  }
-
-
-  passwordRequired(id) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/passwordrequired', id, httpOptions);
-  }
-
-  preparePassword() {
-    const body = {
-      id: this.id,
-      password: this.enterPassword
-    };
-    this.sendPassword(body)
-        .subscribe(
-            res => {
-              console.log(res);
-              if (!res) {
-                alert('Wrong password!');
-              } else {
-                this.study = res;
-                this.ungrouped_cards = this.study.cards;
-              }
-            },
-            err => {
-              console.log('ERR');
-              console.log(err);
-              alert('Wrong password!');
-            }
-        );
-  }
-
-  sendPassword(body) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-study/password', body, httpOptions);
-  }
-
-  postCardSortTestData(object) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/add', object, httpOptions);
-  }
-
-
-  postFeedback(object) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/feedback', object, httpOptions);
+  preparePassword(): void {
+    this.cardSortStudyService
+      .checkPassword(this.id, this.enterPassword)    
+      .subscribe(
+        res => {
+          if (!res) {
+            alert('Wrong password!');
+          } else {
+            this.study = res as ICardSortStudy;
+            this.ungrouped_cards = this.study.cards;
+          }
+        },
+        err => {
+          alert('Wrong password!');
+        }
+      );
   }
 }

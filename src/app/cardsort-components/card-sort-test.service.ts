@@ -26,6 +26,16 @@ export interface ICardSortTestResponse {
   card_sort_test: Array<ICardSortStudy>;
 }
 
+export interface IMindsetRequest {
+  username: string;
+  mindset: string;
+};
+
+export interface IFeedbackRequest {
+  username: string;
+  feedback: string;
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -46,5 +56,21 @@ export class CardSortTestService {
 
   add(cardSortTest: ICardSortTest): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/add`, cardSortTest);
+  }
+
+  mindset(username: string, mindset: string): Observable<void> {
+    const payload: IMindsetRequest = {
+      username,
+      mindset
+    };
+    return this.http.post<void>(`${this.apiUrl}/mindset`, payload);
+  }
+
+  feedback(username: string, feedback: string): Observable<void> {
+    const payload: IFeedbackRequest = {
+      username,
+      feedback
+    };
+    return this.http.post<void>(`${this.apiUrl}/feedback`, payload);
   }
 }
