@@ -138,5 +138,7 @@
     "createdAT": "Erstellt",
     "export": "Exportieren",
     "skipped": "Übersprungen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "copy": "Kopie",
+    "new": "Neu"
 }

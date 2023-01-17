@@ -138,5 +138,7 @@
     "createdAT": "Created",
     "export": "Export",
     "skipped": "Skipped",
-    "back": "Back"
+    "back": "Back",
+    "copy": "Copy",
+    "new": "New"
 }
