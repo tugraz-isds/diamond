@@ -17,14 +17,14 @@
               {{user.email}}
             </td>
             <td>
-              <button *ngIf="user.email !== 'admin' && !user.study" type="button" class="btn btn-primary" (click)="studyAccess(true, user._id)">{{ "enable" | translate }}</button>
-              <button *ngIf="user.email !== 'admin' && user.study" type="button" class="btn btn-warning" (click)="studyAccess(false, user._id)">{{ "disable" | translate }}</button>
+              <button *ngIf="user.email !== 'admin' && !user.study" type="button" class="btn btn-primary" (click)="studyAccess(true, user.id)">{{ "enable" | translate }}</button>
+              <button *ngIf="user.email !== 'admin' && user.study" type="button" class="btn btn-warning" (click)="studyAccess(false, user.id)">{{ "disable" | translate }}</button>
             </td>
             <td>
-                <button *ngIf="user.email !== 'admin'" type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal2" (click)="deleteUserId = user._id">{{ "delete" | translate }}</button>
+                <button *ngIf="user.email !== 'admin'" type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal2" (click)="deleteUserId = user.id">{{ "delete" | translate }}</button>
             </td>
             <td>
-                <button style="width: 125px" type="button" class="btn btn-warning"  data-toggle="modal" data-target="#myModal4" (click)="userid = user._id; deleteUserId = user.email;">{{ "changepassword" | translate }}</button>
+                <button style="width: 125px" type="button" class="btn btn-warning"  data-toggle="modal" data-target="#myModal4" (click)="userid = user.id; deleteUserId = user.email;">{{ "changepassword" | translate }}</button>
             </td>
           </tr>
         </tbody>

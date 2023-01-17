@@ -1,9 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { UserService } from '../../user.service';
 
 
 declare var $: any;

@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
   
 
   getRequest() {
-    // return this.http.get('http://localhost:48792/');
     return this.http.get('/' + this.userService.serverUrl);
 }
 }

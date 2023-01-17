@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserService } from '../../user.service';
-
 import { Parser } from '@json2csv/plainjs';
+import { CardSortTestService, ICardSortTest } from '../card-sort-test.service';
+import { ICardSortStudy } from '../card-sort-study.service';
 
 declare var $: any;
 
@@ -18,36 +16,37 @@ declare var $: any;
 export class CardsortTestsComponent implements OnInit {
 
   // tslint:disable-next-line:no-string-literal
-  id = this.route.snapshot.params['id'];
-  tests = [];
-  study;
-  numberCompleted = 0;
-  numberLeft = 0;
+  private id: string = this.route.snapshot.params['id'];
+  public tests: Array<ICardSortTest> = [];
+  public study: ICardSortStudy;
+  public numberCompleted = 0;
+  public numberLeft = 0;
 
-  totalParticipants = 0;
-  numberIncludedParticipants =0;
+  public totalParticipants = 0;
+  public numberIncludedParticipants = 0;
 
-  showingMatrix = false;
+  public showingMatrix = false;
 
-  root;
-  duration = 750;
-  i = 0;
-  deleteParticipantResultIndex;
+  // duration = 750;
+  // i = 0;
+  public deleteParticipantResultIndex: number;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private cardSortTestService: CardSortTestService
+  ) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
     if (this.id) {
-      this.resultsInformation()
+      this.cardSortTestService
+        .getById(this.id)      
         .subscribe(
           res => {
-            this.tests = (res as any).result;
-            this.study = (res as any).card_sort_test[0];
+            this.tests = res.result;
+            this.study = res.card_sort_test[0]; 
             this.prepareResults();
-          },
-          err => {
-            console.log(err);
           }
         );
     } else {
@@ -67,17 +66,6 @@ export class CardsortTestsComponent implements OnInit {
       r.showing = false;
     }
     result.showing = true;
-  }
-
-  resultsInformation() {
-    /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-tests/' + this.id, '', httpOptions);
   }
 
   getIncludeResultNumber() {
@@ -259,8 +247,8 @@ export class CardsortTestsComponent implements OnInit {
   }
 
 
-  excludeParticpant(test, index){
-    const temp = {
+  excludeParticpant(test: ICardSortTest, index: number): void {
+    const temp: ICardSortTest = {
       _id: test["_id"],
       id: test["id"],
       results: test["results"],
@@ -271,19 +259,18 @@ export class CardsortTestsComponent implements OnInit {
       excluded: true
     };
 
-    this.updateParticipantsTest(temp).subscribe(
-        res => {
-          console.log(res);
+    this.cardSortTestService
+      .update(temp)
+      .subscribe(
+        res => {          
           this.tests[index].excluded = true;
           this.prepareResults();
-        },
-        err => {
-          console.log(err);
         }
-    );
+      );
   }
-  includeParticipant(test, index){
-    const temp = {
+
+  includeParticipant(test: ICardSortTest, index: number): void {
+    const temp: ICardSortTest = {
       _id: test["_id"],
       id: test["id"],
       results: test["results"],
@@ -293,20 +280,17 @@ export class CardsortTestsComponent implements OnInit {
       feedback: test["feedback"],
       excluded: false
     };
-    this.updateParticipantsTest(temp).subscribe(
-        res => {
-          console.log(res);
+    this.cardSortTestService
+      .update(temp)
+      .subscribe(
+        res => {          
           this.tests[index].excluded = false;
           this.prepareResults();
-        },
-        err => {
-          console.log(err);
         }
-    );
+      );
   }
 
-
-  exportUserDataTransposed(){
+  exportUserDataTransposed(): void {
     let rows = [];
     const item = [
       'Name',
@@ -345,51 +329,26 @@ export class CardsortTestsComponent implements OnInit {
 
 
   prepareDeleteParticipantResult() {
-    console.log('prepared!!');
-    console.log(this.deleteParticipantResultIndex);
-    this.deleteParticipantResult()
-    .subscribe(
-      res => {
-        this.resultsInformation()
-        .subscribe(
-          res => {
-            this.tests = (res as any).result;
-            // tslint:disable-next-line:prefer-for-of
-            this.study = (res as any).test[0];
-            this.prepareResults();
-          },
-          err => {
-            console.log(err);
-          }
-        );
-        $('#myModal10').modal('hide');
-      },
-      err => {
-        $('#myModal10').modal('hide');
-        alert('An error occured. Please try again later.');
-      }
-    );
-  }
-
-  deleteParticipantResult() {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-
-    // tslint:disable-next-line:max-line-length
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/delete', {id: this.tests[this.deleteParticipantResultIndex]._id}, httpOptions);
-  }
-  updateParticipantsTest(object){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/card-sort-test/edit', object, httpOptions);
+    const testToDeleteId = this.tests[this.deleteParticipantResultIndex]._id;
+    this.cardSortTestService
+      .delete(testToDeleteId)    
+      .subscribe(
+        res => {
+          this.cardSortTestService
+            .getById(this.id)
+            .subscribe(
+              res => {
+                this.tests = res.result;                
+                this.study = res.card_sort_test[0];
+                this.prepareResults();
+              }
+            );
+          $('#myModal10').modal('hide');
+        },
+        err => {
+          $('#myModal10').modal('hide');
+          alert('An error occured. Please try again later.');
+        }
+      );
   }
 }

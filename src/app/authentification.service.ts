@@ -4,6 +4,14 @@ import { map } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 
+// TODO: we may rename this to IUser ?
+export interface ILoginResponse {
+    email: string;
+    study: boolean;
+    createDate: string;
+    token: string;
+}
+
 @Injectable()
 export class AuthenticationService {
     loggedIn = false;
@@ -31,5 +39,14 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+    }
+
+    getCurrentUser(): ILoginResponse {
+        return JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    getAccessToken(): string {
+        const currentUser = this.getCurrentUser();
+        return currentUser?.token;
     }
 }

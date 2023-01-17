@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
@@ -39,6 +39,7 @@ import {participantsFilterPipe} from 'src/app/pipes/filter.pipe';
 import {datePipe} from './pipes/datePipe.pipe';
 import { StudyClosedComponent } from './study-closed/study-closed.component';
 import { LanguageService } from './language.service';
+import { JwtInterceptor } from './jwt.interceptor';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent},
@@ -105,6 +106,7 @@ const appRoutes: Routes = [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     // TranslationService,
     LanguageService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -93,7 +93,7 @@ async function create(userParam) {
 }
 
 async function update(userParam) {
-    const user = await Account.findById(userParam.userid);
+    const user = await Account.findById(userParam.id);
 
     // validate
     if (!user) throw 'User not found';
@@ -358,7 +358,7 @@ async function deleteCardSortStudy(studyId) {
 }
 
 async function deleteIndividualCardSortTest(resultId) {
-    const cardSortTest = await CardSortTest.find({ "_id" : resultId });
+    const cardSortTest = await CardSortTest.find({ "_id" : resultId });    
     await cardSortTest[0].delete();
     return 1;
 }

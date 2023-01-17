@@ -12,8 +12,8 @@ router.post('/register', register);
 router.post('/', getAll);
 router.get('/current', getCurrent);
 router.get('/:id', getById);
-router.put('/:id', update);
-router.post('/:id', _delete);
+router.put('/', update);
+router.post('/', _delete);
 
 // Tree Study
 router.post('/tree-study/add', addTreeStudy);
@@ -42,9 +42,9 @@ router.post('/card-sort-study/getbyuserid', getAllCardSortStudies);
 router.post('/card-sort-tests/add', saveCardSortTests);
 router.post('/card-sort-tests/mindset', saveCardSortMindset);
 router.post('/card-sort-tests/feedback', saveCardSortFeedback);
-router.post('/card-sort-tests/:id', getCardSortTestsById);
-router.post('/card-sort-test/delete', deleteIndividualCardSortTest);
-router.post('/card-sort-test/edit', editCardSortTest);
+router.post('/card-sort-tests/get/:id', getCardSortTestsById);
+router.post('/card-sort-tests/delete', deleteIndividualCardSortTest);
+router.post('/card-sort-tests/edit', editCardSortTest);
 
 module.exports = router;
 
