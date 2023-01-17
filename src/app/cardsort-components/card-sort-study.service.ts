@@ -8,7 +8,7 @@ export enum CheckPasswordResponse {
 }
 
 export interface ICardSortStudy {
-  _id?: string;
+  _id?: string; // TODO: _id should be removed?
   name: string;
   password?: string;
   launched: boolean;

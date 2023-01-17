@@ -10,7 +10,8 @@ export interface IResultGroup {
 }
 
 export interface ICardSortTest {
-  id: string;
+  _id?: string; // INFO: this is the testId
+  id?: string; // INFO: this is the id of the coresponding study -> FIXME: rename to studyId
   createdDate?: string;
   results: Array<IResultGroup>;
   finished?: boolean;
@@ -19,11 +20,12 @@ export interface ICardSortTest {
   mindset?: string;
   feedback?: string;
   excluded?: boolean;
+  showing?: boolean;
 }
 
 export interface ICardSortTestResponse {
   result: Array<ICardSortTest>;
-  card_sort_test: Array<ICardSortStudy>;
+  card_sort_test: Array<ICardSortStudy>; // FIXME: this should be renamed to "card_sort_study"
 }
 
 export interface IMindsetRequest {
@@ -35,6 +37,10 @@ export interface IFeedbackRequest {
   username: string;
   feedback: string;
 };
+
+export interface IDeleteTestRequest {
+  id: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +57,7 @@ export class CardSortTestService {
   }
 
   getById(studyId: string): Observable<ICardSortTestResponse> {
-    return this.http.post<ICardSortTestResponse>(`${this.apiUrl}/${studyId}`, null);
+    return this.http.post<ICardSortTestResponse>(`${this.apiUrl}/get/${studyId}`, null);
   }
 
   add(cardSortTest: ICardSortTest): Observable<void> {
@@ -72,5 +78,16 @@ export class CardSortTestService {
       feedback
     };
     return this.http.post<void>(`${this.apiUrl}/feedback`, payload);
+  }
+
+  delete(id: string): Observable<void> {
+    const payload: IDeleteTestRequest = {
+      id
+    };
+    return this.http.post<void>(`${this.apiUrl}/delete`, payload);
+  }
+
+  update(test: ICardSortTest): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/edit`, test);
   }
 }

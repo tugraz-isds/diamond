@@ -42,9 +42,9 @@ router.post('/card-sort-study/getbyuserid', getAllCardSortStudies);
 router.post('/card-sort-tests/add', saveCardSortTests);
 router.post('/card-sort-tests/mindset', saveCardSortMindset);
 router.post('/card-sort-tests/feedback', saveCardSortFeedback);
-router.post('/card-sort-tests/:id', getCardSortTestsById);
-router.post('/card-sort-test/delete', deleteIndividualCardSortTest);
-router.post('/card-sort-test/edit', editCardSortTest);
+router.post('/card-sort-tests/get/:id', getCardSortTestsById);
+router.post('/card-sort-tests/delete', deleteIndividualCardSortTest);
+router.post('/card-sort-tests/edit', editCardSortTest);
 
 module.exports = router;
 
@@ -247,7 +247,7 @@ function editCardSortStudy(req, res, next) {
         .catch(err => next(err));
 }
 
-function deleteIndividualCardSortTest(req, res, next) {
+function deleteIndividualCardSortTest(req, res, next) {    
     userService.deleteIndividualCardSortTest(req.body.id)
         .then(() => res.json({}))
         .catch(err => next(err));

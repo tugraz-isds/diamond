@@ -357,8 +357,8 @@ async function deleteCardSortStudy(studyId) {
     return 1;
 }
 
-async function deleteIndividualCardSortTest(resultId) {
-    const cardSortTest = await CardSortTest.find({ "_id" : resultId });
+async function deleteIndividualCardSortTest(resultId) {    
+    const cardSortTest = await CardSortTest.find({ "_id" : resultId });    
     await cardSortTest[0].delete();
     return 1;
 }
