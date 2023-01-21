@@ -19,6 +19,9 @@ export class PathtreeComponent implements OnInit {
     @Input()  margin = {top: 20, right: 100, bottom: 20, left: 30};
     @Input()  fontSize = 10;
     @Input()  showMarginBorders = true;
+    @Input()  flipped: boolean;
+    @Input()  nodeDistribution: number = 360;
+
     id = this.route.snapshot.params['id'];
     index = this.route.snapshot.params['index'];
 
@@ -27,7 +30,6 @@ export class PathtreeComponent implements OnInit {
     tree = [];
     nodeEnter;
     private newTree: any[];
-
     constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) {
     }
 
@@ -66,7 +68,9 @@ export class PathtreeComponent implements OnInit {
 
     preparePathTree(index) {
         const data = this.getPathTreeData(index);
-        const pathTreeGenerator = new PathTreeGenerator({data, margin: this.margin, fontSize: this.fontSize, showMarginBorders: this.showMarginBorders});
+        const pathTreeGenerator = new PathTreeGenerator(
+            {data, margin: this.margin, fontSize: this.fontSize,
+                showMarginBorders: this.showMarginBorders, flipped: this.flipped, angle: this.nodeDistribution});
         pathTreeGenerator.addSvgToDOM();
         pathTreeGenerator.addMarginBorders();
         pathTreeGenerator.addLinksToDOM(this.test, this.index, this.tree);
@@ -81,7 +85,6 @@ export class PathtreeComponent implements OnInit {
         for (let i = 0; i < this.results.length; i++) {
             if (this.results[i].finished) {
                 // go through given task clicks
-                console.log(this.results[i].results, taskIndex);
                 for (let j = 0; j < this.results[i].results[taskIndex].clicks.length; j++) {
 
                     for (let k = 0; k < this.tree.length; k++) {
@@ -220,8 +223,18 @@ export class PathtreeComponent implements OnInit {
         this.preparePathTree(this.index);
     }
 
-    onToggleBorderChange(e: any) {
+    onShowMarginBorders(e: any) {
         this.showMarginBorders = e.target.checked;
+        this.preparePathTree(this.index);
+    }
+
+    onFlipped(e: any) {
+        this.flipped = e.target.checked;
+        this.preparePathTree(this.index);
+    }
+
+    onNodeDistribution(e: any) {
+        this.nodeDistribution = e.target.value;
         this.preparePathTree(this.index);
     }
 }

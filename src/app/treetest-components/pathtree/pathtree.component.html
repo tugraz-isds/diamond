@@ -19,8 +19,12 @@
         <input type="number" min="0" max="400" [value]="margin.left" id="margin-left" (change)="onMarginChange($event)">
     </div>
     <div class="chart-input">
-        <label for="font-size">Font-size:</label>
+        <label for="font-size">Font-Size:</label>
         <input type="number" min="0" max="30" [value]="fontSize" id="font-size" (change)="onFontSizeChange($event)">
+    </div>
+    <div class="chart-input">
+        <label for="font-size">Node Distribution:</label>
+        <input type="number" min="0" max="2000" [value]="nodeDistribution" id="node-distribution" (change)="onNodeDistribution($event)">
     </div>
 </div>
 
@@ -28,7 +32,11 @@
 <div class="chart-checkboxes">
     <div class="chart-checkbox">
         <label for="toggle-border">Show Margin Borders:</label>
-        <input type="checkbox" [checked]="showMarginBorders" [value]="margin.top" id="toggle-border" (change)="onToggleBorderChange($event)"/>
+        <input type="checkbox" [checked]="showMarginBorders" [value]="margin.top" id="toggle-border" (change)="onShowMarginBorders($event)"/>
+    </div>
+    <div class="chart-checkbox">
+        <label for="chart-orientation">Flipped:</label>
+        <input type="checkbox" [checked]="flipped" [value]="margin.top" id="chart-orientation" (change)="onFlipped($event)"/>
     </div>
 </div>
 
