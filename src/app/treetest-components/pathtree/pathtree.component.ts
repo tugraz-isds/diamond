@@ -18,7 +18,7 @@ export class PathtreeComponent implements OnInit {
 
     @Input()  margin = {top: 20, right: 100, bottom: 20, left: 30};
     @Input()  fontSize = 10;
-
+    @Input()  showMarginBorders = true;
     id = this.route.snapshot.params['id'];
     index = this.route.snapshot.params['index'];
 
@@ -66,8 +66,9 @@ export class PathtreeComponent implements OnInit {
 
     preparePathTree(index) {
         const data = this.getPathTreeData(index);
-        const pathTreeGenerator = new PathTreeGenerator({data, margin: this.margin, fontSize: this.fontSize});
+        const pathTreeGenerator = new PathTreeGenerator({data, margin: this.margin, fontSize: this.fontSize, showMarginBorders: this.showMarginBorders});
         pathTreeGenerator.addSvgToDOM();
+        pathTreeGenerator.addMarginBorders();
         pathTreeGenerator.addLinksToDOM(this.test, this.index, this.tree);
         pathTreeGenerator.addNodesToDOM();
         pathTreeGenerator.addCirclesToDOM(this.test, this.index, this.tree);
@@ -175,10 +176,16 @@ export class PathtreeComponent implements OnInit {
     getSvg() {
         //get svg element.
         var svg = document.getElementById("mysvg");
+        const clone = svg.cloneNode(true);
+        if (this.showMarginBorders) {               //remove borders from downloaded svg
+            clone.removeChild(clone.childNodes[1]); //remove first border rect
+            clone.removeChild(clone.childNodes[1]); //remove second border rect which has index 1 now
+        }
+
 
         //get svg source.
         var serializer = new XMLSerializer();
-        var source = serializer.serializeToString(svg);
+        var source = serializer.serializeToString(clone);
 
         //add name spaces.
         if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
@@ -210,6 +217,11 @@ export class PathtreeComponent implements OnInit {
 
     onFontSizeChange(e: any) {
         this.fontSize = Number(e.target.value);
+        this.preparePathTree(this.index);
+    }
+
+    onToggleBorderChange(e: any) {
+        this.showMarginBorders = e.target.checked;
         this.preparePathTree(this.index);
     }
 }

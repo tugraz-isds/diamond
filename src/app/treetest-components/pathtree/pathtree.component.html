@@ -1,5 +1,6 @@
 <a class="btn btn-primary" download="download" id="link">{{ "downloadsvg" | translate }}</a>
 
+
 <div class="chart-inputs">
     <div class="chart-input">
         <label for="margin-top">Margin-Top:</label>
@@ -22,4 +23,14 @@
         <input type="number" min="0" max="30" [value]="fontSize" id="font-size" (change)="onFontSizeChange($event)">
     </div>
 </div>
+
+
+<div class="chart-checkboxes">
+    <div class="chart-checkbox">
+        <label for="toggle-border">Show Margin Borders:</label>
+        <input type="checkbox" [checked]="showMarginBorders" [value]="margin.top" id="toggle-border" (change)="onToggleBorderChange($event)"/>
+    </div>
+</div>
+
+
 <div id="pathtreesvg"></div>
