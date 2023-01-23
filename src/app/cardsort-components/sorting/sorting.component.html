@@ -1,5 +1,12 @@
 <div cdkDropListGroup>
 
+    <div *ngIf="this.isPreview" class="col-md-12 mt-10 mb-10">
+        <div class="alert alert-warning study-preview-info">
+            <p>{{ "studyPreviewInfo" | translate }}</p>
+            <a class="btn btn-primary" routerLink="/card-sort-tests">Go Back To Studies</a>
+        </div>
+    </div>
+
     <div class="col-md-12 mt-10 mb-10 clearfix">
         
         <div class="dm-add-group-wrapper">
@@ -18,12 +25,7 @@
         </div>        
 
         <button *ngIf="!this.isPreview" type="button" class="btn btn-control btn-success mr-5 dm-btn-finish" [disabled]="ungrouped_cards.length"
-                (click)="finish()">{{ "finish" | translate }}</button>
-            
-        <p class="study-preview-info" *ngIf="this.isPreview">
-            {{ "studyPreviewInfo" | translate }}
-            <a class="btn btn-primary" routerLink="/card-sort-tests">Go Back To Studies</a>
-        </p>
+                (click)="finish()">{{ "finish" | translate }}</button>        
     </div>
 
     <div class="col-md-4">

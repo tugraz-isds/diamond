@@ -39,7 +39,10 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   feedback = "";
   feedbackDone = false;
 
+  public isPreview = false;
+
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { 
+    this.isPreview = this.route.snapshot.url[0].path.indexOf('preview') > - 1;
     var date = (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " ");
   }
 
@@ -55,6 +58,11 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    
+    if (this.isPreview) {
+      return;
+    }
+
     if (!this.finished) {
       //add results in database
       const test = {
@@ -101,7 +109,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
         res => {
           console.log(res);
 
-          if (res === 'redirect') {
+          if (res === 'redirect' && !this.isPreview) {
             console.log('redirect');
             this.router.navigate(['study-closed']);
           } else {
@@ -122,6 +130,9 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   }
 
   sendFeedback() {
+    if (this.isPreview) {
+      return;
+    }
     const test = {
       username: this.userName,
       feedback: this.feedback
@@ -141,6 +152,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   }
 
   submitFinalAnswer(index, skipped) {
+
     const instance = $('#study-tree').jstree(true);
     if (skipped) {
       this.test['answer'] = null;
@@ -169,25 +181,28 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     }
     if (this.taskIndex >= this.study.tasks.length) {
       this.finished = true;
-      //add results in database
-      const test = {
-        id: this.id,
-        tests: this.tests,
-        finished: true,
-        username: this.userName,
-        timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
-        feedback: ""
-      };
 
-      this.postTestData(test)
-      .subscribe(
-        res => {
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+      if (!this.isPreview) {      
+        //add results in database
+        const test = {
+          id: this.id,
+          tests: this.tests,
+          finished: true,
+          username: this.userName,
+          timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
+          feedback: ""
+        };
+
+        this.postTestData(test)
+        .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
     }
     this.doingTask = false;
     this.selectedAnswer = false;
