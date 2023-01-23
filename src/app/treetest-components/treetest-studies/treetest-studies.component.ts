@@ -99,6 +99,10 @@ export class TreetestStudiesComponent implements OnInit {
     return this.baseurl + "/#/treetest/" + id;
   }
 
+  launchPreview(studyId: string): void {
+    this.router.navigate(['treetest-preview/' + studyId]);
+  }
+
   launchTest(studyId, preview?) {
     const data = {
       id: studyId,

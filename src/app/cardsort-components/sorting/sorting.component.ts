@@ -15,6 +15,7 @@ export class SortingComponent {
 
   // @ts-ignore
   resultGroups = [];
+  @Input() isPreview: boolean;
   // tslint:disable-next-line:variable-name
   @Input() ungrouped_cards: [string];
   @Output() output = new EventEmitter<any[]>();

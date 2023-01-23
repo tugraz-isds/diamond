@@ -94,6 +94,10 @@ export class CardsortStudiesComponent implements OnInit {
     return `${this.baseurl}/#/cardsort/${id}`;
   }
 
+  launchStudyPreview(studyId: string): void {
+    this.router.navigate(['cardsort-preview/' + studyId]);
+  }
+
   launchCardSortTest(studyId: string, preview?: boolean): void {
 
     const data: ICardSortStudyEdit = {

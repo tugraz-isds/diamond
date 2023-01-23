@@ -152,3 +152,12 @@ button:disabled {
     box-shadow: none;
     opacity: 0.5;
 }
+
+.study-preview-info .btn {
+    font-size: 0.7em;
+}
+
+.study-preview-info {
+    display: flex;
+    justify-content: space-between;
+}

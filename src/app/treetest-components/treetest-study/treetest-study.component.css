@@ -1,0 +1,8 @@
+.study-preview-info .btn {
+    font-size: 0.7em;
+}
+
+.study-preview-info {
+    display: flex;
+    justify-content: space-between;
+}
