@@ -17,8 +17,13 @@
             </form>
         </div>        
 
-        <button type="button" class="btn btn-control btn-success mr-5 dm-btn-finish" [disabled]="ungrouped_cards.length"
+        <button *ngIf="!this.isPreview" type="button" class="btn btn-control btn-success mr-5 dm-btn-finish" [disabled]="ungrouped_cards.length"
                 (click)="finish()">{{ "finish" | translate }}</button>
+            
+        <p class="study-preview-info" *ngIf="this.isPreview">
+            {{ "studyPreviewInfo" | translate }}
+            <a class="btn btn-primary" routerLink="/card-sort-tests">Go Back To Studies</a>
+        </p>
     </div>
 
     <div class="col-md-4">

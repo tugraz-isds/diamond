@@ -25,15 +25,24 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   public feedbackDone = false;
   public ungrouped_cards: string[] = [];
 
+  public isPreview = false;
+
 
   constructor(    
     private route: ActivatedRoute, 
     private router: Router,    
     private cardSortTestService: CardSortTestService,
     private cardSortStudyService: CardSortStudyService
-  ) { }
+  ) { 
+    this.isPreview = this.route.snapshot.url[0].path.indexOf('preview') > - 1;
+  }
 
   ngOnDestroy(): void {
+    
+    if (this.isPreview) {
+      return;
+    }
+
     if (!this.finished) {
       //add results in database
       const test: ICardSortTest = {
@@ -61,7 +70,7 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
       .passwordRequired(this.id)    
       .subscribe(
         res => {           
-          if (res === 'redirect') {
+          if (res === 'redirect' && !this.isPreview) {
             console.log('redirect');
             this.router.navigate(['study-closed']);
           } else {
@@ -82,6 +91,11 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   }
 
   onFinishSorting(results: Array<IResultGroup>): void {
+
+    if (this.isPreview) {
+      return;
+    }
+
     this.finished = true;
 
     const test: ICardSortTest = {
@@ -103,6 +117,10 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   }
 
   sendMindset(): void {
+    if (this.isPreview) {
+      return;
+    }
+
     this.cardSortTestService
       .mindset(this.userName, this.mindset)
       .subscribe()
@@ -110,6 +128,11 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   }
 
   sendFeedback(): void {
+    
+    if (this.isPreview) {
+      return;
+    }
+
     this.cardSortTestService
       .feedback(this.userName, this.feedback)
       .subscribe()

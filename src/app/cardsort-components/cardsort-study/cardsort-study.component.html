@@ -23,7 +23,7 @@
     </div>
     <div *ngIf="!intro" class="col-sm-offset-1 col-sm-9">
         <div *ngIf="!finished" class="row mt-20">
-            <app-sorting [ungrouped_cards]="ungrouped_cards" (output)="onFinishSorting($event)"></app-sorting>
+            <app-sorting [isPreview]="isPreview" [ungrouped_cards]="ungrouped_cards" (output)="onFinishSorting($event)"></app-sorting>
         </div>
         <div *ngIf="finished" >
             <p *ngIf="!mindsetDone" >{{study.thankYouScreen}}</p>

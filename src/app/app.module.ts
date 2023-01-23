@@ -48,6 +48,7 @@ const appRoutes: Routes = [
   { path: 'create-tree-test/:id', component: CreateTestComponent},
   { path: 'create-card-sort/:id', component: CreateCardSortComponent},
   { path: 'cardsort/:id', component: CardsortStudyComponent},
+  { path: 'cardsort-preview/:id', component: CardsortStudyComponent},
   { path: 'treetest/:id', component: TreetestStudyComponent},
   { path: 'results/:id', component: TreetestTestsComponent},
   { path: 'card-sort-results/:id', component: CardsortTestsComponent},
