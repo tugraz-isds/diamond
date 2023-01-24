@@ -397,7 +397,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
 
   addTask() {
     const task = {
-      text: '',
+      text: `Where yould you expect to find ... ?`,
       answer: '',
       id: ''
     };
