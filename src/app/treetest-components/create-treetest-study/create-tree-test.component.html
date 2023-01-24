@@ -120,11 +120,25 @@
 
 
       <div id="finish" class="mt-30 tab-pane fade">
+         <h1>{{testName}}</h1>
+          <p class="footnote">{{ "studytitle" | translate }}</p>
+
+          <h3>{{ "tasks" | translate}}</h3>
+          <div *ngIf="tasks.length == 0">
+            <p>No tasks added. <a routerLink="/tests">Add tasks</a></p>
+          </div>
+          <div *ngIf="tasks.length > 0" >
+            <div *ngFor="let t of tasks; let i = index;">
+              <div>
+                <p>{{tasks[i].text}}<br>{{tasks[i].answer}}</p>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
           <div>{{ "studysaved" | translate }}</div>
           <div>{{ "studysaved1" | translate }}</div>
-          <div class="mt-10">
-            {{ "studysaved2" | translate }} <a routerLink="/tests">{{ "studysaved3" | translate }}</a>.
-          </div>
           <button type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "create" | translate }}</button>
           <button type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
       </div>
