@@ -20,7 +20,8 @@ export class PathtreeComponent implements OnInit {
     @Input()  fontSize = 10;
     @Input()  showMarginBorders = true;
     @Input()  flipped: boolean;
-    @Input()  nodeDistribution: number = 360;
+    @Input()  nodeDistribution = 360;
+    nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
 
     id = this.route.snapshot.params['id'];
     index = this.route.snapshot.params['index'];
@@ -235,6 +236,7 @@ export class PathtreeComponent implements OnInit {
 
     onNodeDistribution(e: any) {
         this.nodeDistribution = e.target.value;
+        this.nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
         this.preparePathTree(this.index);
     }
 }

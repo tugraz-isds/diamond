@@ -37,6 +37,10 @@
     width: 100%;
 }
 
+:host .chart-inputs .chart-input.slider {
+    grid-column: auto / span 2;
+}
+
 :host .chart-inputs .chart-input input {
     width: 100%;
 }

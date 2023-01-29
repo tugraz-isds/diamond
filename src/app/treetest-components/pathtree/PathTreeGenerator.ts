@@ -104,8 +104,9 @@ export default class PathTreeGenerator {
             .attr("width", width - 2 * strokeWidth / 2)
             .attr("height", height - 2 * strokeWidth / 2)
             .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("stroke-width", "2");
+            .attr("stroke", "lightgrey")
+            .attr("stroke-width", "2")
+            .attr("stroke-dasharray", "8 8");
 
         this.svg.append("rect")
             .attr("x", minX)
@@ -113,8 +114,9 @@ export default class PathTreeGenerator {
             .attr("width", width - this.margin.left - this.margin.right)
             .attr("height", height - this.margin.top - this.margin.bottom)
             .attr("fill", "none")
-            .attr("stroke", "black")
+            .attr("stroke", "lightgrey")
             .attr("stroke-width", "2")
+            .attr("stroke-dasharray", "8 8")
             .attr("transform", `translate(${this.margin.left} ${this.margin.top})`);
     }
 
