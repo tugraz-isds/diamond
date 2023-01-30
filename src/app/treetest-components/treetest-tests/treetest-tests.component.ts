@@ -82,7 +82,7 @@ export class TreetestTestsComponent implements OnInit {
             // console.log(this.tree)
             // console.log(this.treemap)
             this.paths = this.retrievePaths();
-            console.log(this.paths);
+            console.log(this.paths); // LR: Create path table from this.
             this.prepareResults();
           },
           err => {

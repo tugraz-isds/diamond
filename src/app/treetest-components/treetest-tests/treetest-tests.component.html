@@ -151,6 +151,32 @@
               </div>
               </div>
 
+              <div style="display: inline-block" class="mt-20">Paths Chosen </div>
+              <table *ngIf="paths.length && study" class="participants table table-bordered mt-5">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Path</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let participant of paths; let j = index;">
+                        <td>{{participant.name}}</td>                        
+                        <td>
+
+                          <ng-container *ngFor="let path of participant.paths[i]; let m = index;">
+                            <ng-container *ngIf="path.direction === 'in'">&gt;</ng-container>
+                            <ng-container *ngIf="path.direction === 'out'">&lt;</ng-container>
+                            {{path.node.data.text}}                                                    
+                          </ng-container>
+
+                        </td>                        
+                        
+                    </tr>
+                </tbody>
+              </table>              
+
               <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pathTree" (click)="preparePathTree(i)">Path Tree</button> -->
               <a [routerLink]="['/pie-tree/' + this.id + '/' + i]" class="btn btn-primary pointer">PathTree</a>
             </div>
