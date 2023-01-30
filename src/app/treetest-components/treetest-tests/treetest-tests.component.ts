@@ -9,7 +9,7 @@ import { Parser } from '@json2csv/plainjs';
 
 declare var Chart: any;
 import * as d3 from 'd3';
-import TreeNode from "./TreeNode";
+import TreeNode, {PathPoint} from "./TreeNode";
 
 declare var $: any;
 
@@ -61,6 +61,7 @@ export class TreetestTestsComponent implements OnInit {
   i = 0;
   deleteParticipantResultIndex;
   irrelevantItemsCollapsed = false;
+  paths = [];
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
@@ -76,6 +77,12 @@ export class TreetestTestsComponent implements OnInit {
             this.treemap = new TreeNode(this.tree, this.tree[0], 1);
             this.treemap.fillTree(this.tests);
             const treemapArray = this.treemap.getDepthFirstArray();
+            // console.log(this.tests)
+            // console.log(this.study)
+            // console.log(this.tree)
+            // console.log(this.treemap)
+            this.paths = this.retrievePaths();
+            console.log(this.paths);
             this.prepareResults();
           },
           err => {
@@ -738,5 +745,32 @@ removeKeys(obj, keys){
   }
 
   irrelevantItemDisabled(item: TreeNode) {
-    return this.irrelevantItemsCollapsed && !item.hasAnswerInPath(); }
+    return this.irrelevantItemsCollapsed && !item.hasAnswerInPath();
+  }
+
+  retrievePaths() {
+    const participants = [];
+    for (const test of this.tests) {
+      if (test.excluded) { continue; }
+      const paths = [];
+      for (const task of test.results) {
+        paths.push(this.retrievePath([...task.clicks, {id: task.answer}])); // because answer is not included in clicks
+      }
+      participants.push({
+        id: test.id,
+        name: test.username,
+        paths
+      });
+    }
+    return participants;
+  }
+
+  retrievePath(clicks: any[]) {
+    const startNode = this.treemap.findNodeById(clicks[0].id);
+    const startPoint: PathPoint = {
+      node: startNode,
+      direction: 'start'
+    };
+    return [startPoint, ...startNode.retrievePath(clicks.slice(1))];
+  }
 }
