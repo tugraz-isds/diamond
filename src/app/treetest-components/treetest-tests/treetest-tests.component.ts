@@ -461,6 +461,10 @@ removeKeys(obj, keys){
   return obj;
 }
 
+
+
+
+
   getCorrectTasks(results) {
     let totalCorrect = 0;
     if (!results.length) { return totalCorrect; }
