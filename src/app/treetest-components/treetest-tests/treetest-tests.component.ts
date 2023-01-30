@@ -817,6 +817,4 @@ removeKeys(obj, keys){
     };
     return [startPoint, ...startNode.retrievePath(clicks.slice(1))];
   }
-
-
 }
