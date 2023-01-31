@@ -125,7 +125,7 @@
 
           <h3>{{ "tasks" | translate}}</h3>
           <div *ngIf="tasks.length == 0">
-            <p>No tasks added. <a routerLink="/tests">Add tasks</a></p>
+            <p>No tasks added. <a [routerLink]="" (click)="open('tasks');">Add tasks</a></p>
           </div>
           <div *ngIf="tasks.length > 0" >
             <div *ngFor="let t of tasks; let i = index;">
