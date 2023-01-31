@@ -18,6 +18,10 @@ export class PathtreeComponent implements OnInit {
 
     @Input()  margin = {top: 20, right: 100, bottom: 20, left: 30};
     @Input()  fontSize = 10;
+    @Input()  showMarginBorders = true;
+    @Input()  flipped: boolean;
+    @Input()  nodeDistribution = 360;
+    nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
 
     id = this.route.snapshot.params['id'];
     index = this.route.snapshot.params['index'];
@@ -27,7 +31,6 @@ export class PathtreeComponent implements OnInit {
     tree = [];
     nodeEnter;
     private newTree: any[];
-
     constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) {
     }
 
@@ -66,8 +69,11 @@ export class PathtreeComponent implements OnInit {
 
     preparePathTree(index) {
         const data = this.getPathTreeData(index);
-        const pathTreeGenerator = new PathTreeGenerator({data, margin: this.margin, fontSize: this.fontSize});
+        const pathTreeGenerator = new PathTreeGenerator(
+            {data, margin: this.margin, fontSize: this.fontSize,
+                showMarginBorders: this.showMarginBorders, flipped: this.flipped, angle: this.nodeDistribution});
         pathTreeGenerator.addSvgToDOM();
+        pathTreeGenerator.addMarginBorders();
         pathTreeGenerator.addLinksToDOM(this.test, this.index, this.tree);
         pathTreeGenerator.addNodesToDOM();
         pathTreeGenerator.addCirclesToDOM(this.test, this.index, this.tree);
@@ -80,7 +86,6 @@ export class PathtreeComponent implements OnInit {
         for (let i = 0; i < this.results.length; i++) {
             if (this.results[i].finished) {
                 // go through given task clicks
-                console.log(this.results[i].results, taskIndex);
                 for (let j = 0; j < this.results[i].results[taskIndex].clicks.length; j++) {
 
                     for (let k = 0; k < this.tree.length; k++) {
@@ -175,10 +180,16 @@ export class PathtreeComponent implements OnInit {
     getSvg() {
         //get svg element.
         var svg = document.getElementById("mysvg");
+        const clone = svg.cloneNode(true);
+        if (this.showMarginBorders) {               //remove borders from downloaded svg
+            clone.removeChild(clone.childNodes[1]); //remove first border rect
+            clone.removeChild(clone.childNodes[1]); //remove second border rect which has index 1 now
+        }
+
 
         //get svg source.
         var serializer = new XMLSerializer();
-        var source = serializer.serializeToString(svg);
+        var source = serializer.serializeToString(clone);
 
         //add name spaces.
         if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
@@ -210,6 +221,22 @@ export class PathtreeComponent implements OnInit {
 
     onFontSizeChange(e: any) {
         this.fontSize = Number(e.target.value);
+        this.preparePathTree(this.index);
+    }
+
+    onShowMarginBorders(e: any) {
+        this.showMarginBorders = e.target.checked;
+        this.preparePathTree(this.index);
+    }
+
+    onFlipped(e: any) {
+        this.flipped = e.target.checked;
+        this.preparePathTree(this.index);
+    }
+
+    onNodeDistribution(e: any) {
+        this.nodeDistribution = e.target.value;
+        this.nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
         this.preparePathTree(this.index);
     }
 }
