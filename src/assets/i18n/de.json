@@ -8,7 +8,7 @@
     "addnode": "Knoten hinzufügen",
     "addtask": "Aufgabe hinzufügen",
     "adduser": "Neuen Benutzer hinzufügen",
-    "cancel": "Stornieren",
+    "cancel": "Abbrechen",
     "cards": "Karten",
     "changepassword": "Passwort ändern",
     "close": "Schließen",
@@ -56,7 +56,7 @@
     "excludedparticipants": "Ausgeschlossene Teilnehmer werden nicht in Statistiken oder Exporte einbezogen.",
     "exclude": "Ausschließen",
     "excluded": "Ausgeschloßen",
-    "finish": "Fertig machen",
+    "finish": "Zusammenfassung",
     "german": "Deutsch",
     "importcsv": "CSV importieren",
     "instructions": "Anleitung",
@@ -141,5 +141,6 @@
     "skipped": "Übersprungen",
     "back": "Zurück",
     "copy": "Kopie",
-    "new": "Neu"
+    "new": "Neu",
+    "create": "Erstellen"
 }

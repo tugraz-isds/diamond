@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EditComponent } from 'src/app/guard';
 
 import { CardSortStudyService, ICardSortStudy } from '../card-sort-study.service';
 
@@ -10,7 +11,7 @@ declare var $: any;
   templateUrl: './create-card-sort.component.html',
   styleUrls: ['./create-card-sort.component.css', '../../app.component.css']
 })
-export class CreateCardSortComponent implements OnInit {
+export class CreateCardSortComponent implements OnInit, EditComponent {
   public randomTestId = Math.random().toString(36).substring(2, 15);
   public testName = '';
   public studyPassword = '';
@@ -30,6 +31,8 @@ export class CreateCardSortComponent implements OnInit {
   public cards: string[] = [];
 
   private currentlySelectedCard = '';  
+
+  private originalTest = null;
 
   private csvContent: string;
   public baseurl: string = '';  
@@ -61,6 +64,7 @@ export class CreateCardSortComponent implements OnInit {
             if (res.subCategories !== undefined) {
               this.subCategories = res.subCategories;
             }
+            this.originalTest = this.createTestData();
           }
         );
       // get it from database
@@ -73,7 +77,44 @@ export class CreateCardSortComponent implements OnInit {
           }, }
       ];
       // this.createTree('test-tree', arrayCollection);
+      this.originalTest = this.createTestData();
     }
+  }
+
+  createTestData() {
+    return {
+      testName: this.testName,
+      studyPassword: this.studyPassword,
+      cards: this.cards,
+      welcomeMessage: this.welcomeMessage,
+      instructions: this.instructions,
+      explanation: this.explanation,
+      thankYouScreen: this.thankYouScreen,
+      leaveFeedback: this.leaveFeedback,
+      subCategories: this.subCategories,
+    };
+  }
+
+  reset() {
+    this.testName = this.originalTest.testName;
+    this.studyPassword = this.originalTest.studyPassword;
+    this.cards = this.originalTest.cards;
+    this.welcomeMessage = this.originalTest.welcomeMessage;
+    this.instructions = this.originalTest.instructions;
+    this.explanation = this.originalTest.explanation;
+    this.thankYouScreen = this.originalTest.thankYouScreen;
+    this.leaveFeedback = this.originalTest.leaveFeedback;
+    this.subCategories = this.originalTest.subCategories;
+  }
+
+  hasChanges() {
+    const originalTest = JSON.stringify(this.originalTest);
+    const testAfterEditing = JSON.stringify(this.createTestData());
+    return testAfterEditing != originalTest;
+  }
+
+  get isEditMode() {
+    return !!this.id;
   }
 
   open(link: string): void {
@@ -164,6 +205,11 @@ export class CreateCardSortComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.reset();
+    this.router.navigate(['/card-sort-tests']);
+  }
+
   saveTest(showPopup?: boolean): void {
     let passTmp = '';
     if (this.studyPassword === '') {
@@ -196,16 +242,22 @@ export class CreateCardSortComponent implements OnInit {
       else {
         alert('Gespeichert!');
       }
-      this.router.navigate(['/card-sort-tests']);
     }
     if (!this.id) {
       this.cardSortStudyService
         .add(study)
-        .subscribe(res => this.id = this.randomTestId);
+        .subscribe(res => {
+          this.id = this.randomTestId;
+          this.reset();
+          this.router.navigate(['/card-sort-tests']);
+        });
     } else {
       this.cardSortStudyService
         .edit(study)
-        .subscribe();
+        .subscribe(res => {
+          this.reset();
+          this.router.navigate(['/card-sort-tests']);
+        });
     }
   }
 }

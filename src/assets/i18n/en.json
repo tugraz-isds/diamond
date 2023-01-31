@@ -56,7 +56,7 @@
     "excludedparticipants": "Excluded participants are not included in statistics or exports.",
     "exclude": "Exclude",
     "excluded": "Excluded",
-    "finish": "Finish",
+    "finish": "Summary",
     "german": "German",
     "importcsv": "Import CSV",
     "instructions": "Instructions",
@@ -141,5 +141,6 @@
     "skipped": "Skipped",
     "back": "Back",
     "copy": "Copy",
-    "new": "New"
+    "new": "New",
+    "create": "Create"
 }

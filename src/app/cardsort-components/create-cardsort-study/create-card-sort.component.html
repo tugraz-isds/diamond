@@ -5,10 +5,10 @@
         <h3 *ngIf="id">{{ "editcardstudy" | translate }}</h3>
 
         <ul class="nav nav-tabs mt-20">
-            <li class="active"><a data-toggle="tab" href="#settings">1. {{ "settings" | translate }}</a></li>
-            <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest()"><a  [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#cards">2. {{ "cards" | translate }}</a></li>
-            <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest()"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#messages">3. {{ "messages" | translate }}</a></li>
-            <li [ngClass]="{'not-allowed': !testName.length}" (click)="saveTest()"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#finish">4. {{ "finish" | translate }}</a></li>
+            <li class="active"><a data-toggle="tab" href="#settings"><span *ngIf="!isEditMode">1. </span>{{ "settings" | translate }}</a></li>
+            <li [ngClass]="{'not-allowed': !testName.length}"><a  [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#cards"><span *ngIf="!isEditMode">2. </span>{{ "cards" | translate }}</a></li>
+            <li [ngClass]="{'not-allowed': !testName.length}"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#messages"><span *ngIf="!isEditMode">3. </span>{{ "messages" | translate }}</a></li>
+            <li *ngIf="!isEditMode" [ngClass]="{'not-allowed': !testName.length}"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#finish"><span *ngIf="!isEditMode">4. </span>{{ "finish" | translate }}</a></li>
         </ul>
 
         <div class="tab-content">
@@ -26,8 +26,9 @@
                     <span style="background-color: lightgray">{{baseurl}}/#/card-sort-test/{{randomTestId}}</span>
                 </div>
                 <div style="margin-top: 10px"><small>* {{ "requiredfield" | translate }}</small></div>
-                <button [disabled]="!testName.length" type="button" class="btn btn-primary mt-30" (click)="open('cards'); saveTest();">{{ "nextstep" | translate }}</button>
-                <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+                <button *ngIf="!isEditMode" [disabled]="!testName.length" type="button" class="btn btn-primary mt-30" (click)="open('cards');">{{ "nextstep" | translate }}</button>
+                <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "save" | translate }}</button>
+                <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
             </div>
 
 
@@ -44,8 +45,9 @@
                 </div>
                 <input class="cardName form-control" [(ngModel)]="cardName" type="text" (keyup.enter)="addCard()">
                 <app-card-list [cards]="cards" (selectedEvent)="selectCard($event)"></app-card-list>
-                <button type="button" class="btn btn-primary mt-30" (click)="open('messages'); saveTest();">{{ "nextstep" | translate }}</button>
-                <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+                <button *ngIf="!isEditMode" type="button" class="btn btn-primary mt-30" (click)="open('messages');">{{ "nextstep" | translate }}</button>
+                <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "save" | translate }}</button>
+                <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
             </div>
 
             <div id="messages" class="mt-30 tab-pane fade">
@@ -72,18 +74,35 @@
 
 
                 <div>
-                    <button type="button" class="btn btn-primary mt-30" (click)="open('finish'); saveTest();">{{ "nextstep" | translate }}</button>
-                    <button type="button" class="btn btn-primary mt-30" (click)="saveTest(true);">{{ "save" | translate }}</button>
+                    <button *ngIf="!isEditMode" type="button" class="btn btn-primary mt-30" (click)="open('finish');">{{ "nextstep" | translate }}</button>
+                    <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "save" | translate }}</button>
+                    <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
                 </div>
             </div>
 
 
             <div id="finish" class="mt-30 tab-pane fade">
+
+                <h1>{{testName}}</h1>
+                <p class="footnote">{{ "studytitle" | translate }}</p>
+
+                <h3>{{ "cards" | translate}}</h3>
+                <div *ngIf="cards.length == 0">
+                    <p>No cards added. <a [routerLink]="" (click)="open('cards');">Add cards</a></p>
+                </div>
+                <div *ngIf="cards.length > 0" >
+                    <div *ngFor="let c of cards">
+                        <p>{{c}}</p>
+                    </div>
+                </div>
+
+                <hr />
+
                 <div>{{ "studysaved" | translate }}</div>
                 <div>{{ "studysaved1" | translate }}</div>
-                <div class="mt-10">
-                    {{ "studysaved2" | translate }} <a routerLink="/card-sort-tests">{{ "studysaved3" | translate }}</a>.
-                </div>
+
+                <button type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "create" | translate }}</button>
+                <button type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
 
             </div>
 
