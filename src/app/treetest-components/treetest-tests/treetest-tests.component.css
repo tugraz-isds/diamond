@@ -108,5 +108,10 @@ body {
 }
 .path-history-arrow{
     font-weight: bold;
-    color: blue;
+    color:royalblue;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+}
+.path-history-final-click{
+    color:darkgreen;
 }
