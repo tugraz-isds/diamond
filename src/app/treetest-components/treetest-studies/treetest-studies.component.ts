@@ -193,7 +193,6 @@ export class TreetestStudiesComponent implements OnInit {
       .subscribe(
         res => {
           this.getAllTests();
-          $("#success").modal('show');
         },
         err => {
           alert("Error: " + err);

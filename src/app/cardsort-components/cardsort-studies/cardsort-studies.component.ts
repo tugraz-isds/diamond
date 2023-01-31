@@ -158,7 +158,6 @@ export class CardsortStudiesComponent implements OnInit {
       .subscribe(
         res => {
           this.getAllCardSortTests();
-          $("#success").modal('show');
         },
         err => {
           alert("Error: " + err);
