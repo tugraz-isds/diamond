@@ -106,3 +106,7 @@ body {
     background: #d2c9c9;
     color: white;
 }
+.path-history-arrow{
+    font-weight: bold;
+    color: blue;
+}

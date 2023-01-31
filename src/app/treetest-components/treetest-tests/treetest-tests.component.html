@@ -166,8 +166,8 @@
                         <td>
 
                           <ng-container *ngFor="let path of participant.paths[i]; let m = index;">
-                            <ng-container *ngIf="path.direction === 'in'">&gt;</ng-container>
-                            <ng-container *ngIf="path.direction === 'out'">&lt;</ng-container>
+                            <ng-container *ngIf="path.direction === 'in'"><span class="path-history-arrow">&gt;</span></ng-container>
+                            <ng-container *ngIf="path.direction === 'out'"><span class="path-history-arrow">&lt;</span></ng-container>
                             {{path.node.data.text}}                                                    
                           </ng-container>
 
