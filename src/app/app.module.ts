@@ -1,5 +1,5 @@
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -36,17 +36,17 @@ import { CardsortTestMatrixComponent } from './cardsort-components/cardsort-test
 
 import { participantsFilterPipe } from 'src/app/pipes/filter.pipe';
 import { PendingChangesGuard } from './guard';
-import { LanguageService } from './language.service';
 import { JwtInterceptor } from './jwt.interceptor';
+import { LanguageService } from './language.service';
 import { datePipe } from './pipes/datePipe.pipe';
 import { StudyClosedComponent } from './study-closed/study-closed.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent},
   { path: 'create-tree-test', component: CreateTestComponent, canDeactivate: [PendingChangesGuard]},
-  { path: 'create-card-sort', component: CreateCardSortComponent},
+  { path: 'create-card-sort', component: CreateCardSortComponent, canDeactivate: [PendingChangesGuard]},
   { path: 'create-tree-test/:id', component: CreateTestComponent, canDeactivate: [PendingChangesGuard]},
-  { path: 'create-card-sort/:id', component: CreateCardSortComponent},
+  { path: 'create-card-sort/:id', component: CreateCardSortComponent, canDeactivate: [PendingChangesGuard]},
   { path: 'cardsort/:id', component: CardsortStudyComponent},
   { path: 'cardsort-preview/:id', component: CardsortStudyComponent},
   { path: 'treetest/:id', component: TreetestStudyComponent},
