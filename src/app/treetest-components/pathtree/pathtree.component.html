@@ -33,12 +33,12 @@
 
 <div class="chart-checkboxes">
     <div class="chart-checkbox">
-        <label for="toggle-border">Margin Borders:</label>
+        <label for="toggle-border">Show Margin Borders:</label>
         <input type="checkbox" [checked]="showMarginBorders" [value]="margin.top" id="toggle-border" (change)="onShowMarginBorders($event)"/>
     </div>
     <div class="chart-checkbox">
-        <label for="chart-orientation">Flipped:</label>
-        <input type="checkbox" [checked]="flipped" [value]="margin.top" id="chart-orientation" (change)="onFlipped($event)"/>
+        <label for="chart-orientation">Horizontal:</label>
+        <input type="checkbox" [checked]="!flipped" [value]="margin.top" id="chart-orientation" (change)="onFlipped($event)"/>
     </div>
 </div>
 
