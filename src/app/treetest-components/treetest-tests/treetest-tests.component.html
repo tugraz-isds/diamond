@@ -13,9 +13,9 @@
         <li><a data-toggle="tab" href="#taskanalysis">{{ "taskanalysis" | translate }}</a></li>
         <li><a data-toggle="tab" href="#destinations">{{ "destinations" | translate }}</a></li>
       </ul>
-      
+
       <div class="tab-content">
-  
+
         <div id="overview" class="mt-30 tab-pane fade in active">
           <h4 class="mt-30">{{ "participants" | translate }}</h4>
           <hr>
@@ -72,7 +72,7 @@
         </div>
 
         <div id="participants" class="mt-30 tab-pane fade">
-          
+
           <p>{{ "excludedparticipants" | translate }}</p>
           <p>{{numberIncludedParticipants}} {{"participants" | translate}} ({{totalParticipants}} {{"totalWith" | translate}} {{totalParticipants - numberIncludedParticipants}} {{"excluded" | translate}})</p>
           <button type="button" class="btn btn-warning"  (click)="exportcsv()">{{ "exportcsv" | translate }}</button>
@@ -106,7 +106,7 @@
 <!--                      <input type="checkbox" [checked]="result.exclude" [(ngModel)]="result.exclude" (click)="updateResultParticipants(j)">-->
                     </td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal10" (click)="deleteParticipantResultIndex = j">{{ "delete" | translate }}</button>   
+                        <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#myModal10" (click)="deleteParticipantResultIndex = j">{{ "delete" | translate }}</button>
                       </td>
                 </tr>
             </tbody>
@@ -151,6 +151,23 @@
               </div>
               </div>
 
+              <!-- first click statistics -->
+              <div class="row mt-20">
+                <div class="col-sm-5">
+                  <div style="display: inline-block">First Click</div>
+                    <span style="padding-left: 5px;" data-toggle="tooltip" title="First click represents the tree element that had been selected by most participants for their first selection." class="glyphicon glyphicon-question-sign"></span>
+                    <div class="bar-container">
+                    <div class="progress bar-width">
+                      <div class="progress-bar " role="progressbar" [ngStyle]="{'width': firstClicks[i][2] + '%'}"></div>
+                    </div>
+                      <div class="percentage">                          
+                          {{firstClicks[i][2]}}% ({{firstClicks[i][1]}} {{"outOf" | translate}} {{numberIncludedParticipants}}) initially picked "{{firstClicks[i][0]}}".                         
+                      </div>
+                    </div>
+                </div>
+              </div>
+              
+              <!-- path history -->
               <div style="display: inline-block" class="mt-20">Paths Chosen </div>
               <table *ngIf="paths.length && study" class="participants table table-bordered mt-5">
                 <thead>
@@ -162,22 +179,22 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let participant of paths; let j = index;">
-                        <td>{{participant.name}}</td>                        
+                        <td>{{participant.name}}</td>
                         <td>
 
                           <ng-container *ngFor="let path of participant.paths[i]; let m = index;">
                             <ng-container *ngIf="path.direction === 'in'"><span class="path-history-arrow">&gt;</span></ng-container>
-                            <ng-container *ngIf="path.direction === 'out'"><span class="path-history-arrow">&lt;</span></ng-container>                            
+                            <ng-container *ngIf="path.direction === 'out'"><span class="path-history-arrow">&lt;</span></ng-container>
                             <ng-container *ngIf="m === participant.paths[i].length - 1"><span class="path-history-final-click">{{path.node.data.text}}</span></ng-container>
                             <ng-container *ngIf="m !== participant.paths[i].length - 1">{{path.node.data.text}}</ng-container>
-                                                                                
+
                           </ng-container>
 
-                        </td>                        
-                        
+                        </td>
+
                     </tr>
                 </tbody>
-              </table>              
+              </table>
 
               <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pathTree" (click)="preparePathTree(i)">Path Tree</button> -->
               <a [routerLink]="['/pie-tree/' + this.id + '/' + i]" class="btn btn-primary pointer">PathTree</a>
@@ -234,8 +251,8 @@
             </tbody>
         </table>
         </div>
-  
-  
+
+
       </div>
     </div>
   </div>
@@ -260,7 +277,7 @@
 <!-- Modal -->
 <div id="myModal10" class="modal fade" role="dialog">
     <div style="max-width: 400px;" class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-body text-center">
@@ -271,6 +288,6 @@
           <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "no" | translate }}</button>
         </div>
       </div>
-  
+
     </div>
   </div>

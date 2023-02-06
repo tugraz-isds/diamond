@@ -49,6 +49,9 @@ export class TreetestTestsComponent implements OnInit {
   totalTasksDirect = 0;
   percentageDirect = 0;
 
+  firstClicks = [];
+  percentageFirstClick = 0;
+
   tasks = [];
   task = {};
 
@@ -274,8 +277,58 @@ export class TreetestTestsComponent implements OnInit {
     }
 
     this.tasks = tasks;
-
+    
     this.destinationTable();
+
+    this.firstClickStatistic();
+    
+  }
+
+  firstClickStatistic(){
+
+    function mode(arr){
+      return arr.sort((a,b) =>
+            arr.filter(v => v===a).length
+          - arr.filter(v => v===b).length
+      ).pop();
+    }
+
+    for(let i = 0; i < this.tasks.length; i++){
+
+      let firstClicks = [];
+
+      // Get most first clicked
+      for(let j = 0; j < this.paths.length; j++){
+        firstClicks.push(this.paths[j].paths[i][0].node.data.text);
+      }
+
+      const mostFirstClicked = mode(firstClicks); 
+      let firstClickedNrOfTimes = 0;
+
+      // Get nr of clicks.
+      for(let j = 0; j < this.paths.length; j++){
+        if(this.paths[j].paths[i][0].node.data.text === mostFirstClicked){
+          firstClickedNrOfTimes += 1;
+        }
+      }            
+
+      const percentageFirstClicked = Math.floor((firstClickedNrOfTimes * 100) / this.paths.length);      
+
+      console.log("most first clicked: "  + mostFirstClicked + ", at ", + firstClickedNrOfTimes + " / " + this.paths.length + " times, " + percentageFirstClicked + "%");
+
+      // Save first click for this task. 
+      // [0] is string, [1] nr of clicks, [2] percentage
+      let firstClicksForThisTask = [];
+      firstClicksForThisTask.push(mostFirstClicked);
+      firstClicksForThisTask.push(firstClickedNrOfTimes);
+      firstClicksForThisTask.push(percentageFirstClicked);
+
+      this.firstClicks.push(firstClicksForThisTask);
+    }
+    
+    console.log(this.firstClicks);
+    
+
   }
 
   preparePathTree(index) {
@@ -773,4 +826,5 @@ removeKeys(obj, keys){
     };
     return [startPoint, ...startNode.retrievePath(clicks.slice(1))];
   }
+
 }
