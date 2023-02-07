@@ -31,6 +31,15 @@ table>tbody>tr>td {
     padding: 10px;
 }
 
+.task-analysis-box a {
+    font-size: 80% !important;
+    text-transform: none;
+}
+
+.task-analysis-box a:hover {
+    text-decoration: none;
+}
+
 @media only screen and (min-width: 992px) {
 .time-result {
     margin-left: 15px;

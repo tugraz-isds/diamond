@@ -152,8 +152,7 @@
               </div>
 
               <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pathTree" (click)="preparePathTree(i)">Path Tree</button> -->
-
-              <button type="button" class="btn btn-primary"  (click)="openPathTree(i)">PathTree</button>
+              <a [routerLink]="['/pie-tree/' + this.id + '/' + i]" class="btn btn-primary pointer">PathTree</a>
             </div>
 
           </div>

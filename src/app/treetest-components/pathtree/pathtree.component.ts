@@ -230,7 +230,7 @@ export class PathtreeComponent implements OnInit {
     }
 
     onFlipped(e: any) {
-        this.flipped = e.target.checked;
+        this.flipped = !e.target.checked;
         this.preparePathTree(this.index);
     }
 
