@@ -115,3 +115,8 @@ body {
 .path-history-final-click{
     color:darkgreen;
 }
+
+.first-clicked-node-text{
+    font-weight: bold;
+    color: #357ab6;
+}

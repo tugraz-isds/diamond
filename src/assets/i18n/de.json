@@ -142,5 +142,11 @@
     "back": "Zurück",
     "copy": "Kopie",
     "new": "Neu",
-    "create": "Erstellen"
+    "create": "Erstellen",
+    "firstclick": "Erster Klick",
+    "pathchosen" : "Ausgewählte Pfade",
+    "name" : "Name",
+    "path" : "Pfad",
+    "pathhistory" : "Pfad Vergangenheit",
+    "pathtree" : "Pfad Baum"
 }

@@ -142,5 +142,11 @@
     "back": "Back",
     "copy": "Copy",
     "new": "New",
-    "create": "Create"
+    "create": "Create",
+    "firstclick": "First Click",
+    "pathchosen" : "Chosen Paths History",
+    "name" : "Name",
+    "path" : "Path",
+    "pathhistory" : "Path History",
+    "pathtree" : "Path Tree"
 }
