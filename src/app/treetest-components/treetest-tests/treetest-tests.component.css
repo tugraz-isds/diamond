@@ -106,3 +106,17 @@ body {
     background: #d2c9c9;
     color: white;
 }
+.path-history-arrow{
+    font-weight: bold;
+    color:royalblue;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+}
+.path-history-final-click{
+    color:darkgreen;
+}
+
+.first-clicked-node-text{
+    font-weight: bold;
+    color: #357ab6;
+}

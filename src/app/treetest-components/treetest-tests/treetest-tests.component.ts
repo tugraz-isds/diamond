@@ -9,7 +9,7 @@ import { Parser } from '@json2csv/plainjs';
 
 declare var Chart: any;
 import * as d3 from 'd3';
-import TreeNode from "./TreeNode";
+import TreeNode, {PathPoint} from "./TreeNode";
 
 declare var $: any;
 
@@ -49,6 +49,9 @@ export class TreetestTestsComponent implements OnInit {
   totalTasksDirect = 0;
   percentageDirect = 0;
 
+  firstClicks = [];
+  percentageFirstClick = 0;
+
   tasks = [];
   task = {};
 
@@ -61,6 +64,7 @@ export class TreetestTestsComponent implements OnInit {
   i = 0;
   deleteParticipantResultIndex;
   irrelevantItemsCollapsed = false;
+  paths = [];
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
@@ -75,7 +79,8 @@ export class TreetestTestsComponent implements OnInit {
             this.tree = (res as any).test[0].tree;
             this.treemap = new TreeNode(this.tree, this.tree[0], 1);
             this.treemap.fillTree(this.tests);
-            const treemapArray = this.treemap.getDepthFirstArray();
+            const treemapArray = this.treemap.getDepthFirstArray(); 
+            this.paths = this.retrievePaths();  // Path history computed from this.paths
             this.prepareResults();
           },
           err => {
@@ -269,6 +274,52 @@ export class TreetestTestsComponent implements OnInit {
     this.tasks = tasks;
 
     this.destinationTable();
+
+    this.firstClickStatistic();
+
+  }
+
+  firstClickStatistic(){
+
+    // Returns the most frequently occuring string in a list.
+    function mode(arr){
+      return arr.sort((a,b) =>
+            arr.filter(v => v===a).length
+          - arr.filter(v => v===b).length
+      ).pop();
+    }
+
+    for(let i = 0; i < this.tasks.length; i++){
+
+      let firstClicks = [];
+
+      // Get most first clicked node.
+      for(let j = 0; j < this.paths.length; j++){
+        firstClicks.push(this.paths[j].paths[i][0].node.data.text);
+      }
+
+      const mostFirstClicked = mode(firstClicks); 
+      let firstClickedNrOfTimes = 0;
+
+      // Get nr of clicks for this node name.
+      for(let j = 0; j < this.paths.length; j++){
+        if(this.paths[j].paths[i][0].node.data.text === mostFirstClicked){
+          firstClickedNrOfTimes += 1;
+        }
+      }            
+
+      const percentageFirstClicked = Math.floor((firstClickedNrOfTimes * 100) / this.paths.length);      
+
+      // Save first click for this task. 
+      // [0] is string, [1] nr of clicks, [2] percentage
+      let firstClicksForThisTask = [];
+      firstClicksForThisTask.push(mostFirstClicked);
+      firstClicksForThisTask.push(firstClickedNrOfTimes);
+      firstClicksForThisTask.push(percentageFirstClicked);
+
+      // This container is used by Angular in the frontend.
+      this.firstClicks.push(firstClicksForThisTask);
+    }
   }
 
   preparePathTree(index) {
@@ -409,10 +460,6 @@ removeKeys(obj, keys){
   }
   return obj;
 }
-
-
-
-
 
   getCorrectTasks(results) {
     let totalCorrect = 0;
@@ -738,5 +785,34 @@ removeKeys(obj, keys){
   }
 
   irrelevantItemDisabled(item: TreeNode) {
-    return this.irrelevantItemsCollapsed && !item.hasAnswerInPath(); }
+    return this.irrelevantItemsCollapsed && !item.hasAnswerInPath(); 
+  }
+
+  retrievePaths() {
+    const participants = [];
+    for (const test of this.tests) {
+      if (test.excluded) { continue; }
+      const paths = [];
+      for (const task of test.results) {
+        paths.push(this.retrievePath([...task.clicks, {id: task.answer}])); // because answer is not included in clicks
+      }
+      participants.push({
+        id: test.id,
+        name: test.username,
+        paths
+      });
+    }
+    return participants;
+  }
+
+  retrievePath(clicks: any[]) {
+    const startNode = this.treemap.findNodeById(clicks[0].id);
+    const startPoint: PathPoint = {
+      node: startNode,
+      direction: 'start'
+    };
+    return [startPoint, ...startNode.retrievePath(clicks.slice(1))];
+  }
+
+
 }

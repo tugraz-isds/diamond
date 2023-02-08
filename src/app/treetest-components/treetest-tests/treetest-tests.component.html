@@ -11,6 +11,7 @@
         <li class="active"><a data-toggle="tab" href="#overview">{{ "overview" | translate }}</a></li>
         <li><a data-toggle="tab" href="#participants">{{ "participants" | translate }}</a></li>
         <li><a data-toggle="tab" href="#taskanalysis">{{ "taskanalysis" | translate }}</a></li>
+        <li><a data-toggle="tab" href="#pathhistory">{{ "pathhistory" | translate }}</a></li>
         <li><a data-toggle="tab" href="#destinations">{{ "destinations" | translate }}</a></li>
       </ul>
       
@@ -70,7 +71,8 @@
             </div>
           </div>
         </div>
-
+        
+        <!-- Participants Tab. -->
         <div id="participants" class="mt-30 tab-pane fade">
           
           <p>{{ "excludedparticipants" | translate }}</p>
@@ -112,52 +114,112 @@
             </tbody>
           </table>
 
-
         </div>
 
+       <!-- Task Analysis Tab. -->
+       <div id="taskanalysis" class="mt-30 tab-pane fade">
+        <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
+          <div class="task-analysis-box">
+            {{i+1}}. {{study.tasks[i].text}}
 
-        <div id="taskanalysis" class="mt-30 tab-pane fade">
-          <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
-            <div class="task-analysis-box">
-              {{i+1}}. {{study.tasks[i].text}}
-
-              <div class="row mt-20">
-                <div class="col-sm-5">
-                  <div style="display: inline-block">{{ "success" | translate }}</div>
-                    <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually &#10;(possibly with deviations from the direct path) managed to find &#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
-                    <div class="bar-container">
-                    <div class="progress bar-width">
-                      <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': t.percentageCorrect + '%'}">
-                      </div>
-                    </div>
-                      <div class="percentage">
-                          {{t.percentageCorrect}}% ({{t.directSuccess + t.indirectSuccess}} {{"outOf" | translate}} {{numberIncludedParticipants}})
-                      </div>
-                    </div>
-                </div>
-              </div>
-
-              <div class="row mt-20">
-                  <div class="col-sm-5">
-                  <div style="display: inline-block">{{ "directness" | translate }}</div>
-                  <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path &#10;to the correct answer without deviations, i.e. without navigating &#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
+            <!-- correctness -->
+            <div class="row mt-20">
+              <div class="col-sm-5">
+                <div style="display: inline-block">{{ "success" | translate }}</div>
+                  <span style="padding-left: 5px;" data-toggle="tooltip" title="The success rate indicates the percentage of users who eventually &#10;(possibly with deviations from the direct path) managed to find &#10;where in the tree the correct answer is located." class="glyphicon glyphicon-question-sign"></span>
                   <div class="bar-container">
-                      <div class="progress bar-width">
-                          <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': t.percentageDirect + '%'}"></div>
-                      </div>
-                      <div class="percentage">{{t.percentageDirect}}% ({{t.directSuccess + t.directFailure}} {{"outOf" | translate}} {{numberIncludedParticipants}})</div>
-                 </div>
-
+                  <div class="progress bar-width">
+                    <div class="progress-bar  progress-bar-success" role="progressbar" [ngStyle]="{'width': t.percentageCorrect + '%'}">
+                    </div>
+                  </div>
+                    <div class="percentage">
+                        {{t.percentageCorrect}}% ({{t.directSuccess + t.indirectSuccess}} {{"outOf" | translate}} {{numberIncludedParticipants}})
+                    </div>
+                  </div>
               </div>
-              </div>
-
-              <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pathTree" (click)="preparePathTree(i)">Path Tree</button> -->
-              <a [routerLink]="['/pie-tree/' + this.id + '/' + i]" class="btn btn-primary pointer">PathTree</a>
             </div>
 
-          </div>
-        </div>
+            <!-- directness -->
+            <div class="row mt-20">
+                <div class="col-sm-5">
+                <div style="display: inline-block">{{ "directness" | translate }}</div>
+                <span style="padding-left: 5px;" data-toggle="tooltip" title="The directness rate measures how many users selected the path &#10;to the correct answer without deviations, i.e. without navigating &#10;back in the tree in order to reconsider a decision." class="glyphicon glyphicon-question-sign"></span>
+                <div class="bar-container">
+                    <div class="progress bar-width">
+                        <div class="progress-bar  progress-bar-info" role="progressbar" [ngStyle]="{'width': t.percentageDirect + '%'}"></div>
+                    </div>
+                    <div class="percentage">{{t.percentageDirect}}% ({{t.directSuccess + t.directFailure}} {{"outOf" | translate}} {{numberIncludedParticipants}})</div>
+               </div>
 
+            </div>
+            </div>
+
+            <!-- first click statistics -->
+            <div class="row mt-20">
+              <div class="col-sm-5">
+                <div style="display: inline-block">{{"firstclick" | translate}}</div>
+                  <span style="padding-left: 5px;" data-toggle="tooltip" title="First click represents the tree element that had been selected by most participants for their first selection." class="glyphicon glyphicon-question-sign"></span>
+                  <div> <span class="first-clicked-node-text">"{{firstClicks[i][0]}}"</span></div>
+                  <div class="bar-container">
+                  <div class="progress bar-width">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{'width': firstClicks[i][2] + '%'}"></div>
+                  </div>                      
+                    <div class="percentage">                          
+                        {{firstClicks[i][2]}}% ({{firstClicks[i][1]}} {{"outOf" | translate}} {{numberIncludedParticipants}})                         
+                    </div>
+                  </div>
+              </div>
+            </div>
+
+            <!-- <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#pathTree" (click)="preparePathTree(i)">Path Tree</button> -->
+            <a [routerLink]="['/pie-tree/' + this.id + '/' + i]" class="btn btn-primary pointer">{{"pathtree" | translate}}</a>
+            <!-- <button type="button" class="btn btn-primary"  (click)="openPathTree(i)">{{"pathtree" | translate}}</button> -->
+          </div>
+
+        </div>
+      </div>
+
+       <!-- Path History Tab. -->
+       <div id="pathhistory" class="mt-30 tab-pane fade">
+        <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
+          <div class="task-analysis-box">
+            {{i+1}}. {{study.tasks[i].text}}
+            
+            <!-- Path history. -->
+            <div class="mt-20">{{"pathchosen" | translate}}</div>
+            <table *ngIf="paths.length && study" class="participants table table-bordered mt-5">
+              <thead>
+                <tr>
+                  <th>{{"name" | translate}}</th>
+                  <th>{{"path" | translate}}</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let participant of paths; let j = index;">
+                      <td>{{participant.name}}</td>
+                      <td>
+
+                        <ng-container *ngFor="let path of participant.paths[i]; let m = index;">
+                          <ng-container *ngIf="path.direction === 'in'"><span class="path-history-arrow">&gt;</span></ng-container>
+                          <ng-container *ngIf="path.direction === 'out'"><span class="path-history-arrow">&lt;</span></ng-container>
+                          <ng-container *ngIf="m === participant.paths[i].length - 1"><span class="path-history-final-click">{{path.node.data.text}}</span></ng-container>
+                          <ng-container *ngIf="m !== participant.paths[i].length - 1">{{path.node.data.text}}</ng-container>
+
+                        </ng-container>
+
+                      </td>
+
+                  </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+      </div>
+
+       <!-- Destinations Tab. -->
         <div *ngIf="study" id="destinations" class="mt-30 tab-pane fade">
           <div class="mt-10 mb-10">{{ "tasks" | translate }}:</div>
           <div *ngFor="let t of study.tasks; let i = index;">
