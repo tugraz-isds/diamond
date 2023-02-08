@@ -1,14 +1,20 @@
+export type PathPoint = {
+  node: TreeNode,
+  direction: 'in' | 'out' | 'repeat' | 'start'
+};
+
 class TreeNode {
   children: TreeNode[] = [];
   answerCount: number[] = [];
+  root: TreeNode;
 
-  constructor(trees: any[], public data: any, public level: number) {
+  constructor(trees: any[], public data: any, public level: number, root?: TreeNode) {
     const [directChildren, rest] = trees.reduce((result, node) => {
       result[node.parent === data.id ? 0 : 1].push(node);
       return result;
     }, [[], []]);
-
-    directChildren.forEach(child => { this.children.push(new TreeNode(rest, child, level + 1)); });
+    this.root = root ? root : this;
+    directChildren.forEach(child => { this.children.push(new TreeNode(rest, child, level + 1, this.root)); });
   }
 
   fillTree(tests: any[]) {
@@ -46,6 +52,37 @@ class TreeNode {
     return currentArray;
   }
 
+  retrievePath(clicks: any[]): PathPoint[] {
+    if (clicks.length === 0) { return []; }
+    const pathPoint: PathPoint = {
+      node: undefined,
+      direction: 'in'
+    };
+    if (this.data.id === clicks[0].id) {
+      pathPoint.node = this;
+      pathPoint.direction = 'repeat';
+    }
+    if (!pathPoint.node) {
+      pathPoint.node = this.findNodeById(clicks[0].id);
+      pathPoint.direction = 'in';
+    }
+    if (!pathPoint.node) {
+      pathPoint.node = this.root.findNodeById(clicks[0].id);
+      pathPoint.direction = 'out';
+    }
+    return [pathPoint, ...pathPoint.node.retrievePath(clicks.slice(1))];
+  }
+
+  findNodeById(id: string): TreeNode | undefined {
+    if (this.data.id === id) { return this; }
+    for (const child of this.children) {
+      const node = child.findNodeById(id);
+      if (node) {
+        return node;
+      }
+    }
+    return undefined;
+  }
 }
 
 export default TreeNode;
