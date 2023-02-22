@@ -32,7 +32,7 @@ export class CreateCardSortComponent implements OnInit, EditComponent {
 
   private currentlySelectedCard = '';  
 
-  private originalTest = null;
+  private originalTest = null; // TODO: should be of type ICardsortStudy
 
   private csvContent: string;
   public baseurl: string = '';  

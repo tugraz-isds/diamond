@@ -12,7 +12,7 @@ export interface ITreetestStudy {
   _id?: string; // TODO: _id should be removed?
   name: string;
   password?: string;
-  launched: boolean;
+  launched?: boolean;
   id: string;
   createdDate?: string;
   tree: any;
@@ -54,6 +54,12 @@ export class TreetestStudyService {
 
   constructor(private http: HttpClient) { }
 
+  get(studyId: string): Observable<ITreetestStudy> {
+    const payload: ITreetestStudyRequest = {
+      id: studyId
+    };
+    return this.http.post<ITreetestStudy>(`${this.apiUrl}/get`, payload);
+  }
 
   getAllByUserId(email: string): Observable<Array<ITreetestStudy>> {
     const payload: IGetTreetestStudyByUserIdRequest = {
@@ -67,7 +73,7 @@ export class TreetestStudyService {
   }
 
   // FIXME: we dont need the whole object here, just the updated property should be allowed
-  edit(treetestStudy: ITreetestStudyEdit): Observable<void> {
+  edit(treetestStudy: ITreetestStudyEdit | ITreetestStudy): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/edit`, treetestStudy);
   }
 

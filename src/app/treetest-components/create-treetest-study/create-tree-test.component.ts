@@ -1,9 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditComponent } from 'src/app/guard';
-
-import { UserService } from '../../user.service';
+import { ITreetestStudy, TreetestStudyService } from '../treetest-study.service';
 
 declare var $: any;
 
@@ -14,85 +12,86 @@ declare var $: any;
 })
 export class CreateTestComponent implements OnInit, EditComponent {
 
-  randomTestId = Math.random().toString(36).substring(2, 15);
-  testName = '';
-  studyPassword = '';
-  tasks = [];
-  task = {
+  public randomTestId: string = Math.random().toString(36).substring(2, 15);
+  public testName = '';
+  public studyPassword = '';
+  
+  public tasks = [];
+  private task = {
     text: '',
     answer: '',
     id: ''
   };
-  currentTaskIndex = 0;
-  answerTreeCreated = false;
+  public currentTaskIndex = 0;
+  private answerTreeCreated = false;
+  
   // tslint:disable-next-line:no-string-literal
-  id = this.route.snapshot.params['id'];
+  public id = this.route.snapshot.params['id'];
 
-  welcomeMessage = "Welcome to the study. Your answers can help improving the information hierarchy.";
-  instructions = "Read the task, and find the appropriate answer in the tree.";
-  thankYouScreen = "Thank you for your participation.";
-  leaveFeedback = "Your results are saved. You can write us your feedback (optional).";
+  public welcomeMessage = 'Welcome to the study. Your answers can help improving the information hierarchy.';
+  public instructions = 'Read the task, and find the appropriate answer in the tree.';
+  public thankYouScreen = 'Thank you for your participation.';
+  public leaveFeedback = 'Your results are saved. You can write us your feedback (optional).';
 
-  leafNodes = true;
-  orderNumbers = true;
+  public leafNodes = true;
+  public orderNumbers = true;
 
-  canSave = false;
+  public canSave = false;
 
-  csvContent;
-  baseurl = "";
+  private csvContent: string;
+  public baseurl: string = '';
 
-  itemsFinal;
+  // private itemsFinal;
 
-  originalTest = null;
+  private originalTest = null; // TODO: should be of type ITreetestStudy
 
-  constructor(private http: HttpClient, 
+  constructor(
+    private treetestStudyService: TreetestStudyService,
     private route: ActivatedRoute,
-    private userService: UserService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
     if (this.id) {
-      const body = {
-        id: this.id
-      };
-      this.testInformation(body)
-        .subscribe(
-          res => {
-            // tslint:disable-next-line:no-angle-bracket-type-assertion
-            this.testName = (res as any).name;
-            this.studyPassword = (res as any).password;
-            this.createTree('test-tree', (res as any).tree);
-            this.tasks = (res as any).tasks;
-            this.welcomeMessage = (res as any).welcomeMessage;
-            this.instructions = (res as any).instructions;
-            this.thankYouScreen = (res as any).thankYouScreen;
-            this.leaveFeedback = (res as any).leaveFeedback;
-            if ((res as any).leafNodes !== undefined) {
-              this.leafNodes = (res as any).leafNodes;
-              this.orderNumbers = (res as any).orderNumbers;
-            }
-            this.originalTest = this.createTestData();
-          },
-          err => {
+      this.treetestStudyService
+        .get(this.id)
+        .subscribe(res => {
+          // tslint:disable-next-line:no-angle-bracket-type-assertion
+          this.testName = (res as any).name;
+          this.studyPassword = (res as any).password;
+          this.createTree('test-tree', (res as any).tree);
+          this.tasks = (res as any).tasks;
+          this.welcomeMessage = (res as any).welcomeMessage;
+          this.instructions = (res as any).instructions;
+          this.thankYouScreen = (res as any).thankYouScreen;
+          this.leaveFeedback = (res as any).leaveFeedback;
+          if ((res as any).leafNodes !== undefined) {
+            this.leafNodes = (res as any).leafNodes;
+            this.orderNumbers = (res as any).orderNumbers;
           }
-        );
+          this.originalTest = this.createTestData();
+        });
+
       // get it from database
       this.randomTestId = this.id;
       // this.testName = t
     } else {
-        const arrayCollection = [
-          {id: 'root', parent: '#', text: 'Root', 'state' : {
+        const arrayCollection = [{
+          id: 'root',
+          parent: '#',
+          text: 'Root',
+          'state' : {
             'selected' : true
-          },}
-      ];
+          }
+        }];
         this.createTree('test-tree', arrayCollection);
         this.originalTest = this.createTestData();
     }
   }
 
-  createTestData() {
+  createTestData() { // TODO: should return type ITreetestStudy
     return {
       testName: this.testName,
       studyPassword: this.studyPassword,
@@ -106,7 +105,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     };
   }
 
-  reset() {
+  reset() { 
     this.testName = this.originalTest.testName;
     this.studyPassword = this.originalTest.studyPassword;
     this.tasks = this.originalTest.tasks;
@@ -232,7 +231,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
           }
         }
 
-        this.itemsFinal = items;
+        // this.itemsFinal = items;
 
         $('#test-tree').jstree("destroy").empty();
         this.createTree('test-tree', []);
@@ -408,7 +407,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     this.tasks.splice(index, 1);
   }
 
-  createTest() {
+  createTest(): ITreetestStudy {
 
     let passTmp = "";
     if (this.studyPassword === "") {
@@ -422,7 +421,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
       name: this.testName,
       launched: false,
       password: passTmp,
-      id: this.randomTestId,
+      id: this.randomTestId, // this.id? this.id : this.randomTestId,
       tree: $('#test-tree').jstree(true).get_json('#', {flat: true}),
       tasks: this.tasks,
       user: JSON.parse(localStorage.getItem('currentUser')).email,
@@ -443,75 +442,34 @@ export class CreateTestComponent implements OnInit, EditComponent {
     this.router.navigate(['/tests']);
   }
 
-  saveTest(showPopup?) {
+  saveTest(showPopup?: boolean): void {
+    
     const test = this.createTest();
+
     if(showPopup) {
       let lang = localStorage.getItem('tt-language');
-      if (lang === 'en')
+      if (lang === 'en') {
         alert("Saved!");
-        else 
+      } else {
         alert("Gespeichert!");
-      }
-    if (!this.id) { // new test
-      this.postTestData(test)
-      .subscribe(
-        res => {
-          console.log(res);
+      }        
+    }
+
+    if (!this.id) {
+      this.treetestStudyService
+        .add(test)      
+        .subscribe(res => {          
           this.id = this.randomTestId;
           this.reset();
           this.router.navigate(['/tests']);
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    } else { // edit existing test
-      this.editTest(test)
-      .subscribe(
-        res => {
-          console.log(res);
+        });
+    } else {      
+      this.treetestStudyService
+        .edit(test)
+        .subscribe(res => {          
           this.reset();
           this.router.navigate(['/tests']);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+        });
     }
   }
-
-  postTestData(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/tree-study/add', object, httpOptions);
-  }
-
-  testInformation(id) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-study/get', id, httpOptions);
-  }
-
-  editTest(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl +  '/users/tree-study/edit', object, httpOptions);
-  }
-
 }

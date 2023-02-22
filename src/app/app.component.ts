@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentification.service';
 import { Router } from '@angular/router';
-
-import { UserService } from './user.service';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +10,8 @@ import { UserService } from './user.service';
 export class AppComponent implements OnInit {
 
   constructor(
-    private http: HttpClient,
     private authService: AuthenticationService,
-    private router: Router,
-    private userService: UserService
+    private router: Router
     ) {}
 
   ngOnInit() {
@@ -33,8 +28,4 @@ export class AppComponent implements OnInit {
     }
   }
   
-
-  getRequest() {
-    return this.http.get('/' + this.userService.serverUrl);
-}
 }
