@@ -5,8 +5,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('./server/_helpers/jwt');
 const errorHandler = require('./server/_helpers/error-handler');
-const config = require('./server/config.json');
-const expressJwt = require('express-jwt');
 const db = require('./server/_helpers/db');
 
 const userService = require('./server/src/services/account.service');
@@ -39,32 +37,32 @@ app.use('/users', require('./server/src/controllers/tree-test-test.controller'))
 app.use(errorHandler);
 
 // start server
-const port = 48792;
+const appPort = process.env.PORT || 8000;
+const adminEmail = process.env.ADMIN_EMAIL || 'admin';
+const adminPwd = process.env.ADMIN_PWD || 'admin189m';
 
+var dbb;
 
-  var dbb;
+// Connect to the database before starting the application server.
+mongodb.MongoClient.connect(db.database_connection_url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, client) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
 
-  // Connect to the database before starting the application server.
-  mongodb.MongoClient.connect(db.database_connection_url || db.database_connection_url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, client) {
-    if (err) {
-      console.log(err);
-      process.exit(1);
-    }
-  
-    // Save database object from the callback for reuse.
-    dbb = client.db();
-    console.log("Database connection ready");
-  
-    // Initialize the app.
-    var server = app.listen(process.env.PORT || 48792, function () {
-      var port = server.address().port;
-      console.log("App now running on port", port);
+  // Save database object from the callback for reuse.
+  dbb = client.db();
+  console.log("Database connection ready");
 
-      // add admin user
-      userService.create({ email: 'admin', password: 'admin189m' })
-        .then(() => res.json({}))
-        .catch(err => {});
-      // { email: 'newuser', password: 'newuser' }
+  // Initialize the app.
+  var server = app.listen(appPort, function () {
+    var port = server.address().port;
+    console.log("App now running on port", port);
 
-    });
+    // add admin user
+    userService.create({ email: adminEmail, password: adminPwd })
+      .then(() => res.json({}))
+      .catch(err => {});    
+
   });
+});

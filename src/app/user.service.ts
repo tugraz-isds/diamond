@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as UserPaths from '../../server/user-paths.js';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export class User {
     id?: string;
@@ -13,7 +13,7 @@ export class User {
 @Injectable()
 export class UserService {
 
-    public serverUrl = UserPaths.server_url;
+    public serverUrl = `${environment.apiUrl}`;
 
     constructor(private http: HttpClient) { }
 
