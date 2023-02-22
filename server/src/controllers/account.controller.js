@@ -26,7 +26,7 @@ router.post('/tree-study/getbyuserid', getAllTreeStudies);
 // Tree Tests
 router.post('/tree-tests/add', saveTreeTests);
 router.post('/tree-tests/feedback', saveTreeTestFeedback);
-router.post('/tree-tests/:id', getTreeTestsById);
+router.post('/tree-tests/get/:id', getTreeTestsById);
 router.post('/tree-test/delete', deleteIndividualTreeTest);
 router.post('/tree-test/edit', editTreeTest);
 

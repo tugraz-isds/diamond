@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
-
-import { UserService } from '../../user.service';
 import { AuthenticationService, ILoginResponse } from '../../authentification.service';
 
 import { Router } from '@angular/router';
 
 import { saveAs } from 'file-saver'
-import { ITreetestStudy, ITreetestStudyEdit, TreetestStudyService } from '../treetest-study.service';
+import { IParticipant, ITreetestStudy, ITreetestStudyEdit, TreetestStudyService } from '../treetest-study.service';
+import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
+import { forkJoin, Observable } from 'rxjs';
 
 declare var $: any;
 
@@ -30,14 +28,13 @@ export class TreetestStudiesComponent implements OnInit {
   private baseurl: string;  
 
   //number of participants for each study
-  public numberParticipants = [];
+  public numberParticipants: Array<IParticipant> = [];
 
   constructor(
-    private http: HttpClient,
-    private userService: UserService,
     public authService: AuthenticationService,
     private router: Router,
-    private treetestStudyService: TreetestStudyService
+    private treetestStudyService: TreetestStudyService,
+    private treetestTestService: TreetestTestService
   ) { }
 
   ngOnInit(): void {
@@ -91,18 +88,7 @@ export class TreetestStudiesComponent implements OnInit {
 
   }
 
-  /*getTestData(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-study/getbyuserid', object, httpOptions);
-  }*/
-
-  getLink(id) {
+  getLink(id): string {
     return this.baseurl + "/#/treetest/" + id;
   }
 
@@ -177,73 +163,44 @@ export class TreetestStudiesComponent implements OnInit {
       );
   }
 
-  export(studyId){
-  let study = this.studies.find(study => study._id === studyId);
-  let id = study.id;
-  let file;
-  this.resultsInformation(id)
-        .subscribe(
-          res => {
-            this.tests = (<any>res).result;
-            file = {...study, tests : this.tests};
-            this.downloadFile(file, id);
-            console.log(file);
-          },
-          err => {
-            console.log(err);
-          }
-        );
+  export(studyId: string): void {
+    let study = this.studies.find(study => study._id === studyId);
+    let id = study.id;
+    let file;
+    this.treetestTestService
+      .getById(id)
+      .subscribe(res => {
+        this.tests = (<any>res).result;
+        file = {...study, tests : this.tests};
+        this.downloadFile(file, id);        
+      });
   }
 
-  private downloadFile(data, fileName) {
+  private downloadFile(data, fileName: string): void {
     const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
     saveAs(blob, `study-${fileName}.json`);
   }
 
-
-  resultsInformation(id) {
-    /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-         Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + id, "", httpOptions);
-  }
-
-  setNumberOfParticipants(){
-    let obj;
+  setNumberOfParticipants(): void {    
+    
+    // FIXME: this should be done on the backend when fetching data from db       
     this.numberParticipants = [];
+
     for(let study of this.studies){
-      let number = 0;
       let id = study["id"];
-      this.resultsInformation(id)
-        .subscribe(
-          res => {
-            let tests = (<any>res).result;
-            for (let i = 0; i < tests.length; i++) {
-              number ++;
-            }
-            obj = {id: id, participants: number}
-            this.numberParticipants.push(obj)
-          },
-          err => {
-            console.log(err);
-          }
-        );
+      this.treetestTestService
+        .getById(id)
+        .subscribe(res => this.numberParticipants.push({ id, participants: res.result.length }));
     }
   }
 
-  generateRandomStudyId() {
+  generateRandomStudyId(): string {
     return Math.random().toString(36).substring(2, 15);
-  }
-  
+  }  
 
-  onFileSelect(input) {
+  onFileSelect(input): void {
 
-    const files = input.files;
-    
+    const files = input.files;    
 
     if (files && files.length) {
 
@@ -293,10 +250,13 @@ export class TreetestStudiesComponent implements OnInit {
             err => alert("Error: " + err)
           );
 
+        let subs: Array<Observable<void>> = [];
+
         for(let test of json["tests"]){
           let exclude = false;
           if (test["excluded"] !== undefined) { exclude = test["excluded"]};
-          const temp = {
+
+          const temp: ITreetestTest = {
             id: study.id,
             results: test["results"],
             finished: test["finished"],
@@ -304,37 +264,16 @@ export class TreetestStudiesComponent implements OnInit {
             timestamp: test["timestamp"],
             feedback: test["feedback"],
             excluded: exclude,
-          };
+          };          
 
-          this.postTestData(temp)
-            .subscribe(
-              res => {
-                console.log(res);
-              },
-              err => {
-                console.log(err);
-              }
-            );
+          subs.push(this.treetestTestService.add(temp));
         }
-        this.getAllTests();
-        };
-        fileReader.readAsText(input.files[0]);
+
+        forkJoin(subs).subscribe(res => this.getAllTests());
+      };
       
+      fileReader.readAsText(input.files[0]);      
     }
   }
-
-  postTestData(object) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/tree-tests/add', object, httpOptions);
-  }
-
-  
-
 }
 

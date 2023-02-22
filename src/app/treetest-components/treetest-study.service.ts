@@ -3,6 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+export interface IParticipant {
+  id: string;
+  participants: number;
+}
+
 export interface ITreetestStudy {
   _id?: string; // TODO: _id should be removed?
   name: string;
