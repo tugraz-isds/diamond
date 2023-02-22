@@ -82,7 +82,7 @@ export class CardSortStudyService {
     return this.http.post<Array<ICardSortStudy>>(`${this.apiUrl}/getbyuserid`, payload);
   }
 
-  add(cardSortStudy: ICardSortStudy) {
+  add(cardSortStudy: ICardSortStudy): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/add`, cardSortStudy);
   }
 

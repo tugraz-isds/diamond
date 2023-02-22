@@ -135,7 +135,7 @@ export class CardsortStudiesComponent implements OnInit {
       );
   }
 
-  prepareDeleteStudy() {
+  prepareDeleteStudy(): void {
     this.cardSortStudyService
       .delete(this.deleteCardSortTestId)
       .subscribe(
