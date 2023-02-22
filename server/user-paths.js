@@ -7,7 +7,7 @@ const UserPaths = {
 ///// SERVER URL: /////
 
 // Local
-server_url: 'http://localhost:48792',
+// server_url: 'http://localhost:8000',
 
 // Heroku
 // server_url: 'https://iaweb-diamond.herokuapp.com',

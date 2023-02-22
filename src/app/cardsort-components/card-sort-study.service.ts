@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserService } from '../user.service';
+import { environment } from 'src/environments/environment';
 
 export enum CheckPasswordResponse {
   REDIRECT = 'redirect'
@@ -64,14 +64,9 @@ interface ICardSortStudyPasswordRequest {
 })
 export class CardSortStudyService {
 
-  private readonly apiUrl: string;
+  private readonly apiUrl: string = `${environment.apiUrl}/users/card-sort-study`;
 
-  constructor(
-    private http: HttpClient,
-    private userService: UserService
-  ) { 
-    this.apiUrl = `${this.userService.serverUrl}/users/card-sort-study`;
-  }
+  constructor(private http: HttpClient) { }
 
   get(studyId: string): Observable<ICardSortStudy> {
     const payload: ICardSortStudyRequest = {

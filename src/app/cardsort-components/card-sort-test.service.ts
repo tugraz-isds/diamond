@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserService } from '../user.service';
+import { environment } from 'src/environments/environment';
 import { ICardSortStudy } from './card-sort-study.service';
 
 export interface IResultGroup {
@@ -47,14 +47,9 @@ export interface IDeleteTestRequest {
 })
 export class CardSortTestService {
 
-  private readonly apiUrl: string;
+  private readonly apiUrl: string = `${environment.apiUrl}/users/card-sort-tests`;;
 
-  constructor(
-    private http: HttpClient,
-    private userService: UserService
-  ) { 
-    this.apiUrl = `${this.userService.serverUrl}/users/card-sort-tests`;
-  }
+  constructor(private http: HttpClient) { }
 
   getById(studyId: string): Observable<ICardSortTestResponse> {
     return this.http.post<ICardSortTestResponse>(`${this.apiUrl}/get/${studyId}`, null);
