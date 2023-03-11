@@ -1,14 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
-import {HttpHeaders} from '@angular/common/http';
-
-import {UserService} from '../../user.service';
-
-import * as svg from 'save-svg-as-png';
-import * as d3 from "d3";
-import PathTreeGenerator from "./PathTreeGenerator";
-
+import { PathTreeGenerator, IPathTreeData, IPathTreeNode } from "./PathTreeGenerator";
+import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
+import { ITreetestStudy } from '../treetest-study.service';
 @Component({
     selector: 'app-pathtree',
     templateUrl: './pathtree.component.html',
@@ -16,72 +10,61 @@ import PathTreeGenerator from "./PathTreeGenerator";
 })
 export class PathtreeComponent implements OnInit {
 
-    @Input()  margin = {top: 20, right: 100, bottom: 20, left: 30};
-    @Input()  fontSize = 10;
-    @Input()  showMarginBorders = true;
-    @Input()  flipped: boolean;
-    @Input()  nodeDistribution = 360;
-    nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
+    @Input() margin = { top: 20, right: 100, bottom: 20, left: 30 };
+    @Input() fontSize = 10;
+    @Input() showMarginBorders = true;
+    @Input() flipped: boolean;
+    @Input() nodeDistribution = 360;
+    public nodeDistributionDisplay: number = Math.floor(this.nodeDistribution / 3.6);
 
-    id = this.route.snapshot.params['id'];
-    index = this.route.snapshot.params['index'];
+    private id: string = this.route.snapshot.params['id'];
+    private index: number = this.route.snapshot.params['index'];
 
-    test;
-    results = [];
-    tree = [];
-    nodeEnter;
-    private newTree: any[];
-    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) {
+    private study: ITreetestStudy;
+    private results: Array<ITreetestTest> = [];
+
+    private tree = [];
+    private newTree: Array<IPathTreeNode> = [];
+
+    constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+      private treeTestService: TreetestTestService
+    ) { }
+
+    ngOnInit(): void {
+      if (this.id && this.index) {
+        this.treeTestService
+          .getById(this.id)
+          .subscribe(res =>  {
+            this.results = res.result;
+            this.results.forEach(item => item.include = true);
+            this.study = res.test[0];
+            this.tree = this.study.tree;
+            this.preparePathTreeData(this.index);
+            this.preparePathTree(this.index);
+          });
+      } else {
+        this.router.navigate(['tests']);
+      }
     }
 
-    ngOnInit() {
-        if (this.id && this.index) {
-            this.resultsInformation()
-                .subscribe(
-                    res => {
-                        this.results = (<any>res).result;
-                        for (let i = 0; i < this.results.length; i++) {
-                            this.results[i]["include"] = true;
-                        }
-                        this.test = (<any>res).test[0];
-                        this.tree = (<any>res).test[0].tree;
-                        this.preparePathTreeData(this.index);
-                        this.preparePathTree(this.index);
-                    },
-                    err => {
-                        console.log(err);
-                    }
-                );
-        } else {
-            this.router.navigate(['tests']);
-        }
-    }
 
-    resultsInformation() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-            })
-        };
-        return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, "", httpOptions);
-    }
-
-    preparePathTree(index) {
-        const data = this.getPathTreeData(index);
+    preparePathTree(index: number): void {
+        const data = this.getPathTreeData();
         const pathTreeGenerator = new PathTreeGenerator(
             {data, margin: this.margin, fontSize: this.fontSize,
                 showMarginBorders: this.showMarginBorders, flipped: this.flipped, angle: this.nodeDistribution});
         pathTreeGenerator.addSvgToDOM();
         pathTreeGenerator.addMarginBorders();
-        pathTreeGenerator.addLinksToDOM(this.test, this.index, this.tree);
+        pathTreeGenerator.addLinksToDOM(this.study, this.index, this.tree);
         pathTreeGenerator.addNodesToDOM();
-        pathTreeGenerator.addCirclesToDOM(this.test, this.index, this.tree);
+        pathTreeGenerator.addCirclesToDOM(this.study, this.index, this.tree);
 
         this.getSvg();
     }
 
-    preparePathTreeData(taskIndex) {
+    preparePathTreeData(taskIndex: number): void {
         // go through each participant
         for (let i = 0; i < this.results.length; i++) {
             if (this.results[i].finished) {
@@ -130,10 +113,10 @@ export class PathtreeComponent implements OnInit {
         this.newTree = newTree;
     }
 
-    getPathTreeData(taskIndex) {
+    getPathTreeData(): IPathTreeData {
         return {
-            "name": this.tree[0].text,
-            "children": this.getNestedChildren(this.newTree, "root")
+            name: this.tree[0].text,
+            children: this.getNestedChildren(this.newTree, "root")
         };
     }
 
@@ -220,23 +203,23 @@ export class PathtreeComponent implements OnInit {
     }
 
     onFontSizeChange(e: any) {
-        this.fontSize = Number(e.target.value);
-        this.preparePathTree(this.index);
+      this.fontSize = Number(e.target.value);
+      this.preparePathTree(this.index);
     }
 
     onShowMarginBorders(e: any) {
-        this.showMarginBorders = e.target.checked;
-        this.preparePathTree(this.index);
+      this.showMarginBorders = e.target.checked;
+      this.preparePathTree(this.index);
     }
 
     onFlipped(e: any) {
-        this.flipped = !e.target.checked;
-        this.preparePathTree(this.index);
+      this.flipped = !e.target.checked;
+      this.preparePathTree(this.index);
     }
 
     onNodeDistribution(e: any) {
-        this.nodeDistribution = e.target.value;
-        this.nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
-        this.preparePathTree(this.index);
+      this.nodeDistribution = e.target.value;
+      this.nodeDistributionDisplay = Math.floor(this.nodeDistribution / 3.6);
+      this.preparePathTree(this.index);
     }
 }

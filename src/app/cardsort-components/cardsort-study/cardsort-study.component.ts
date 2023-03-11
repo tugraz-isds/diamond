@@ -28,17 +28,17 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   public isPreview = false;
 
 
-  constructor(    
-    private route: ActivatedRoute, 
-    private router: Router,    
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private cardSortTestService: CardSortTestService,
     private cardSortStudyService: CardSortStudyService
-  ) { 
+  ) {
     this.isPreview = this.route.snapshot.url[0].path.indexOf('preview') > - 1;
   }
 
   ngOnDestroy(): void {
-    
+
     if (this.isPreview) {
       return;
     }
@@ -56,7 +56,7 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
       };
 
       this.cardSortTestService
-        .add(test)    
+        .add(test)
         .subscribe(
           res => console.log(res),
           err => console.log(err)
@@ -65,11 +65,11 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    $('[data-toggle="tooltip"]').tooltip();  
+    // $('[data-toggle="tooltip"]').tooltip();
     this.cardSortStudyService
-      .passwordRequired(this.id)    
+      .passwordRequired(this.id)
       .subscribe(
-        res => {           
+        res => {
           if (res === 'redirect' && !this.isPreview) {
             console.log('redirect');
             this.router.navigate(['study-closed']);
@@ -83,7 +83,7 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
             this.preparePassword();
           }
         },
-        err => {              
+        err => {
           this.password = false;
           this.router.navigate(['study-closed']);
         }
@@ -109,7 +109,7 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
     };
 
     this.cardSortTestService
-      .add(test)    
+      .add(test)
       .subscribe(
         res => console.log(res),
         err => console.log(err)
@@ -128,7 +128,7 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
   }
 
   sendFeedback(): void {
-    
+
     if (this.isPreview) {
       return;
     }
@@ -136,12 +136,12 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
     this.cardSortTestService
       .feedback(this.userName, this.feedback)
       .subscribe()
-      .add(() => this.mindsetDone = true);            
+      .add(() => this.mindsetDone = true);
   }
 
   preparePassword(): void {
     this.cardSortStudyService
-      .checkPassword(this.id, this.enterPassword)    
+      .checkPassword(this.id, this.enterPassword)
       .subscribe(
         res => {
           if (!res) {
@@ -151,9 +151,7 @@ export class CardsortStudyComponent implements OnDestroy, OnInit {
             this.ungrouped_cards = this.study.cards;
           }
         },
-        err => {
-          alert('Wrong password!');
-        }
+        err => alert('Wrong password!')
       );
   }
 }

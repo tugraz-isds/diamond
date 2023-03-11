@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IFeedbackRequest } from '../cardsort-components/card-sort-test.service';
 import { ITreetestStudy } from './treetest-study.service';
 
 export interface ITreetestTest {
   _id?: string; // INFO: this is the testId
   id: string; // INFO: this is the id of the coresponding study -> FIXME: rename to studyId
   createdDate?: string;
-  results: any; // Array<IResultGroup>;
+  results?: any; // Array<IResultGroup>;
+  tests?: any; // FIXME: this should be called results and not tests!
   finished?: boolean;
   username: string;
   timestamp: string;
@@ -16,11 +18,16 @@ export interface ITreetestTest {
   feedback?: string;
   excluded?: boolean;
   showing?: boolean;
+  include?: boolean;
 }
 
 export interface ITreetestTestResponse {
   result: Array<ITreetestTest>;
-  card_sort_test: Array<ITreetestStudy>; // FIXME: this should be renamed to "card_sort_study"
+  test: Array<ITreetestStudy>; // FIXME: this should be renamed to "card_sort_study"
+}
+
+interface ITreetestTestRequest {
+  id: string;
 }
 
 @Injectable({
@@ -39,5 +46,24 @@ export class TreetestTestService {
   add(treetestTest: ITreetestTest): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/add`, treetestTest);
   }
-  
+
+  update(treetestTest: ITreetestTest): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/edit`, treetestTest);
+  }
+
+  delete(testId: string): Observable<void> {
+    const payload: ITreetestTestRequest = {
+      id: testId
+    };
+    return this.http.post<void>(`${this.apiUrl}/delete`, payload);
+  }
+
+  feedback(username: string, feedback: string): Observable<void> {
+    const payload: IFeedbackRequest = {
+      username,
+      feedback
+    };
+    return this.http.post<void>(`${this.apiUrl}/feedback`, payload);
+  }
+
 }

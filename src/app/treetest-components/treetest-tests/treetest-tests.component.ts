@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { UserService } from '../../user.service';
-
 import { Parser } from '@json2csv/plainjs';
-
-declare var Chart: any;
 import * as d3 from 'd3';
-import TreeNode, {PathPoint} from "./TreeNode";
+import { TreeNode, PathPoint} from "./TreeNode";
+import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
+import { ITreetestStudy } from '../treetest-study.service';
 
 declare var $: any;
+
+export type TPath = Array<PathPoint>;
+
+export interface IPathtreeParticipant {
+  id: string;
+  name: string;
+  paths: Array<TPath>
+}
 
 @Component({
   selector: 'app-results',
@@ -21,43 +24,43 @@ declare var $: any;
 export class TreetestTestsComponent implements OnInit {
 
   // tslint:disable-next-line:no-string-literal
-  id = this.route.snapshot.params['id'];
-  tests = [];
-  study;
-  numberCompleted = 0;
-  numberLeft = 0;
+  private id: string = this.route.snapshot.params['id'];
+  public tests: Array<ITreetestTest> = [];
+  public study: ITreetestStudy;
+  public numberCompleted: number = 0;
+  public numberLeft: number = 0;
 
-  totalParticipants = 0;
-  numberIncludedParticipants = 0;
+  public totalParticipants: number = 0;
+  public numberIncludedParticipants: number = 0;
 
-  totalSecondsTaken = 0;
-  averageSecondsByUser;
-  averageMinutesByUser = 0;
+  public totalSecondsTaken: number = 0;
+  public averageSecondsByUser: number;
+  public averageMinutesByUser: number = 0;
 
-  totalLongest = 0;
-  longestMinutes = 0;
-  longestSeconds = 0;
+  public totalLongest: number = 0;
+  public longestMinutes: number = 0;
+  public longestSeconds: number = 0;
 
-  totalShortest = 1000000;
-  shortestMinutes = 0;
-  shortestSeconds = 0;
+  public totalShortest: number = 1000000;
+  public shortestMinutes: number = 0;
+  public shortestSeconds: number = 0;
 
-  totalTasksDone = 0;
-  totalTasksCorrect = 0;
-  percentageCorrect = 0;
+  public totalTasksDone: number = 0;
+  public totalTasksCorrect: number = 0;
+  public percentageCorrect: number = 0;
 
-  totalTasksDirect = 0;
-  percentageDirect = 0;
+  public totalTasksDirect = 0;
+  public percentageDirect = 0;
 
-  firstClicks = [];
-  percentageFirstClick = 0;
+  public firstClicks: Array<any> = [];
+  private percentageFirstClick: number = 0;
 
   tasks = [];
   task = {};
 
   tree = [];
   destinations;
-  treemap: TreeNode;
+  private treemap: TreeNode;
   root;
   svg;
   duration = 750;
@@ -66,32 +69,27 @@ export class TreetestTestsComponent implements OnInit {
   irrelevantItemsCollapsed = false;
   paths = [];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private treeTestService: TreetestTestService
+  ) { }
 
   ngOnInit() {
-    $('[data-toggle="tooltip"]').tooltip();
     if (this.id) {
-      this.resultsInformation()
-        .subscribe(
-          res => {
-            this.tests = (res as any).result;
-            this.study = (res as any).test[0];
-            this.tree = (res as any).test[0].tree;
-            this.treemap = new TreeNode(this.tree, this.tree[0], 1);
-            this.treemap.fillTree(this.tests);
-            const treemapArray = this.treemap.getDepthFirstArray();
-            // console.log(this.tests)
-            // console.log(this.study)
-            // console.log(this.tree)
-            // console.log(this.treemap)
-            this.paths = this.retrievePaths();
-            console.log(this.paths); // LR: Create path table from this.
-            this.prepareResults();
-          },
-          err => {
-            console.log(err);
-          }
-        );
+      this.treeTestService
+        .getById(this.id)
+        .subscribe(res => {
+          this.tests = res.result;
+          this.study = res.test[0];
+          this.tree = this.study.tree;
+          this.treemap = new TreeNode(this.tree, this.tree[0], 1);
+          this.treemap.fillTree(this.tests);
+          // const treemapArray = this.treemap.getDepthFirstArray();
+          this.paths = this.retrievePaths();
+          // console.log(this.paths); // LR: Create path table from this.
+          this.prepareResults();
+        });
     } else {
       this.router.navigate(['tests']);
     }
@@ -107,17 +105,6 @@ export class TreetestTestsComponent implements OnInit {
     setTimeout(() => {
       this.prepareResults();
     }, 300);
-  }
-
-  resultsInformation() {
-    /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-tests/' + this.id, '', httpOptions);
   }
 
   getIncludeResultNumber() {
@@ -277,11 +264,11 @@ export class TreetestTestsComponent implements OnInit {
     }
 
     this.tasks = tasks;
-    
+
     this.destinationTable();
 
     this.firstClickStatistic();
-    
+
   }
 
   firstClickStatistic(){
@@ -303,7 +290,7 @@ export class TreetestTestsComponent implements OnInit {
         firstClicks.push(this.paths[j].paths[i][0].node.data.text);
       }
 
-      const mostFirstClicked = mode(firstClicks); 
+      const mostFirstClicked = mode(firstClicks);
       let firstClickedNrOfTimes = 0;
 
       // Get nr of clicks for this node name.
@@ -311,11 +298,11 @@ export class TreetestTestsComponent implements OnInit {
         if(this.paths[j].paths[i][0].node.data.text === mostFirstClicked){
           firstClickedNrOfTimes += 1;
         }
-      }            
+      }
 
-      const percentageFirstClicked = Math.floor((firstClickedNrOfTimes * 100) / this.paths.length);      
+      const percentageFirstClicked = Math.floor((firstClickedNrOfTimes * 100) / this.paths.length);
 
-      // Save first click for this task. 
+      // Save first click for this task.
       // [0] is string, [1] nr of clicks, [2] percentage
       let firstClicksForThisTask = [];
       firstClicksForThisTask.push(mostFirstClicked);
@@ -696,8 +683,8 @@ removeKeys(obj, keys){
     link.click(); // This will download the data file named "my_data.csv".
   }
 
-  excludeParticpant(result, index){
-    const temp = {
+  excludeParticpant(result: ITreetestTest, index: number): void {
+    const temp: ITreetestTest = {
       _id: result._id,
       id: result.id,
       results: result.results,
@@ -707,20 +694,17 @@ removeKeys(obj, keys){
       feedback: result.feedback,
       excluded: true
     };
-    // console.log(temp);
-    this.updateParticipantsTest(temp).subscribe(
-        res => {
-          console.log(res);
-          this.tests[index].excluded = true;
-          this.prepareResults();
-        },
-        err => {
-          console.log(err);
-        }
-    );
+
+    this.treeTestService
+      .update(temp)
+      .subscribe(res => {
+        this.tests[index].excluded = true;
+        this.prepareResults();
+      });
   }
-  includeParticipant(result, index){
-    const temp = {
+
+  includeParticipant(result: ITreetestTest, index: number): void {
+    const temp: ITreetestTest = {
       _id: result._id,
       id: result.id,
       results: result.results,
@@ -730,78 +714,52 @@ removeKeys(obj, keys){
       feedback: result.feedback,
       excluded: false
     };
-    this.updateParticipantsTest(temp).subscribe(
+
+    this.treeTestService
+      .update(temp)
+      .subscribe(res => {
+        this.tests[index].excluded = false;
+        this.prepareResults();
+      });
+  }
+
+  prepareDeleteParticipantResult(): void {
+
+    const testId = this.tests[this.deleteParticipantResultIndex]._id;
+
+    this.treeTestService
+      .delete(testId)
+      .subscribe(
         res => {
-          console.log(res);
-          this.tests[index].excluded = false;
-          this.prepareResults();
+          this.treeTestService
+            .getById(this.id)
+            .subscribe(
+              res => {
+                this.tests = res.result;
+                this.study = res.test[0];
+                this.tree = this.study.tree;
+                this.prepareResults();
+              }
+            );
         },
-        err => {
-          console.log(err);
-        }
-    );
-  }
-  prepareDeleteParticipantResult() {
-    console.log('prepared!!');
-    console.log(this.tests);
-    this.deleteParticipantResult()
-    .subscribe(
-      res => {
-        this.resultsInformation()
-        .subscribe(
-          res => {
-            this.tests = (res as any).result;
-            this.study = (res as any).test[0];
-            this.tree = (res as any).test[0].tree;
-            this.prepareResults();
-          },
-          err => {
-            console.log(err);
-          }
-        );
-        $('#myModal10').modal('hide');
-      },
-      err => {
-        $('#myModal10').modal('hide');
-        alert('An error occured. Please try again later.');
-      }
-    );
+        err => alert('An error occured. Please try again later.')
+      )
+      .add(() => $('#myModal10').modal('hide'))
   }
 
-  deleteParticipantResult() {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-test/delete', {id: this.tests[this.deleteParticipantResultIndex]._id}, httpOptions);
-  }
-
-  updateParticipantsTest(object){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/tree-test/edit', object, httpOptions);
-  }
-
-  toggleIrrelevantItems() {
+  toggleIrrelevantItems(): void {
     this.irrelevantItemsCollapsed = !this.irrelevantItemsCollapsed;
   }
 
-  irrelevantItemDisabled(item: TreeNode) {
+  irrelevantItemDisabled(item: TreeNode): boolean {
     return this.irrelevantItemsCollapsed && !item.hasAnswerInPath();
   }
 
-  retrievePaths() {
-    const participants = [];
+  retrievePaths(): Array<IPathtreeParticipant> {
+    let participants: Array<IPathtreeParticipant> = [];
     for (const test of this.tests) {
       if (test.excluded) { continue; }
-      const paths = [];
+      const paths: Array<TPath> = [];
       for (const task of test.results) {
         paths.push(this.retrievePath([...task.clicks, {id: task.answer}])); // because answer is not included in clicks
       }
@@ -814,7 +772,7 @@ removeKeys(obj, keys){
     return participants;
   }
 
-  retrievePath(clicks: any[]) {
+  retrievePath(clicks: any[], nodeId?: string): TPath {
     const startNode = this.treemap.findNodeById(clicks[0].id);
     const startPoint: PathPoint = {
       node: startNode,

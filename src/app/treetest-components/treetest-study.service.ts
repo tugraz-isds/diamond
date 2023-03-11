@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CheckPasswordResponse, ICardSortStudyPasswordRequest, ICardSortStudyRequest } from '../cardsort-components/card-sort-study.service';
 
 export interface IParticipant {
   id: string;
@@ -73,7 +74,7 @@ export class TreetestStudyService {
   }
 
   // FIXME: we dont need the whole object here, just the updated property should be allowed
-  edit(treetestStudy: ITreetestStudyEdit | ITreetestStudy): Observable<void> {
+  update(treetestStudy: ITreetestStudyEdit | ITreetestStudy): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/edit`, treetestStudy);
   }
 
@@ -83,5 +84,20 @@ export class TreetestStudyService {
     };
     return this.http.post<void>(`${this.apiUrl}/delete`, payload);
   }
-  
+
+  passwordRequired(studyId: string): Observable<CheckPasswordResponse | boolean> {
+    const payload: ICardSortStudyRequest = {
+      id: studyId
+    };
+    return this.http.post<CheckPasswordResponse | boolean>(`${this.apiUrl}/passwordrequired`, payload);
+  }
+
+  checkPassword(studyId: string, password: string): Observable<ITreetestStudy | boolean> {
+    const payload: ICardSortStudyPasswordRequest = {
+      id: studyId,
+      password
+    };
+    return this.http.post<ITreetestStudy | boolean>(`${this.apiUrl}/password`, payload);
+  }
+
 }

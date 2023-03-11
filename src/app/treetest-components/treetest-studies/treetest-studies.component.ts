@@ -18,14 +18,14 @@ declare var $: any;
 export class TreetestStudiesComponent implements OnInit {
 
   private currentUser: ILoginResponse;
-  
+
   public studies: Array<ITreetestStudy> = [];
-  
+
   private tests = [];
 
   public deleteTestId: string;
 
-  private baseurl: string;  
+  private baseurl: string;
 
   //number of participants for each study
   public numberParticipants: Array<IParticipant> = [];
@@ -41,10 +41,10 @@ export class TreetestStudiesComponent implements OnInit {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
     this.currentUser = this.authService.getCurrentUser();
-    this.getAllTests();     
+    this.getAllTests();
   }
 
-  getAllTests(): void {    
+  getAllTests(): void {
     this.treetestStudyService
       .getAllByUserId(this.currentUser?.email)
       .subscribe(res => {
@@ -107,9 +107,9 @@ export class TreetestStudiesComponent implements OnInit {
     if (!preview && !confirm('Continue? Study will not be changeable after launch!')) {
       return;
     }
-    
+
     this.treetestStudyService
-      .edit(data)
+      .update(data)
       .subscribe(
         res => {
           this.getAllTests()
@@ -122,22 +122,22 @@ export class TreetestStudiesComponent implements OnInit {
   }
 
   stopTest(studyId: string): void {
-    
+
     const data: ITreetestStudyEdit = {
       id: studyId,
       launched: false,
       lastEnded: new Date()
-    };    
+    };
 
     this.treetestStudyService
-      .edit(data)
+      .update(data)
       .subscribe(
         res => this.getAllTests(),
         err => alert('An error occured. Please try again later.')
       );
   }
 
-  prepareDeleteStudy(): void {    
+  prepareDeleteStudy(): void {
     this.treetestStudyService
       .delete(this.deleteTestId)
       .subscribe(
@@ -148,7 +148,7 @@ export class TreetestStudiesComponent implements OnInit {
   }
 
   createCopy(study: ITreetestStudy): void {
-    
+
     let variant = { ...study }
     delete variant._id;
     variant.lastEnded = new Date();
@@ -172,7 +172,7 @@ export class TreetestStudiesComponent implements OnInit {
       .subscribe(res => {
         this.tests = (<any>res).result;
         file = {...study, tests : this.tests};
-        this.downloadFile(file, id);        
+        this.downloadFile(file, id);
       });
   }
 
@@ -181,9 +181,9 @@ export class TreetestStudiesComponent implements OnInit {
     saveAs(blob, `study-${fileName}.json`);
   }
 
-  setNumberOfParticipants(): void {    
-    
-    // FIXME: this should be done on the backend when fetching data from db       
+  setNumberOfParticipants(): void {
+
+    // FIXME: this should be done on the backend when fetching data from db
     this.numberParticipants = [];
 
     for(let study of this.studies){
@@ -196,11 +196,11 @@ export class TreetestStudiesComponent implements OnInit {
 
   generateRandomStudyId(): string {
     return Math.random().toString(36).substring(2, 15);
-  }  
+  }
 
   onFileSelect(input): void {
 
-    const files = input.files;    
+    const files = input.files;
 
     if (files && files.length) {
 
@@ -264,15 +264,15 @@ export class TreetestStudiesComponent implements OnInit {
             timestamp: test["timestamp"],
             feedback: test["feedback"],
             excluded: exclude,
-          };          
+          };
 
           subs.push(this.treetestTestService.add(temp));
         }
 
         forkJoin(subs).subscribe(res => this.getAllTests());
       };
-      
-      fileReader.readAsText(input.files[0]);      
+
+      fileReader.readAsText(input.files[0]);
     }
   }
 }

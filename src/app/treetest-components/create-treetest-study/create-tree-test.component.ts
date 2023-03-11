@@ -15,7 +15,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   public randomTestId: string = Math.random().toString(36).substring(2, 15);
   public testName = '';
   public studyPassword = '';
-  
+
   public tasks = [];
   private task = {
     text: '',
@@ -24,7 +24,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   };
   public currentTaskIndex = 0;
   private answerTreeCreated = false;
-  
+
   // tslint:disable-next-line:no-string-literal
   public id = this.route.snapshot.params['id'];
 
@@ -105,7 +105,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     };
   }
 
-  reset() { 
+  reset() {
     this.testName = this.originalTest.testName;
     this.studyPassword = this.originalTest.studyPassword;
     this.tasks = this.originalTest.tasks;
@@ -141,14 +141,14 @@ export class CreateTestComponent implements OnInit, EditComponent {
   }
 
   onFileLoad(fileLoadedEvent) {
-    const textFromFileLoaded = fileLoadedEvent.target.result;              
-    this.csvContent = textFromFileLoaded;     
+    const textFromFileLoaded = fileLoadedEvent.target.result;
+    this.csvContent = textFromFileLoaded;
   }
 
   onFileSelect(input: HTMLInputElement) {
 
     const files = input.files;
-    var content = this.csvContent;    
+    var content = this.csvContent;
     if (files && files.length) {
 
       const fileToRead = files[0];
@@ -174,7 +174,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
           headers = allTextLines[0].split(';');
           spliter = ";";
         }
-      
+
         for (let i = 0; i < allTextLines.length; i++) {
           // split content based on comma
           let data = allTextLines[i].split(spliter);
@@ -183,7 +183,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
             for (let j = 0; j < headers.length; j++) {
               tarr.push(data[j]);
             }
-      
+
             lines.push(tarr);
           }
         }
@@ -415,7 +415,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     } else {
       passTmp = this.studyPassword;
     }
-    const launchable: boolean = this.tasks.length > 0 ? true : false; 
+    const launchable: boolean = this.tasks.length > 0 ? true : false;
 
     return {
       name: this.testName,
@@ -443,7 +443,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   }
 
   saveTest(showPopup?: boolean): void {
-    
+
     const test = this.createTest();
 
     if(showPopup) {
@@ -452,21 +452,21 @@ export class CreateTestComponent implements OnInit, EditComponent {
         alert("Saved!");
       } else {
         alert("Gespeichert!");
-      }        
+      }
     }
 
     if (!this.id) {
       this.treetestStudyService
-        .add(test)      
-        .subscribe(res => {          
+        .add(test)
+        .subscribe(res => {
           this.id = this.randomTestId;
           this.reset();
           this.router.navigate(['/tests']);
         });
-    } else {      
+    } else {
       this.treetestStudyService
-        .edit(test)
-        .subscribe(res => {          
+        .update(test)
+        .subscribe(res => {
           this.reset();
           this.router.navigate(['/tests']);
         });

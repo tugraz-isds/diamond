@@ -1,9 +1,21 @@
 import * as d3 from "d3";
 
+export interface IPathTreeData {
+  name: string;
+  children: any;
+}
+
+export interface IPathTreeNode {
+  id: number;
+  name: string;
+  parent: IPathTreeNode;
+  clicks: number;
+}
+
 interface PathTreeGeneratorOptions {
     radius?: number;
     angle?: number;
-    data: any;
+    data: IPathTreeData;
     margin?: {
         top: number,
         right: number,
@@ -17,10 +29,10 @@ interface PathTreeGeneratorOptions {
     flipped?: boolean;
 }
 
-export default class PathTreeGenerator {
+export class PathTreeGenerator {
     private radius = 0;
     private angle = 0;
-    private data: any;
+    private data: IPathTreeData;
     private maxClicks = 0;
     private margin = {top: 0, right: 0, bottom: 0, left: 0};
     private fontSize = 0;

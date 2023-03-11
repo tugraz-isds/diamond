@@ -19,11 +19,11 @@ export class CardsortStudiesComponent implements OnInit {
   public cardSortStudies: Array<ICardSortStudy>;
 
   public deleteCardSortTestId: string;
-  
+
   private baseurl: string = '';
 
   private tests: Array<any> = [];
-  
+
   public numberParticipants: Array<IParticipant> = [];
 
   private currentUser: ILoginResponse;
@@ -42,7 +42,7 @@ export class CardsortStudiesComponent implements OnInit {
     this.getAllCardSortTests();
   }
 
-  getAllCardSortTests() {    
+  getAllCardSortTests() {
     this.cardSortStudyService
       .getAllByUserId(this.currentUser?.email)
       .subscribe(res => {
@@ -103,8 +103,8 @@ export class CardsortStudiesComponent implements OnInit {
     };
 
     this.cardSortStudyService
-      .edit(data)
-      .subscribe(res => {        
+      .update(data)
+      .subscribe(res => {
         if (preview) {
           this.router.navigate(['cardsort/' + studyId]);
         } else {
@@ -124,7 +124,7 @@ export class CardsortStudiesComponent implements OnInit {
     };
 
     this.cardSortStudyService
-      .edit(data)
+      .update(data)
       .subscribe(
         res => this.getAllCardSortTests(),
         err => alert('An error occured. Please try again later.')
@@ -142,7 +142,7 @@ export class CardsortStudiesComponent implements OnInit {
   }
 
   createCopy(study: ICardSortStudy) {
-    
+
     let variant: ICardSortStudy = { ...study };
     delete variant._id;
     variant.lastEnded = new Date();
@@ -185,7 +185,7 @@ export class CardsortStudiesComponent implements OnInit {
   }
 
   setNumberOfParticipants() {
-    
+
     // FIXME: this should be done on the backend when fetching data from db
     this.numberParticipants = [];
 
@@ -207,8 +207,8 @@ export class CardsortStudiesComponent implements OnInit {
   onFileSelect(input) {
 
     const files = input.files;
-    
-    // var content = this.csvContent;    
+
+    // var content = this.csvContent;
     if (files && files.length) {
 
       const fileToRead = files[0];
@@ -240,7 +240,7 @@ export class CardsortStudiesComponent implements OnInit {
           lastEnded: new Date(),
           lastLaunched: new Date()
         };
-      
+
         this.cardSortStudyService
           .add(study)
           .subscribe(
@@ -271,7 +271,7 @@ export class CardsortStudiesComponent implements OnInit {
         forkJoin(subs).subscribe(res => this.getAllCardSortTests());
       };
 
-      fileReader.readAsText(input.files[0]);        
+      fileReader.readAsText(input.files[0]);
     }
   }
 }
