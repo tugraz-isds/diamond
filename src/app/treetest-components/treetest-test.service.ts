@@ -10,7 +10,6 @@ export interface ITreetestTest {
   id: string; // INFO: this is the id of the coresponding study -> FIXME: rename to studyId
   createdDate?: string;
   results?: any; // Array<IResultGroup>;
-  tests?: any; // FIXME: this should be called results and not tests!
   finished?: boolean;
   username: string;
   timestamp: string;

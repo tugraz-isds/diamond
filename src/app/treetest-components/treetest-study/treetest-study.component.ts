@@ -62,7 +62,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
       //add results in database
       const test: ITreetestTest = {
         id: this.id,
-        tests: this.tests,
+        results: this.tests,
         finished: false,
         username: this.userName,
         timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
@@ -155,7 +155,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
         //add results in database
         const test: ITreetestTest = {
           id: this.id,
-          tests: this.tests,
+          results: this.tests,
           finished: true,
           username: this.userName,
           timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
