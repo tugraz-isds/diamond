@@ -60,7 +60,7 @@ const appRoutes: Routes = [
   { path: 'tests', component: TreetestStudiesComponent, canActivate: [ AuthGuard ]},
   { path: 'card-sort-tests', component: CardsortStudiesComponent, canActivate: [ AuthGuard ]},
   { path: 'pie-tree/:id/:index', component: PathtreeComponent, canActivate: [ AuthGuard ] },
-  {path: 'study-closed', component: StudyClosedComponent, canActivate: [ AuthGuard ]},
+  {path: 'study-closed', component: StudyClosedComponent},
   { path: '**', redirectTo: 'tests', pathMatch: 'full' }
 ];
 
