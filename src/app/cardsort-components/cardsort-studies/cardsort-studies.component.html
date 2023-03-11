@@ -1,11 +1,11 @@
 <div class="container-fluid mt-50">
   <div class="col-sm-offset-1">
-    <p *ngIf="!this.authService.user.study && this.authService.user.email !== 'admin'">{{ "accountnotenabled" | translate }}</p>
-    <h3 *ngIf="(this.authService.user.study || this.authService.user.email === 'admin')">{{ "CardSort Studies" | translate }}</h3>
-    
+    <p *ngIf="!authService.userCan('studyAccess') && !authService.isAdmin()">{{ "accountnotenabled" | translate }}</p>
+    <h3 *ngIf="authService.userCan('studyAccess') || authService.isAdmin()">{{ "CardSort Studies" | translate }}</h3>
+
     <div class="row">
       <div class="col-sm-9">
-        <table *ngIf="cardSortStudies && cardSortStudies.length && (this.authService.user.study || this.authService.user.email === 'admin')" class="table table-bordered mt-50">
+        <table *ngIf="cardSortStudies && cardSortStudies.length && (authService.userCan('studyAccess') || authService.isAdmin())" class="table table-bordered mt-50">
           <thead>
             <tr>
               <th style="width: 150px">Name</th>
@@ -27,7 +27,7 @@
             <tr *ngFor="let t of cardSortStudies; let i = index;">
               <td><a [routerLink]="['/card-sort-results/' + t.id]" class="pointer">{{t.name}}</a></td>
               <td>
-                <input #myInput style="width: 250px; border: 1px solid lightgray; padding-left: 3px; display: inline-block;" type="text" 
+                <input #myInput style="width: 250px; border: 1px solid lightgray; padding-left: 3px; display: inline-block;" type="text"
                 [ngModel]="getLink(t.id)">
                 <i (click)="copyToClipboard(t.id); myInput.select();" class="glyphicon glyphicon-copy"></i></td>
               <td class="text-center">
@@ -75,10 +75,10 @@
 
 
 
-    <div *ngIf="(this.authService.user.study || this.authService.user.email === 'admin')">
+   <div *ngIf="authService.userCan('studyAccess') || authService.isAdmin()">
       <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-card-sort">{{ "createstudy" | translate }}</button>
       <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importstudy" | translate }}</button>
-      <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">      
+      <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
     </div>
   </div>
 </div>

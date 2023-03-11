@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService, ILoginResponse } from 'src/app/authentification.service';
 import { EditComponent } from 'src/app/guard';
 import { IJstreeNode, IJstreeNodeAlt, ITreetestStudy, ITreetestTask, TreetestStudyService } from '../treetest-study.service';
 
@@ -36,19 +37,21 @@ export class CreateTestComponent implements OnInit, EditComponent {
   private csvContent: string;
   public baseurl: string = '';
 
-  // private itemsFinal;
+  private currentUser: ILoginResponse;
 
   private originalTest = null; // TODO: should be of type ITreetestStudy
 
   constructor(
     private treetestStudyService: TreetestStudyService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthenticationService
   ) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
+    this.currentUser = this.authService.getCurrentUser();
     if (this.id) {
       this.treetestStudyService
         .get(this.id)
@@ -416,7 +419,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
       id: this.randomTestId, // this.id? this.id : this.randomTestId,
       tree: $('#test-tree').jstree(true).get_json('#', {flat: true}),
       tasks: this.tasks,
-      user: JSON.parse(localStorage.getItem('currentUser')).email,
+      user: this.currentUser?.email,
       welcomeMessage: this.welcomeMessage,
       instructions: this.instructions,
       thankYouScreen: this.thankYouScreen,

@@ -231,7 +231,7 @@ export class CardsortStudiesComponent implements OnInit {
           password: json["password"],
           id: randomStudyId,
           instructions: json["instructions"],
-          user: JSON.parse(localStorage.getItem('currentUser')).email,
+          user: this.currentUser?.email,
           welcomeMessage: json["welcomeMessage"],
           thankYouScreen: json["thankYouScreen"],
           leaveFeedback: json["leaveFeedback"],
