@@ -5,6 +5,12 @@ import { environment } from 'src/environments/environment';
 import { IFeedbackRequest } from '../cardsort-components/card-sort-test.service';
 import { ITreetestStudy } from './treetest-study.service';
 
+export interface ITreetestResult {
+  clicks: Array<any>; // Array of clicked tree nodes see
+  answer: string; // Id of the selected node
+  time: number;
+}
+
 export interface ITreetestTest {
   _id?: string; // INFO: this is the testId
   id: string; // INFO: this is the id of the coresponding study -> FIXME: rename to studyId

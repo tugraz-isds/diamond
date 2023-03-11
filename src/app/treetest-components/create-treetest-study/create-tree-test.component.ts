@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditComponent } from 'src/app/guard';
-import { ITreetestStudy, TreetestStudyService } from '../treetest-study.service';
+import { IJstreeNode, IJstreeNodeAlt, ITreetestStudy, ITreetestTask, TreetestStudyService } from '../treetest-study.service';
 
 declare var $: any;
 
@@ -16,12 +16,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   public testName = '';
   public studyPassword = '';
 
-  public tasks = [];
-  private task = {
-    text: '',
-    answer: '',
-    id: ''
-  };
+  public tasks: Array<ITreetestTask> = [];
   public currentTaskIndex = 0;
   private answerTreeCreated = false;
 
@@ -58,18 +53,17 @@ export class CreateTestComponent implements OnInit, EditComponent {
       this.treetestStudyService
         .get(this.id)
         .subscribe(res => {
-          // tslint:disable-next-line:no-angle-bracket-type-assertion
-          this.testName = (res as any).name;
-          this.studyPassword = (res as any).password;
-          this.createTree('test-tree', (res as any).tree);
-          this.tasks = (res as any).tasks;
-          this.welcomeMessage = (res as any).welcomeMessage;
-          this.instructions = (res as any).instructions;
-          this.thankYouScreen = (res as any).thankYouScreen;
-          this.leaveFeedback = (res as any).leaveFeedback;
-          if ((res as any).leafNodes !== undefined) {
-            this.leafNodes = (res as any).leafNodes;
-            this.orderNumbers = (res as any).orderNumbers;
+          this.testName = res.name;
+          this.studyPassword = res.password;
+          this.createTree('test-tree', res.tree);
+          this.tasks = res.tasks;
+          this.welcomeMessage = res.welcomeMessage;
+          this.instructions = res.instructions;
+          this.thankYouScreen = res.thankYouScreen;
+          this.leaveFeedback = res.leaveFeedback;
+          if (res.leafNodes !== undefined) {
+            this.leafNodes = res.leafNodes;
+            this.orderNumbers = res.orderNumbers;
           }
           this.originalTest = this.createTestData();
         });
@@ -78,12 +72,12 @@ export class CreateTestComponent implements OnInit, EditComponent {
       this.randomTestId = this.id;
       // this.testName = t
     } else {
-        const arrayCollection = [{
+        const arrayCollection: Array<IJstreeNodeAlt> = [{
           id: 'root',
           parent: '#',
           text: 'Root',
-          'state' : {
-            'selected' : true
+          state: {
+            selected : true
           }
         }];
         this.createTree('test-tree', arrayCollection);
@@ -93,8 +87,8 @@ export class CreateTestComponent implements OnInit, EditComponent {
 
   createTestData() { // TODO: should return type ITreetestStudy
     return {
-      testName: this.testName,
-      studyPassword: this.studyPassword,
+      name: this.testName,
+      password: this.studyPassword,
       tasks: this.tasks,
       welcomeMessage: this.welcomeMessage,
       instructions: this.instructions,
@@ -105,9 +99,9 @@ export class CreateTestComponent implements OnInit, EditComponent {
     };
   }
 
-  reset() {
-    this.testName = this.originalTest.testName;
-    this.studyPassword = this.originalTest.studyPassword;
+  reset(): void {
+    this.testName = this.originalTest.name;
+    this.studyPassword = this.originalTest.password;
     this.tasks = this.originalTest.tasks;
     this.welcomeMessage = this.originalTest.welcomeMessage;
     this.instructions = this.originalTest.instructions;
@@ -117,7 +111,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     this.orderNumbers = this.originalTest.orderNumbers;
   }
 
-  hasChanges() {
+  hasChanges(): boolean {
     const originalTest = JSON.stringify(this.originalTest);
     const testAfterEditing = JSON.stringify(this.createTestData());
     return testAfterEditing != originalTest;
@@ -127,18 +121,18 @@ export class CreateTestComponent implements OnInit, EditComponent {
     return !!this.id;
   }
 
-  open(link) {;
+  open(link: string): void {
     if (link === "tasks") {
       this.defineCorrectAnswer(0);
     }
     $('a[href="#' + link + '"]').click();
   }
 
-  getData() {
+  /*getData() {
     const v = $('#test-tree').jstree(true).get_json('#', {flat: true});
     const mytext = JSON.stringify(v);
     this.createTree('test-tree2', v);
-  }
+  }*/
 
   onFileLoad(fileLoadedEvent) {
     const textFromFileLoaded = fileLoadedEvent.target.result;
@@ -270,7 +264,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
 
   }
 
-  createTree(id, content) {
+  createTree(id: string, content: Array<IJstreeNodeAlt>): void {
     if (id === "test-tree-answer") {
       console.log("creating tree!");
       console.log(content);
@@ -342,7 +336,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     }
   }
 
-  addNode() {
+  addNode(): void {
     const currentNode = $('#test-tree').jstree('get_selected');
     $('#test-tree').jstree('create_node', currentNode, {text : 'new Node'}, 'last' , function test(newNode) {
         $('#test-tree').jstree('open_node', currentNode);
@@ -351,36 +345,34 @@ export class CreateTestComponent implements OnInit, EditComponent {
     });
   }
 
-  renameNode() {
+  renameNode(): void {
     const instance = $('#test-tree').jstree(true);
     instance.edit(instance.get_selected());
   }
 
-  deleteSelectedNode() {
+  deleteSelectedNode(): void {
     const instance = $('#test-tree').jstree(true);
     instance.delete_node(instance.get_selected());
   }
 
-  setIndex(index) {
+  setIndex(index: number): void {
     this.currentTaskIndex = index;
     this.defineCorrectAnswer(index);
   }
 
-  defineCorrectAnswer(index, newAnswer?) {
-      const v = $('#test-tree').jstree(true).get_json('#', {flat: true});
-      const mytext = JSON.stringify(v);
-      this.currentTaskIndex = index;
-      setTimeout(() => { this.createTree('test-tree-answer', v); }, 0);
-    //}
+  defineCorrectAnswer(index: number): void {
+    const v = $('#test-tree').jstree(true).get_json('#', {flat: true});
+    this.currentTaskIndex = index;
+    setTimeout(() => { this.createTree('test-tree-answer', v); }, 0);
   }
 
-  saveAnswer() {
+  saveAnswer(): void {
     const selected = ($('#test-tree-answer').jstree('get_selected', true))[0];
     this.tasks[this.currentTaskIndex].answer = selected.text;
     this.tasks[this.currentTaskIndex].id = selected.id;
   }
 
-  answerNotValid() {
+  answerNotValid(): boolean {
     const selected = ($('#test-tree-answer').jstree('get_selected', true))[0];
     if ($('#test-tree-answer').jstree('get_selected', true)) {
       const v = $('#test-tree').jstree(true).get_json('#', {flat: true});
@@ -394,8 +386,8 @@ export class CreateTestComponent implements OnInit, EditComponent {
     return true;
   }
 
-  addTask() {
-    const task = {
+  addTask(): void {
+    const task: ITreetestTask = {
       text: `Where would you expect to find ... ?`,
       answer: '',
       id: ''
@@ -403,7 +395,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     this.tasks.push(task);
   }
 
-  deleteTask(index) {
+  deleteTask(index: number): void {
     this.tasks.splice(index, 1);
   }
 
@@ -437,7 +429,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     };
   }
 
-  cancel() {
+  cancel(): void {
     this.reset();
     this.router.navigate(['/tests']);
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ITreetestStudy, TreetestStudyService } from '../treetest-study.service';
-import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
+import { ITreetestResult, ITreetestTest, TreetestTestService } from '../treetest-test.service';
 
 declare var $: any;
 
@@ -12,16 +12,15 @@ declare var $: any;
 })
 export class TreetestStudyComponent implements OnDestroy, OnInit {
 
-
   public taskIndex: number = 0;
-  private tests = [];
-  test = {
+  private tests: Array<ITreetestResult> = [];
+  private test: ITreetestResult = {
     clicks: [],
-    answer: {},
+    answer: null,
     time: null
   };
-  private startTime;
-  private endTime;
+  private startTime: Date;
+  private endTime: Date;
   public doingTask: boolean = false;
   public enterPassword: string = ''; // ngModel
   // private studyPassword: string = '';
@@ -123,6 +122,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
   submitFinalAnswer(index, skipped) {
 
     const instance = $('#study-tree').jstree(true);
+
     if (skipped) {
       this.test['answer'] = null;
     } else {
@@ -130,7 +130,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
       this.test['answer'] = (instance.get_selected())[0];
     }
     this.endTime = new Date();
-    const timeDiff = (this.endTime - this.startTime) / 1000; // in seconds
+    const timeDiff = (this.endTime.getTime() - this.startTime.getTime()) / 1000; // in seconds
     // tslint:disable-next-line:no-string-literal
     this.test['time'] = timeDiff;
     this.startTime = undefined;
@@ -138,7 +138,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     this.tests.push(this.test);
     this.test =  {
       clicks: [],
-      answer: {},
+      answer: null,
       time: null
     };
     $(".jstree").jstree('close_all');
@@ -176,7 +176,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
 
   }
 
-  startTask(index) {
+  startTask(index: number): void {
     this.showTree = false;
     this.doingTask = false;
     this.startTime = new Date();
@@ -216,7 +216,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     }, 500);
   }
 
-  createTree(id, content) {
+  createTree(id: string, content: any) {
     $('#' + id).jstree({
       core : {
         expand_selected_onload : false,
@@ -252,7 +252,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     }, 500);
   }
 
-  preparePassword() {
+  preparePassword(): void {
     this.treetestStudyService
       .checkPassword(this.id, this.enterPassword)
       .subscribe(
