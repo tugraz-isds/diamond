@@ -2,7 +2,13 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import { PathTreeGenerator, IPathTreeData, IPathTreeNode } from "./PathTreeGenerator";
 import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
-import { ITreetestStudy } from '../treetest-study.service';
+import { IJstreeNodeAlt, ITreetestStudy } from '../treetest-study.service';
+
+interface IJstreePathTreeNode extends IJstreeNodeAlt {
+  name?: string;
+  clicked?: boolean;
+  clickNumbers?: number;
+}
 @Component({
     selector: 'app-pathtree',
     templateUrl: './pathtree.component.html',
@@ -23,7 +29,7 @@ export class PathtreeComponent implements OnInit {
     private study: ITreetestStudy;
     private results: Array<ITreetestTest> = [];
 
-    private tree = [];
+    private tree: Array<IJstreePathTreeNode> = [];
     private newTree: Array<IPathTreeNode> = [];
 
     constructor(
