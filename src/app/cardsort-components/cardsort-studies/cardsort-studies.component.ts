@@ -5,13 +5,9 @@ import { AuthenticationService, ILoginResponse } from '../../authentification.se
 import { CardSortStudyService, ICardSortStudy, ICardSortStudyEdit } from '../card-sort-study.service';
 import { CardSortTestService, ICardSortTest } from '../card-sort-test.service';
 import { forkJoin, Observable } from 'rxjs';
+import { IParticipant } from 'src/app/treetest-components/treetest-study.service';
 
 declare var $: any;
-
-interface IParticipant {
-  id: string;
-  participants: number;
-}
 
 @Component({
   selector: 'app-tests',
@@ -23,11 +19,11 @@ export class CardsortStudiesComponent implements OnInit {
   public cardSortStudies: Array<ICardSortStudy>;
 
   public deleteCardSortTestId: string;
-  
+
   private baseurl: string = '';
 
   private tests: Array<any> = [];
-  
+
   public numberParticipants: Array<IParticipant> = [];
 
   private currentUser: ILoginResponse;
@@ -46,7 +42,7 @@ export class CardsortStudiesComponent implements OnInit {
     this.getAllCardSortTests();
   }
 
-  getAllCardSortTests() {    
+  getAllCardSortTests() {
     this.cardSortStudyService
       .getAllByUserId(this.currentUser?.email)
       .subscribe(res => {
@@ -107,8 +103,8 @@ export class CardsortStudiesComponent implements OnInit {
     };
 
     this.cardSortStudyService
-      .edit(data)
-      .subscribe(res => {        
+      .update(data)
+      .subscribe(res => {
         if (preview) {
           this.router.navigate(['cardsort/' + studyId]);
         } else {
@@ -128,14 +124,14 @@ export class CardsortStudiesComponent implements OnInit {
     };
 
     this.cardSortStudyService
-      .edit(data)
+      .update(data)
       .subscribe(
         res => this.getAllCardSortTests(),
         err => alert('An error occured. Please try again later.')
       );
   }
 
-  prepareDeleteStudy() {
+  prepareDeleteStudy(): void {
     this.cardSortStudyService
       .delete(this.deleteCardSortTestId)
       .subscribe(
@@ -146,7 +142,7 @@ export class CardsortStudiesComponent implements OnInit {
   }
 
   createCopy(study: ICardSortStudy) {
-    
+
     let variant: ICardSortStudy = { ...study };
     delete variant._id;
     variant.lastEnded = new Date();
@@ -167,7 +163,7 @@ export class CardsortStudiesComponent implements OnInit {
   }
 
   // Export Study
-  export(studyId: string){
+  export(studyId: string): void {
     let study = this.cardSortStudies.find(study => study._id === studyId);
     let id = study.id;
     let file;
@@ -181,104 +177,101 @@ export class CardsortStudiesComponent implements OnInit {
         file = {...study, tests: this.tests};
         this.downloadFile(file, id);
       });
+  }
+
+  private downloadFile(data, fileName: string): void {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    saveAs(blob, `study-${fileName}.json`);
+  }
+
+  setNumberOfParticipants() {
+
+    // FIXME: this should be done on the backend when fetching data from db
+    this.numberParticipants = [];
+
+    for(let study of this.cardSortStudies) {
+      let id = study["id"];
+      this.cardSortTestSerice
+        .getById(id)
+        .subscribe(res => {
+          this.numberParticipants.push({ id, participants: res.result.length });
+        });
     }
+  }
 
-    private downloadFile(data, fileName) {
-      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-      saveAs(blob, `study-${fileName}.json`);
-    }
+  generateRandomStudyId() {
+    return Math.random().toString(36).substring(2, 15);
+  }
 
-    setNumberOfParticipants() {
-      
-      // FIXME: this should be done on the backend when fetching data from db
-      this.numberParticipants = [];
+  // Import Study
+  onFileSelect(input) {
 
-      for(let study of this.cardSortStudies) {
-        let id = study["id"];
-        this.cardSortTestSerice
-          .getById(id)
-          .subscribe(res => {
-            this.numberParticipants.push({ id, participants: res.result.length });
-          });
+    const files = input.files;
+
+    // var content = this.csvContent;
+    if (files && files.length) {
+
+      const fileToRead = files[0];
+      let extension = fileToRead.name.split(".");
+      if (extension[extension.length -1] !== "json") {
+        alert("File extension is wrong! Please provide .json file.");
+        return;
       }
-    }
 
-    generateRandomStudyId() {
-      return Math.random().toString(36).substring(2, 15);
-    }
+      const fileReader = new FileReader();
+      let json = null;
+      fileReader.onload = (e) => {
 
-    // Import Study
-    onFileSelect(input) {
-
-      const files = input.files;
-      
-      // var content = this.csvContent;    
-      if (files && files.length) {
-  
-        const fileToRead = files[0];
-        let extension = fileToRead.name.split(".");
-        if (extension[extension.length -1] !== "json") {
-          alert("File extension is wrong! Please provide .json file.");
-          return;
-        }
-  
-        const fileReader = new FileReader();
-        let json = null;
-        fileReader.onload = (e) => {
-
-          json = JSON.parse(e.target.result.toString());
-          const randomStudyId = this.generateRandomStudyId();
-          const study: ICardSortStudy = {
-            cards: json["cards"],
-            name: json["name"],
-            launched: false,
-            password: json["password"],
-            id: randomStudyId,
-            instructions: json["instructions"],
-            user: JSON.parse(localStorage.getItem('currentUser')).email,
-            welcomeMessage: json["welcomeMessage"],
-            thankYouScreen: json["thankYouScreen"],
-            leaveFeedback: json["leaveFeedback"],
-            explanation: json["explanation"],
-            subCategories: json["subCategories"],
-            lastEnded: new Date(),
-            lastLaunched: new Date()
-          };
-        
-          this.cardSortStudyService
-            .add(study)
-            .subscribe(
-              res => $("#success").modal('show'),
-              err => alert("Error: " + err)
-            );
-
-          let subs: Array<Observable<void>> = [];
-
-          for(let study of json["tests"]) {
-            let exclude = false;
-            if (study["excluded"] !== undefined) { exclude = study["excluded"]};
-
-            const temp: ICardSortTest = {
-              id: randomStudyId,
-              results: study["results"],
-              finished: study["finished"],
-              username: study["username"],
-              timestamp: study["timestamp"],
-              feedback: study["feedback"],
-              mindset: study["mindset"],
-              excluded: exclude,
-            };
-
-            subs.push(this.cardSortTestSerice.add(temp));
-          }
-
-          forkJoin(subs)
-            .subscribe(res => {
-              this.getAllCardSortTests();
-            });
+        json = JSON.parse(e.target.result.toString());
+        const randomStudyId = this.generateRandomStudyId();
+        const study: ICardSortStudy = {
+          cards: json["cards"],
+          name: json["name"],
+          launched: false,
+          password: json["password"],
+          id: randomStudyId,
+          instructions: json["instructions"],
+          user: JSON.parse(localStorage.getItem('currentUser')).email,
+          welcomeMessage: json["welcomeMessage"],
+          thankYouScreen: json["thankYouScreen"],
+          leaveFeedback: json["leaveFeedback"],
+          explanation: json["explanation"],
+          subCategories: json["subCategories"],
+          lastEnded: new Date(),
+          lastLaunched: new Date()
         };
 
-        fileReader.readAsText(input.files[0]);        
-      }
+        this.cardSortStudyService
+          .add(study)
+          .subscribe(
+            res => $("#success").modal('show'),
+            err => alert("Error: " + err)
+          );
+
+        let subs: Array<Observable<void>> = [];
+
+        for(let study of json["tests"]) {
+          let exclude = false;
+          if (study["excluded"] !== undefined) { exclude = study["excluded"]};
+
+          const temp: ICardSortTest = {
+            id: randomStudyId,
+            results: study["results"],
+            finished: study["finished"],
+            username: study["username"],
+            timestamp: study["timestamp"],
+            feedback: study["feedback"],
+            mindset: study["mindset"],
+            excluded: exclude,
+          };
+
+          subs.push(this.cardSortTestSerice.add(temp));
+        }
+
+        forkJoin(subs).subscribe(res => this.getAllCardSortTests());
+      };
+
+      fileReader.readAsText(input.files[0]);
     }
+  }
 }

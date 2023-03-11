@@ -1,9 +1,11 @@
+import { ITreetestTest } from "../treetest-test.service";
+
 export type PathPoint = {
   node: TreeNode,
   direction: 'in' | 'out' | 'repeat' | 'start'
 };
 
-class TreeNode {
+export class TreeNode {
   children: TreeNode[] = [];
   answerCount: number[] = [];
   root: TreeNode;
@@ -17,7 +19,7 @@ class TreeNode {
     directChildren.forEach(child => { this.children.push(new TreeNode(rest, child, level + 1, this.root)); });
   }
 
-  fillTree(tests: any[]) {
+  fillTree(tests: Array<ITreetestTest>): void {
     for (const test of tests) {
       if (test.excluded) continue;
       while (test.results.length > this.answerCount.length) {
@@ -32,7 +34,7 @@ class TreeNode {
     });
   }
 
-  hasAnswerInPath() {
+  hasAnswerInPath(): boolean {
     for (const count of this.answerCount) {
       if (count > 0) return true;
     }
@@ -43,7 +45,7 @@ class TreeNode {
     return false;
   }
 
-  getDepthFirstArray() {
+  getDepthFirstArray(): Array<TreeNode> {
     const currentArray: TreeNode[] = [this];
     for (const child of this.children) {
       const childArray = child.getDepthFirstArray();
@@ -52,7 +54,7 @@ class TreeNode {
     return currentArray;
   }
 
-  retrievePath(clicks: any[]): PathPoint[] {
+  retrievePath(clicks: any[], nodeId?: string): PathPoint[] {
     if (clicks.length === 0) { return []; }
     const pathPoint: PathPoint = {
       node: undefined,
@@ -84,5 +86,3 @@ class TreeNode {
     return undefined;
   }
 }
-
-export default TreeNode;

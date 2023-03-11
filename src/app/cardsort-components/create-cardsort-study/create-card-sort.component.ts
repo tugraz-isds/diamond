@@ -30,15 +30,15 @@ export class CreateCardSortComponent implements OnInit, EditComponent {
   public cardName = '';
   public cards: string[] = [];
 
-  private currentlySelectedCard = '';  
+  private currentlySelectedCard = '';
 
-  private originalTest = null;
+  private originalTest = null; // TODO: should be of type ICardsortStudy
 
   private csvContent: string;
-  public baseurl: string = '';  
+  public baseurl: string = '';
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
     private cardSortStudyService: CardSortStudyService
   ) { }
@@ -48,10 +48,10 @@ export class CreateCardSortComponent implements OnInit, EditComponent {
     this.baseurl = location.origin;
     if (this.id) {
       this.cardSortStudyService
-        .get(this.id)      
+        .get(this.id)
         .subscribe(
           res => {
-            
+
             this.testName = res.name;
             this.studyPassword = res.password;
             // this.cardName = res.cardName;
@@ -253,7 +253,7 @@ export class CreateCardSortComponent implements OnInit, EditComponent {
         });
     } else {
       this.cardSortStudyService
-        .edit(study)
+        .update(study)
         .subscribe(res => {
           this.reset();
           this.router.navigate(['/card-sort-tests']);

@@ -46,15 +46,15 @@ export interface ICardSortStudyEdit {
   lastLaunched?: string | Date;
 }
 
-interface ICardSortStudyRequest {
+export interface ICardSortStudyRequest {
   id: string;
 }
 
-interface IGetCardSortStudyByUserIdRequest {
+export interface IGetCardSortStudyByUserIdRequest {
   user: string
 }
 
-interface ICardSortStudyPasswordRequest {
+export interface ICardSortStudyPasswordRequest {
   id: string,
   password: string;
 }
@@ -82,7 +82,7 @@ export class CardSortStudyService {
     return this.http.post<Array<ICardSortStudy>>(`${this.apiUrl}/getbyuserid`, payload);
   }
 
-  add(cardSortStudy: ICardSortStudy) {
+  add(cardSortStudy: ICardSortStudy): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/add`, cardSortStudy);
   }
 
@@ -102,7 +102,7 @@ export class CardSortStudyService {
   }
 
   // FIXME: we dont need the whole object here, just the updated property should be allowed
-  edit(cardSortStudy: ICardSortStudyEdit): Observable<void> {
+  update(cardSortStudy: ICardSortStudyEdit): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/edit`, cardSortStudy);
   }
 

@@ -10,15 +10,15 @@
       <li [ngClass]="{'not-allowed': !testName.length}"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#messages"><span *ngIf="!isEditMode">4. </span>{{ "messages" | translate }}</a></li>
       <li *ngIf="!isEditMode" [ngClass]="{'not-allowed': !testName.length}"><a [ngClass]="{'not-allowed': !testName.length}" data-toggle="tab" href="#finish"><span *ngIf="!isEditMode">5. </span>{{ "finish" | translate }}</a></li>
     </ul>
-    
+
     <div class="tab-content">
 
       <div id="settings" class="mt-30 tab-pane fade in active">
         <p>{{ "studytitle" | translate }} *</p>
         <input [(ngModel)]="testName" type="text">
         <div>
-        <p style="display: inline-block" class="mt-20">{{ "studypassword" | translate }}</p><span style="padding-left: 5px;" data-toggle="tooltip" title="Set a study password to protect your study. Users will have to enter this password before starting the tree test." class="glyphicon glyphicon-question-sign"></span>
-      </div>
+          <p style="display: inline-block" class="mt-20">{{ "studypassword" | translate }}</p><span style="padding-left: 5px;" data-toggle="tooltip" title="Set a study password to protect your study. Users will have to enter this password before starting the tree test." class="glyphicon glyphicon-question-sign"></span>
+        </div>
         <input [(ngModel)]="studyPassword" type="text">
         <div class="mt-20">
           <input type="checkbox" id="leaf-nodes" [checked]="leafNodes"
@@ -52,7 +52,7 @@
                   translate }}</button>
           <button [disabled]="tasks.length" type="button" class="btn btn-primary mr-5" (click)="renameNode()">{{ "rename" | translate }}</button>
           <button [disabled]="tasks.length" type="button" class="btn btn-primary" (click)="deleteSelectedNode()">{{ "delete" | translate }}</button>
-          
+
           <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importcsv" | translate }}</button>
           <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
 
@@ -93,7 +93,7 @@
       </div>
 
       <div id="messages" class="mt-30 tab-pane fade">
-        
+
           <p class="mt-30">{{ "welcomemessage" | translate }}</p>
           <textarea style="width: 300px" class="mt-10" rows="4"  [(ngModel)]="welcomeMessage">
           </textarea>

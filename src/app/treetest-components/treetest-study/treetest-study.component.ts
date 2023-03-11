@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { UserService } from '../../user.service';
+import { ITreetestStudy, TreetestStudyService } from '../treetest-study.service';
+import { ITreetestResult, ITreetestTest, TreetestTestService } from '../treetest-test.service';
 
 declare var $: any;
 
@@ -14,101 +12,81 @@ declare var $: any;
 })
 export class TreetestStudyComponent implements OnDestroy, OnInit {
 
-
-  taskIndex = 0;
-  tests = [];
-  test = {
+  public taskIndex: number = 0;
+  private tests: Array<ITreetestResult> = [];
+  private test: ITreetestResult = {
     clicks: [],
-    answer: {},
+    answer: null,
     time: null
   };
-  startTime;
-  endTime;
-  doingTask = false;
-  enterPassword = '';
-  studyPassword = '';
-  study;
-  password = false;
-  finished = false;
-  selectedAnswer = false;
+  private startTime: Date;
+  private endTime: Date;
+  public doingTask: boolean = false;
+  public enterPassword: string = ''; // ngModel
+  // private studyPassword: string = '';
+
+  public study: ITreetestStudy;
+  public password: boolean = false;
+  public finished: boolean = false;
+  public selectedAnswer: boolean = false;
+
   // tslint:disable-next-line:no-string-literal
-  id = this.route.snapshot.params['id'];
-  intro = true;
-  showTree = false;
-  userName = "";
-  feedback = "";
-  feedbackDone = false;
+  private id: string = this.route.snapshot.params['id'];
 
-  public isPreview = false;
+  public intro: boolean = true;
+  private showTree: boolean = false;
+  public userName: string = ''; // ngModel
+  public feedback: string = ''; // ngModel
+  public feedbackDone: boolean = false;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private userService: UserService) { 
+  public isPreview: boolean = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private treeTestService: TreetestTestService,
+    private treetestStudyService: TreetestStudyService
+  ) {
     this.isPreview = this.route.snapshot.url[0].path.indexOf('preview') > - 1;
-    var date = (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " ");
-  }
-
-  getTestData() {
-    /*const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});*/
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl +  '/users/tree-tests/' + this.id, "", httpOptions);
+    // var date = (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " ");
   }
 
   ngOnDestroy() {
-    
+
     if (this.isPreview) {
       return;
     }
 
     if (!this.finished) {
       //add results in database
-      const test = {
+      const test: ITreetestTest = {
         id: this.id,
-        tests: this.tests,
+        results: this.tests,
         finished: false,
         username: this.userName,
         timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
         feedback: ""
       };
 
-      this.postTestData(test)
-      .subscribe(
-        res => {
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+      this.treeTestService
+        .add(test)
+        .subscribe(
+          res => console.log(res),
+          err => console.log(err)
+        );
     }
   }
 
   ngOnInit() {
-    $('[data-toggle="tooltip"]').tooltip();
-    this.getTestData()
-    .subscribe(
-      res => {
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // $('[data-toggle="tooltip"]').tooltip();
 
     if (localStorage.getItem('jstree')) {
       localStorage.removeItem('jstree');
     }
-    const body = {
-      id: this.id
-    };
-    this.passwordRequired(body)
+    this.treetestStudyService
+      .passwordRequired(this.id)
       .subscribe(
         res => {
-          console.log(res);
-
           if (res === 'redirect' && !this.isPreview) {
             console.log('redirect');
             this.router.navigate(['study-closed']);
@@ -123,37 +101,28 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
           }
         },
         err => {
-          console.log(err);
           this.password = false;
+          // TODO: we may need this.router.navigate(['study-closed']); ?
         }
       );
   }
 
-  sendFeedback() {
+  sendFeedback(): void {
+
     if (this.isPreview) {
       return;
     }
-    const test = {
-      username: this.userName,
-      feedback: this.feedback
-    };
 
-    this.postFeedback(test)
-    .subscribe(
-      res => {
-        console.log(res);
-        this.feedbackDone = true;
-      },
-      err => {
-        this.feedbackDone = true;
-        console.log(err);
-      }
-    );
+    this.treeTestService
+      .feedback(this.userName, this.feedback)
+      .subscribe()
+      .add(() => this.feedbackDone = true);
   }
 
   submitFinalAnswer(index, skipped) {
 
     const instance = $('#study-tree').jstree(true);
+
     if (skipped) {
       this.test['answer'] = null;
     } else {
@@ -161,7 +130,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
       this.test['answer'] = (instance.get_selected())[0];
     }
     this.endTime = new Date();
-    const timeDiff = (this.endTime - this.startTime) / 1000; // in seconds
+    const timeDiff = (this.endTime.getTime() - this.startTime.getTime()) / 1000; // in seconds
     // tslint:disable-next-line:no-string-literal
     this.test['time'] = timeDiff;
     this.startTime = undefined;
@@ -169,7 +138,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     this.tests.push(this.test);
     this.test =  {
       clicks: [],
-      answer: {},
+      answer: null,
       time: null
     };
     $(".jstree").jstree('close_all');
@@ -182,26 +151,24 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     if (this.taskIndex >= this.study.tasks.length) {
       this.finished = true;
 
-      if (!this.isPreview) {      
+      if (!this.isPreview) {
         //add results in database
-        const test = {
+        const test: ITreetestTest = {
           id: this.id,
-          tests: this.tests,
+          results: this.tests,
           finished: true,
           username: this.userName,
           timestamp: (new Date()).toISOString().slice(0, 19).replace(/-/g, "-").replace("T", " "),
           feedback: ""
         };
 
-        this.postTestData(test)
-        .subscribe(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        );
+        this.treeTestService
+          .add(test)
+          .subscribe(
+            res => console.log(res),
+            err => console.log(err)
+          );
+
       }
     }
     this.doingTask = false;
@@ -209,7 +176,7 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
 
   }
 
-  startTask(index) {
+  startTask(index: number): void {
     this.showTree = false;
     this.doingTask = false;
     this.startTime = new Date();
@@ -229,27 +196,27 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
             $("#study-tree").jstree("open_node", $("#" + data.node.id));
             var obj =  data.instance.get_node(data.node, true);
             if(obj) {
-              obj.siblings('.jstree-open').each(function () { data.instance.close_node($('#study-tree'), 0); }); 
+              obj.siblings('.jstree-open').each(function () { data.instance.close_node($('#study-tree'), 0); });
             }
           }
         });
-        $("#study-tree").bind("open_node.jstree", (event, data) => { 
+        $("#study-tree").bind("open_node.jstree", (event, data) => {
           if (data.node.id !== 'root') {
             this.test['clicks'].push(data.node);
           }
           var obj =  data.instance.get_node(data.node, true);
-          
+
           if (obj) {
-            obj.siblings('.jstree-open').each(function () {       data.instance.close_node(this, 0); 
-            data.instance.close_all(this, 0); 
-            }); 
+            obj.siblings('.jstree-open').each(function () {       data.instance.close_node(this, 0);
+            data.instance.close_all(this, 0);
+            });
           }
         });
       }
     }, 500);
   }
 
-  createTree(id, content) {
+  createTree(id: string, content: any) {
     $('#' + id).jstree({
       core : {
         expand_selected_onload : false,
@@ -285,81 +252,18 @@ export class TreetestStudyComponent implements OnDestroy, OnInit {
     }, 500);
   }
 
-  passwordRequired(id) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-study/passwordrequired', id, httpOptions);
-  }
-
-  testInformation(id) {
-    const header = new Headers({ Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token});
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-        Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-study/get', id, httpOptions);
-  }
-
-  preparePassword() {
-    const body = {
-      id: this.id,
-      password: this.enterPassword
-    };
-    this.sendPassword(body)
+  preparePassword(): void {
+    this.treetestStudyService
+      .checkPassword(this.id, this.enterPassword)
       .subscribe(
         res => {
-          console.log(res);
           if (!res) {
             alert('Wrong password!');
           } else {
-            this.study = res;
+            this.study = res as ITreetestStudy;
           }
         },
-        err => {
-          console.log('ERR');
-          console.log(err);
-          alert('Wrong password!');
-        }
+        err => alert('Wrong password!')
       );
   }
-
-  sendPassword(body) {
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-  };
-    return this.http.post(this.userService.serverUrl + '/users/tree-study/password', body, httpOptions);
-  }
-
-  postTestData(object) {
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/tree-tests/add', object, httpOptions);
-  }
-
-  postFeedback(object) {
-    const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-          Authorization: 'Bearer ' + (JSON.parse(localStorage.getItem('currentUser'))).token
-      })
-    };
-    return this.http.post(this.userService.serverUrl + '/users/tree-tests/feedback', object, httpOptions);
-  }
-
 }

@@ -47,7 +47,7 @@ export interface IDeleteTestRequest {
 })
 export class CardSortTestService {
 
-  private readonly apiUrl: string = `${environment.apiUrl}/users/card-sort-tests`;;
+  private readonly apiUrl: string = `${environment.apiUrl}/users/card-sort-tests`;
 
   constructor(private http: HttpClient) { }
 

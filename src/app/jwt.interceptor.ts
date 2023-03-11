@@ -15,14 +15,9 @@ import { UserService } from './user.service';
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  private readonly apiUrl: string;
+  private readonly apiUrl: string = environment.apiUrl;
 
-  constructor(
-    private authService: AuthenticationService,
-    private userService: UserService
-  ) { 
-    this.apiUrl = `${this.userService.serverUrl}`;
-  }
+  constructor(private authService: AuthenticationService) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
