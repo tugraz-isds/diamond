@@ -13,7 +13,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^14.3.0",
-    "@angular/cdk": "^13.3.9",
+    "@angular/cdk": "^14.2.7",
     "@angular/common": "^14.3.0",
     "@angular/compiler": "^14.3.0",
     "@angular/core": "^14.3.0",
@@ -23,7 +23,6 @@
     "@angular/platform-browser-dynamic": "^14.3.0",
     "@angular/router": "^14.3.0",
     "@json2csv/plainjs": "^6.1.2",
-    "@material/button": "^13.0.0",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "@types/file-saver": "^2.0.5",
