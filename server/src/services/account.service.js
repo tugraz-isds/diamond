@@ -1,5 +1,4 @@
-﻿const config = require('../../config.json');
-const jwt = require('jsonwebtoken');
+﻿const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../../_helpers/db');
 const Account = db.Account;
@@ -14,7 +13,7 @@ module.exports = {
     saveTreeTests,
     editTreeTest,
     saveTreeTestFeedback,
-    
+
     addTreeStudy,
     getTreeStudy,
     editTreeStudy,
@@ -60,7 +59,8 @@ async function authenticate({ email, password }) {
     const user = await Account.findOne({ email });
     if (user && bcrypt.compareSync(password, user.hash)) {
         const { hash, ...userWithoutHash } = user.toObject();
-        const token = jwt.sign({ sub: user.id }, config.secret);
+        const secret = process.env.JWT_SECRET || 'Diamond Default Secret - USE JWT_SECRET env in production!'; // FIXME: use a public key as secret? key rotation?
+        const token = jwt.sign({ sub: user.id }, secret ); // FIXME: set expiry date { expiresIn: '60s' }
         return {
             ...userWithoutHash,
             token
@@ -358,7 +358,7 @@ async function deleteCardSortStudy(studyId) {
 }
 
 async function deleteIndividualCardSortTest(resultId) {
-    const cardSortTest = await CardSortTest.find({ "_id" : resultId });    
+    const cardSortTest = await CardSortTest.find({ "_id" : resultId });
     await cardSortTest[0].delete();
     return 1;
 }
@@ -404,7 +404,7 @@ async function editCardSortStudy(updatedStudy) {
     if(updatedStudy.lastEnded){
         cardSortStudy[0].lastEnded = updatedStudy.lastEnded
     }
-    
+
     await cardSortStudy[0].save();
 
     return cardSortStudy[0];
