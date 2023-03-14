@@ -90,7 +90,7 @@ const appRoutes: Routes = [
   imports: [
     HttpClientModule,
     BrowserModule,
-    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot(appRoutes),
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forRoot({
