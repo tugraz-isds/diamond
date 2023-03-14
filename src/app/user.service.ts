@@ -10,32 +10,62 @@ export class User {
     study?: boolean;
 }
 
+interface IUser {
+  id?: number;
+  email: string;
+  password: string;
+}
+
+export interface IUserAccount {
+  email: string;
+  study: boolean;
+  createdDate: string;
+}
+
+interface IAddUserRequest {
+  email: string;
+  password: string;
+  study: boolean;
+}
+
+export interface IUpdateUserAccount {
+  id: string;
+  email?: string;
+  password?: string;
+  study?: boolean;
+}
+
 @Injectable()
 export class UserService {
 
-    private apiUrl = `${environment.apiUrl}`;
+  private apiUrl = `${environment.apiUrl}/users`;
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    getAll(): Observable<Array<User>> {
-        return this.http.post<Array<User>>(this.apiUrl + '/users', {});
+  getAll(): Observable<Array<IUserAccount>> {
+    return this.http.post<Array<IUserAccount>>(this.apiUrl, {});
+  }
+
+  getById(id: string): Observable<IUserAccount> {
+    return this.http.get<IUserAccount>(`${this.apiUrl}/get/${id}`);
+  }
+
+  register(user: IUser): Observable<void> {
+    const payload: IAddUserRequest = {
+      email: user.email,
+      password: user.password,
+      study: true,
     }
+    // FIXME: response is {} instead of void
+    return this.http.post<void>(`${this.apiUrl}/register`, payload);
+  }
 
-    getById(id: string): Observable<User> {
-        return this.http.get<User>(this.apiUrl + `/users/` + id);
-    }
+  update(user: IUpdateUserAccount): Observable<void> {
+    // FIXME: response is {} instead of void
+    return this.http.put<void>(`${this.apiUrl}`, user);
+  }
 
-    register(user: User): Observable<void> {
-        user.study = true;
-        return this.http.post<void>(this.apiUrl + `/users/register`, user);
-    }
-
-    update(user: User) {
-        return this.http.put(this.apiUrl + `/users`, user);
-    }
-
-    delete(id: string): Observable<void> {
-        const payload: User = { id };
-        return this.http.post<void>(`/users`, payload);
-    }
+  delete(id: string) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

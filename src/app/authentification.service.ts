@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { IUserAccount } from './user.service';
 
-export type TUser = ILoginResponse;
-export interface ILoginResponse {
-    email: string;
-    study: boolean;
-    createDate: string;
-    token: string;
+
+export interface ILoginResponse extends IUserAccount {
+  email: string;
+  study: boolean;
+  createDate: string;
+  token: string;
 }
 
 interface ILoginRequest {

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { User, UserService } from '../user.service';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
+import { IUpdateUserAccount, IUserAccount, User, UserService } from '../user.service';
 
 declare var $: any;
 
@@ -13,7 +11,7 @@ declare var $: any;
 })
 export class AdminComponent implements OnInit {
 
-  public users: Array<User>;
+  public users: Array<IUserAccount>;
 
   public deleteUserId: string;
 
@@ -26,7 +24,6 @@ export class AdminComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit() {
-    $('[data-toggle="tooltip"]').tooltip();
     this.userService.getAll().subscribe(res => this.users = res);
   }
 
@@ -64,9 +61,8 @@ export class AdminComponent implements OnInit {
   }
 
   changePassword() {
-    const userObj: User = { 
-      id: this.userid, 
-      email: this.deleteUserId, 
+    const userObj: IUpdateUserAccount = {
+      id: this.userid,
       password: this.password
     };
     this.userService.update(userObj)
@@ -78,7 +74,7 @@ export class AdminComponent implements OnInit {
                   let lang = localStorage.getItem('tt-language');
                   if (lang === 'en')
                   alert("Successfully changed password!");
-                  else 
+                  else
                   alert("Passwort erfolgreich geändert!");
                   this.users = res;
                   $("#myModal4").modal('hide');
@@ -92,8 +88,7 @@ export class AdminComponent implements OnInit {
   }
 
   studyAccess(value: boolean, userId: string) {
-    this.userid = userId;
-    const userObj: User = {
+    const userObj: IUpdateUserAccount = {
       id: userId,
       study: value
     };

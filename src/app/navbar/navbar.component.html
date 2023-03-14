@@ -29,7 +29,7 @@
           <a href="#" (click)="changeLanguage('de', $event)">DE</a>
         </li>
         <li *ngIf="authService.isLoggedIn()">
-          <a href="#" (click)="logout()">{{ "logout" | translate }}</a>
+          <a href="#" (click)="onLogout()">{{ "logout" | translate }}</a>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
