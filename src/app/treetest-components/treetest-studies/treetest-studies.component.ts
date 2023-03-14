@@ -227,7 +227,7 @@ export class TreetestStudiesComponent implements OnInit {
             id: randomStudyId,
             tree: json["tree"],
             tasks: json["tasks"],
-            user: JSON.parse(localStorage.getItem('currentUser')).email,
+            user: this.currentUser?.email,
             welcomeMessage: json["welcomeMessage"],
             instructions: json["instructions"],
             thankYouScreen: json["thankYouScreen"],

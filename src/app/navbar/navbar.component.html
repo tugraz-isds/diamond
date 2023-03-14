@@ -15,21 +15,22 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-left">
-        <li *ngIf="(authService.loggedIn && authService.studyAccess) || authService.user.email === 'admin'" routerLink="/tests" class="pointer"><a [class]="treeHighlighted">{{ " TreeTest Studies" | translate }}</a></li>
-        <li *ngIf="(authService.loggedIn && authService.studyAccess) || authService.user.email === 'admin'" routerLink="/card-sort-tests" class="pointer"><a [class]="cardHighlighted">{{ "CardSort Studies" | translate }}</a></li>
+      <ul class="nav navbar-nav" *ngIf="authService.isAdmin() || authService.userCan('studyAccess')">
+        <li routerLink="/tests" class="pointer"><a [class]="treeHighlighted">{{ "TreeTest Studies" | translate }}</a></li>
+        <li routerLink="/card-sort-tests" class="pointer"><a [class]="cardHighlighted">{{ "CardSort Studies" | translate }}</a></li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
-        <li *ngIf="authService.user && authService.user.email === 'admin'" class="pointer" routerLink="/admin"><a>Admin Panel</a></li>
-        <li *ngIf="authService.user"><a style="cursor: initial !important;">{{authService.user.email}}</a></li>
+        <li *ngIf="authService.isAdmin()" class="pointer" routerLink="/admin"><a>Admin Panel</a></li>
+        <li *ngIf="authService.isLoggedIn()"><p class="navbar-text">{{authService.getCurrentUser().email}}</p></li>
         <li [class.dm-active-lang]="isCurrentLang('en')">
           <a href="#" (click)="changeLanguage('en', $event)">EN</a>
         </li>
         <li [class.dm-active-lang]="isCurrentLang('de')">
           <a href="#" (click)="changeLanguage('de', $event)">DE</a>
         </li>
-        <li *ngIf="authService.loggedIn" class="pointer"><a href="#" (click)="onLogout($event)">{{ "logout" | translate }}</a></li>
+        <li *ngIf="authService.isLoggedIn()">
+          <a href="#" (click)="onLogout()">{{ "logout" | translate }}</a>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

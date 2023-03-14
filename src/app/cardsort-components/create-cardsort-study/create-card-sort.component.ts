@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService, ILoginResponse } from 'src/app/authentification.service';
 import { EditComponent } from 'src/app/guard';
 
 import { CardSortStudyService, ICardSortStudy } from '../card-sort-study.service';
@@ -37,15 +38,19 @@ export class CreateCardSortComponent implements OnInit, EditComponent {
   private csvContent: string;
   public baseurl: string = '';
 
+  private currentUser: ILoginResponse;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private cardSortStudyService: CardSortStudyService
+    private cardSortStudyService: CardSortStudyService,
+    private authService: AuthenticationService
   ) { }
 
   ngOnInit() {
     $('[data-toggle="tooltip"]').tooltip();
     this.baseurl = location.origin;
+    this.currentUser = this.authService.getCurrentUser();
     if (this.id) {
       this.cardSortStudyService
         .get(this.id)
@@ -223,7 +228,7 @@ export class CreateCardSortComponent implements OnInit, EditComponent {
       password: passTmp,
       cards: this.cards,
       id: this.randomTestId,
-      user: JSON.parse(localStorage.getItem('currentUser')).email,
+      user: this.currentUser?.email,
       welcomeMessage: this.welcomeMessage,
       instructions: this.instructions,
       explanation: this.explanation,

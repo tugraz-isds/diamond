@@ -10,8 +10,9 @@ import {NavigationEnd, Router} from "@angular/router";
 })
 export class NavbarComponent {
 
-  treeHighlighted: "highlighted" | "";
-  cardHighlighted: "highlighted" | "";
+  public treeHighlighted: "highlighted" | "";
+  public cardHighlighted: "highlighted" | "";
+
   constructor(
     public readonly authService: AuthenticationService,
     private readonly langService: LanguageService,
@@ -30,7 +31,7 @@ export class NavbarComponent {
   onLogout($event?: MouseEvent | KeyboardEvent) {
     $event?.preventDefault();
     this.authService.logout();
-    location.reload();
+    this.router.navigate(['/login']);
   }
 
   changeLanguage(lang: string, $event: MouseEvent): void {

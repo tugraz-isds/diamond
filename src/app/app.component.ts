@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
     ) {}
 
   ngOnInit() {
-    if (localStorage.getItem('currentUser')) {
+    /*if (localStorage.getItem('currentUser')) {
       this.authService.loggedIn = true;
       const user = JSON.parse(localStorage.getItem('currentUser'));
       this.authService.user = user;
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
       if (!((window.location.href).includes('/test/') || (window.location.href).includes('/card-sort-test/'))) {
         this.router.navigate(['/login']);
       }
-    }
+    }*/
   }
-  
+
 }

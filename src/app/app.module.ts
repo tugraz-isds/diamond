@@ -40,26 +40,28 @@ import { JwtInterceptor } from './jwt.interceptor';
 import { LanguageService } from './language.service';
 import { datePipe } from './pipes/datePipe.pipe';
 import { StudyClosedComponent } from './study-closed/study-closed.component';
+import { AuthGuard } from './auth.guard';
+import { AuthRedirectGuard } from './auth-redirect.guard';
 
 const appRoutes: Routes = [
-  { path: 'admin', component: AdminComponent},
-  { path: 'create-tree-test', component: CreateTestComponent, canDeactivate: [PendingChangesGuard]},
-  { path: 'create-card-sort', component: CreateCardSortComponent, canDeactivate: [PendingChangesGuard]},
-  { path: 'create-tree-test/:id', component: CreateTestComponent, canDeactivate: [PendingChangesGuard]},
-  { path: 'create-card-sort/:id', component: CreateCardSortComponent, canDeactivate: [PendingChangesGuard]},
+  { path: 'admin', component: AdminComponent, canActivate: [ AuthGuard ]},
+  { path: 'create-tree-test', component: CreateTestComponent, canDeactivate: [PendingChangesGuard], canActivate: [ AuthGuard ]},
+  { path: 'create-card-sort', component: CreateCardSortComponent, canDeactivate: [PendingChangesGuard], canActivate: [ AuthGuard ]},
+  { path: 'create-tree-test/:id', component: CreateTestComponent, canDeactivate: [PendingChangesGuard], canActivate: [ AuthGuard ]},
+  { path: 'create-card-sort/:id', component: CreateCardSortComponent, canDeactivate: [PendingChangesGuard], canActivate: [ AuthGuard ]},
   { path: 'cardsort/:id', component: CardsortStudyComponent},
-  { path: 'cardsort-preview/:id', component: CardsortStudyComponent},
+  { path: 'cardsort-preview/:id', component: CardsortStudyComponent, canActivate: [ AuthGuard ]},
   { path: 'treetest/:id', component: TreetestStudyComponent},
-  { path: 'treetest-preview/:id', component: TreetestStudyComponent},
-  { path: 'results/:id', component: TreetestTestsComponent},
-  { path: 'card-sort-results/:id', component: CardsortTestsComponent},
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'tests', component: TreetestStudiesComponent},
-  { path: 'card-sort-tests', component: CardsortStudiesComponent},
-  { path: 'pie-tree/:id/:index', component: PathtreeComponent },
+  { path: 'treetest-preview/:id', component: TreetestStudyComponent, canActivate: [ AuthGuard ]},
+  { path: 'results/:id', component: TreetestTestsComponent, canActivate: [ AuthGuard ]},
+  { path: 'card-sort-results/:id', component: CardsortTestsComponent, canActivate: [ AuthGuard ]},
+  { path: 'login', component: LoginComponent,canActivate: [ AuthRedirectGuard ]},
+  { path: 'register', component: RegisterComponent,canActivate: [ AuthRedirectGuard ]},
+  { path: 'tests', component: TreetestStudiesComponent, canActivate: [ AuthGuard ]},
+  { path: 'card-sort-tests', component: CardsortStudiesComponent, canActivate: [ AuthGuard ]},
+  { path: 'pie-tree/:id/:index', component: PathtreeComponent, canActivate: [ AuthGuard ] },
   {path: 'study-closed', component: StudyClosedComponent},
-  { path: '**', redirectTo: 'login', pathMatch: 'full' }
+  { path: '**', redirectTo: 'tests', pathMatch: 'full' }
 ];
 
 @NgModule({

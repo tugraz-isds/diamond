@@ -11,9 +11,9 @@ router.post('/adminregister', adminregister);
 router.post('/register', register);
 router.post('/', getAll);
 router.get('/current', getCurrent);
-router.get('/:id', getById);
+router.get('/get/:id', getById);
 router.put('/', update);
-router.post('/', _delete);
+router.delete('/:id', _delete);
 
 // Tree Study
 router.post('/tree-study/add', addTreeStudy);
@@ -95,7 +95,7 @@ function update(req, res, next) {
 }
 
 function _delete(req, res, next) {
-    userService.delete(req.body.id)
+    userService.delete(req.params.id)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
