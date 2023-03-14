@@ -88,7 +88,7 @@
 
                 <h3>{{ "cards" | translate}}</h3>
                 <div *ngIf="cards.length == 0">
-                    <p>No cards added. <a [routerLink]="" (click)="open('cards');">Add cards</a></p>
+                    <p>No cards added. <a [routerLink]="[]" (click)="open('cards');">Add cards</a></p>
                 </div>
                 <div *ngIf="cards.length > 0" >
                     <div *ngFor="let c of cards">
