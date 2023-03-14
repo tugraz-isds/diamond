@@ -1,12 +1,12 @@
-const expressJwt = require('express-jwt');
-const config = require('../config.json');
+var { expressjwt } = require("express-jwt");
 const userService = require('../src/services/account.service');
+
 
 module.exports = jwt;
 
 function jwt() {
-    const secret = config.secret;
-    return expressJwt({ secret, isRevoked }).unless({
+    const secret = process.env.JWT_SECRET || 'Diamond Default Secret - USE JWT_SECRET env in production!';
+    return expressjwt({ secret, algorithms: ['HS256'] }).unless({
         path: [
             // public routes that don't require authentication
             '/users/authenticate',

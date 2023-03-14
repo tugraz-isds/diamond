@@ -62,7 +62,7 @@ mongodb.MongoClient.connect(db.database_connection_url, { useNewUrlParser: true,
     // add admin user
     userService.create({ email: adminEmail, password: adminPwd })
       .then(() => res.json({}))
-      .catch(err => {});    
+      .catch(err => {});
 
   });
 });

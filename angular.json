@@ -35,7 +35,7 @@
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/mdbootstrap/js/jquery-3.3.1.min.js",
+              "node_modules/mdbootstrap/js/jquery.min.js",
               "node_modules/mdbootstrap/js/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/mdbootstrap/js/mdb.min.js",
