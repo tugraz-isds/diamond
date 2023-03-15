@@ -5,7 +5,7 @@
     "scripts": {
       "start": "node server.js",
       "prebuild": "cd ../client && npm install",
-      "build": "rm -rf public && cd ../client && npm run build && cp -r dist/client ../server/public",
+      "build": "cd ../client && npm run build",
       "postbuild": "cd .. && rimraf node_modules && cd server && npm install"
     },
     "dependencies": {

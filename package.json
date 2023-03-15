@@ -8,7 +8,9 @@
     "server"
   ],
   "scripts": {
-    "start": "npm start --workspace server"
+    "start": "npm start --workspace server",
+    "build": "npm run build --workspace client",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",

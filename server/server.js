@@ -23,7 +23,7 @@ var options = {
   maxAge: '1m',
   redirect: false
 }
-const publicDir = process.env.PUBLIC_DIR || 'public';
+const publicDir = process.env.PUBLIC_DIR || '../client/dist/client';
 app.use(express.static(publicDir, options))
 
 app.use(bodyParser.urlencoded({ extended: false }));
