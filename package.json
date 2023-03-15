@@ -7,6 +7,9 @@
     "client",
     "server"
   ],
+  "scripts": {
+    "start": "npm start --workspace server"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tugraz-isds/diamond.git"
