@@ -2,12 +2,8 @@
   "name": "@diamond/client",
   "version": "2.0.0",
   "scripts": {
-    "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "build": "ng build -c production"
   },
   "private": true,
   "dependencies": {

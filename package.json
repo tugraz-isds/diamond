@@ -2,12 +2,11 @@
   "name": "diamond",
   "version": "2.0.0",
   "description": "A card-sorting and tree-testing application",
-  "main": "server/server.js",
   "private": true,
-  "workspaces": [ "client", "server" ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tugraz-isds/diamond.git"

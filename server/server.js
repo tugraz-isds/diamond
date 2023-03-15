@@ -11,20 +11,27 @@ const userService = require('./src/services/account.service');
 
 var mongodb = require("mongodb");
 
-/////
-
-// Create link to Angular build directory
-var distDir = __dirname + "/dist/";
-app.use(express.static(distDir));
-
-/////
+// #############################################################################
+// This configures static hosting for files in /public that have the extensions
+// listed in the array.
+// src: https://github.com/cyclic-software/express-hello-world/blob/main/app.js
+var options = {
+  dotfiles: 'ignore',
+  etag: false,
+  extensions: ['htm', 'html','css','js','ico','jpg','jpeg','png','svg'],
+  index: ['index.html'],
+  maxAge: '1m',
+  redirect: false
+}
+const publicDir = process.env.PUBLIC_DIR || 'public';
+app.use(express.static(publicDir, options))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
 // use JWT auth to secure the api
-app.use(jwt());
+// app.use(jwt());
 
 // api routes
 app.use('/users', require('./src/controllers/account.controller'));
