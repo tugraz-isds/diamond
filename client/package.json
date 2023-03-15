@@ -1,6 +1,7 @@
 {
   "name": "@diamond/client",
   "version": "2.0.0",
+  "description": "Diamond Frontend Application",
   "scripts": {
     "start": "ng serve",
     "build": "ng build -c production"
