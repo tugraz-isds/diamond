@@ -1,9 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import {CdkDragDrop, CdkDropListGroup, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {$} from 'protractor';
-import {printLine} from 'tslint/lib/verify/lines';
-// @ts-ignore
-// @ts-ignore
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+
 @Component({
   selector: 'app-sorting',
   templateUrl: './sorting.component.html',
@@ -13,10 +10,8 @@ import {printLine} from 'tslint/lib/verify/lines';
 
 export class SortingComponent {
 
-  // @ts-ignore
   resultGroups = [];
   @Input() isPreview: boolean;
-  // tslint:disable-next-line:variable-name
   @Input() ungrouped_cards: [string];
   @Output() output = new EventEmitter<any[]>();
   groupName = '';
@@ -34,7 +29,7 @@ export class SortingComponent {
     setTimeout(() => {
       this.inputGroupNameElementRef.nativeElement.focus();
     }, 0);
-    
+
 
     // TODO: close on focus out or on ESC
 

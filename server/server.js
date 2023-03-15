@@ -3,11 +3,11 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const jwt = require('./server/_helpers/jwt');
-const errorHandler = require('./server/_helpers/error-handler');
-const db = require('./server/_helpers/db');
+const jwt = require('./_helpers/jwt');
+const errorHandler = require('./_helpers/error-handler');
+const db = require('./_helpers/db');
 
-const userService = require('./server/src/services/account.service');
+const userService = require('./src/services/account.service');
 
 var mongodb = require("mongodb");
 
@@ -27,11 +27,11 @@ app.use(cors());
 app.use(jwt());
 
 // api routes
-app.use('/users', require('./server/src/controllers/account.controller'));
-app.use('/users', require('./server/src/controllers/tree-test-study.controller'));
-app.use('/users', require('./server/src/controllers/card-sort-study.controller'));
-app.use('/users', require('./server/src/controllers/tree-test-test.controller'));
-//app.use('/users', require('./server/src/card-sort-test.controller'));
+app.use('/users', require('./src/controllers/account.controller'));
+// app.use('/users', require('./src/controllers/tree-test-study.controller'));
+// app.use('/users', require('./src/controllers/card-sort-study.controller'));
+// app.use('/users', require('./src/controllers/tree-test-test.controller'));
+//app.use('/users', require('./src/card-sort-test.controller'));
 
 // global error handler
 app.use(errorHandler);
