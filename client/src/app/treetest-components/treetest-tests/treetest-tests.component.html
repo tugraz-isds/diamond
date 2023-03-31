@@ -5,7 +5,7 @@
   </div>
   <div [hidden]="!tests.length" class="col-sm-offset-1 col-sm-10">
     <button *ngIf="study" [routerLink]="['/create-tree-test/' + study.id]" class="pull-right btn btn-primary">{{ "edittreestudy" | translate }}</button>
-    <h3>{{ "study" | translate }}</h3>
+    <h3>{{ "treeteststudy" | translate }}</h3>
     <h4 *ngIf="study">{{study.name}}</h4>
     <ul class="nav nav-tabs mt-50">
       <li class="active"><a data-toggle="tab" href="#overview">{{ "overview" | translate }}</a></li>

@@ -5,15 +5,15 @@
     </div>
     <div [hidden]="!tests.length" class="col-sm-offset-1 col-sm-10">
       <button *ngIf="study" [routerLink]="['/create-card-sort/' + study.id]" class="pull-right btn btn-primary">{{ "editcardstudy" | translate }}</button>
-      <h3>{{ "study" | translate }}</h3>
+      <h3>{{ "cardsortstudy" | translate }}</h3>
       <h4 *ngIf="study">{{study.name}}</h4>
       <ul class="nav nav-tabs mt-50">
         <li class="active"><a data-toggle="tab" href="#overview">{{ "overview" | translate }}</a></li>
         <li><a data-toggle="tab" href="#participants">{{ "participants" | translate }}</a></li>
       </ul>
-      
+
       <div class="tab-content">
-  
+
         <div id="overview" class="mt-30 tab-pane fade in active">
           <h4 class="mt-30">{{ "participants" | translate }}</h4>
           <hr>
@@ -114,7 +114,7 @@
 <!-- Modal -->
 <div id="myModal10" class="modal fade" role="dialog">
     <div style="max-width: 400px;" class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-body text-center">
@@ -125,6 +125,6 @@
           <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "no" | translate }}</button>
         </div>
       </div>
-  
+
     </div>
   </div>

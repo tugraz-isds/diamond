@@ -3,6 +3,9 @@
 # environment
 .env
 
+# docker
+/deploy
+
 # compiled output
 /dist
 /tmp
