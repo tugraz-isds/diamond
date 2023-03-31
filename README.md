@@ -67,8 +67,8 @@ To start the MongoDB docker container, go to ```/deploy/local``` and run
 ```docker-compose up -d```. This will start a MongoDB instance in the
 background and can be accessed via 
 ```mongodb://localhost:27017/<database_name>```. Diamond is set up to
-use this connection string as default, if no .env file is available.```
-
+use this connection string as default, if no .env file is available.
+Use ```docker-compose down``` to shut down MongoDB.
 
 
 ## Developing Diamond
