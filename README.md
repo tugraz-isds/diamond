@@ -1,12 +1,17 @@
 
-# Introduction
+# Diamond - A card-sorting and tree-testing application
+
+
+
+## Introduction
 
 Diamond is a web-based tool for information architects, which supports
 both tree testing and card sorting. It is implemented using Angular as
 its frontend, Node.js as its server, and MongoDB as its database.
 
 
-# Features
+
+## Features
 
 - Registration and login.
 - Create/edit/delete a study.
@@ -18,55 +23,114 @@ its frontend, Node.js as its server, and MongoDB as its database.
 
 
 
-# Running Diamond locally
+## Requirements
 
-By default, Diamond is configured to run locally on localhost.
+- [Node.js v16 (Gallium)](https://nodejs.org/en/download/releases)
+- [MongoDB v4](https://www.mongodb.com/docs/v4.4/installation/)
 
-The following set up is necessary the first time:
-- Go to root directory, and run ```npm install```.
-- Install MongoDB on the local machine (required for database).
-- In ```server/user-paths.js``` configure the server URL and local MongoDB connection string,
-  for example:
-  - ```server_url: 'http://localhost:48792',```
-  - ```db_connection_url: 'mongodb://localhost:27017/node-mongo-registration-login-api',```
-
-The following is necessary every time to run Diamond locally:
-- Start MongoDB on the local machine and make it ready to accept connections.
-- In the root directory, run ```node server.js``` to start the Diamond server.
-- In the root directory, run ```npx ng serve``` to start the Diamond frontend.
-
-Navigate to http://localhost:4200/ to see the app.
+To manage your Node.js installation, it is recommended to use 
+[NVM](https://github.com/nvm-sh/nvm) or 
+[NVM-Windows](https://github.com/coreybutler/nvm-windows).
+The required Node.js version is printed to the ```.nvmrc``` file.
 
 
 
-# Deploying Diamond
+## Architecture
+
+The project is set up as a multi-package repository containing both
+frontend and backend code. To seperate both code bases, npm workspaces 
+are used. Currently, there are to workspaces: client (for frontend code)
+and server (for backend code).
+
+
+
+## Running Diamond locally
+
+- Make sure to have Node.js v16 and MongoDB v4 installed
+- Create a local copy of the sample environment file 
+  ```cp .env.sample .env``` and fill in admin account details and your 
+  local MongoDB connection string. 
+- Startup your local MongoDB
+- In the project root folder run ```npm install``` to install all 
+  dependencies
+- In the project root folder run ```npm run build``` to build the 
+frontend
+- In the project root folder run ```npm start``` to start the 
+  application
+
+Open your browser and got to 
+[http://localhost:8000](http://localhost:8000).
+
+
+
+## Developing Diamond
+
+The following npm scripts are available (run all of the from the 
+project's root):
+
+- To install all dependencies ```npm install```
+- To only install the dependencies of a specific workspace 
+  ```npm install -w client``` or ```npm install -w server```
+- To start the frontend for development: ```npm start -w client```
+- To start the backend for development: ```npm start -w server```
+- To create a production frontend build: ```npm run build -w client``` 
+  (the server's public directory is set to the client's build output 
+  directory)
+
+To run frontend and backend independently:
+
+- Make sure to have Node.js v16 and MongoDB v4 installed
+- Create a local copy of the sample environment file 
+  ```cp .env.sample .env``` and fill in admin account details and your 
+  local MongoDB connection string. 
+- Startup your local MongoDB
+- In the project root folder run ```npm install``` to install all 
+  dependencies
+- In the project root folder run ```npm start -w server``` to start the
+  backend. It will be available at 
+  [http://localhost:8000](http://localhost:8000)
+- In the project root folder run ```npm start -w client``` to start the
+  frontend. It will be available at 
+  [http://localhost:4200](http://localhost:4200)
+- To connect the frontend to the backend, make sure to set the correct
+  apiUrl (server url) in ```client/src/environments/environment.ts```
+
+
+
+## Deploying Diamond
 
 In order to deploy Diamond to a remote server, it is necessary that
-the server has Angular CLI, Node, and MongoDB pre-installed.
+the server supports Node.js v16 and MongoDB v4.
 
-Additionally, the remote server URL and remote MongoDB connection
-string must be configured in the file ```server/user-paths.js```.
+We recommend to use [Cyclic.sh](https://www.cyclic.sh/) for hosting 
+the frontend and backend of Diamond. As a database provider, we 
+recommend [MongoDB Atlas](https://www.mongodb.com/atlas/database). Both
+offer a free-tier plan and are more than sufficient to run studies with
+Diamond.
 
-For example:
-- ```server_url: 'https://iaweb-diamond.herokuapp.com',```
-- ```db_connection_url: 'mongodb+srv://root:root@cluster0-wqaum.mongodb.net/test?retryWrites=true&w=majority',```
+Deploying Diamond to Cyclic.sh works as follows:
+
+- Create a fork of the official Diamond Github repository
+- Connect your Diamond Github repository to Cyclic. How to do this is
+  explained [here](https://docs.cyclic.sh/how-to/add-private-repository)
+- Specify the following build options:
+  + Root path: ```/server```
+- Select Node v16 as runtime
+- Create the following variables and apply your specific settings:
+  + ADMIN_EMAIL: Email or username of Diamond's admin user
+  + ADMIN_PWD: Password of Diamond's admin user
+  + DB_CONNECTION_URL: Connection string to your MongoDB Atlas server
+
+Deployment should start automatically. Cyclic will create a random
+subdomain, where your version of Diamond will be available to users.
 
 
-Deploying Diamond can be automated using the [Heroku CLI
-tool](https://devcenter.heroku.com/articles/heroku-cli).
-
-
-
-# Admin Account
-
-Diamond installation comes with a predefined admin account (username:
-admin, password: admin189m). The admin password should be changed as
-soon as possible through Diamond's Admin page.
+[![Deploy to Cyclic](https://deploy.cyclic.sh/button.svg)](https://deploy.cyclic.sh/)
 
 
 
 
-# Contributors
+## Contributors
 
 Diamond is an extension of an earlier system called TreeTest, which
 implemented web-based tree testing. Diamond added support for
@@ -79,12 +143,23 @@ The following people have contributed to Diamond:
   [kandrews@iicm.edu](mailto:kandrews@iicm.edu?subject=Rslidy)  
   Project Leader
 
+- Mathias Blum  
+  (Seminar Project SS 2023). Rethinking Diamond: A Web Application for 
+  Tree Testing and Card Sorting.
+
+- Mohamed Amine El Kaouakibi  
+  (Bachelor's thesis 2023). Import and Export of Studies. 
+
+- David Egger, Ludwig Reinhardt, Stefan Schnutt, Sebastian Überreiter  
+  (IAweb WS 2022 G3). Improving the Diamond Tree Testing Tool.
+
 - Philipp Brandl, Tamara David, and Bernhard Kargl  
   (IAweb WS 2020 G1). Made Card Sorting accessible.
 
 - Christopher Oser, Markus Ruplitsch, and Markus Stradner  
   (IAweb WS 2020 G3). Added support for Card Sorting.
 
-- Ajdin Mehic  
-  Master's Thesis. Original developer of TreeTest.
+- Ajdin Mehic. Original developer of TreeTest.  
+  (Master's Thesis 2019). TreeTest: Online Tree Testing for Information
+  Hierarchies.
 

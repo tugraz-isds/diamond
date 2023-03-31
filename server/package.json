@@ -1,28 +1,27 @@
 {
-    "name": "node-mongo-registration-login-api",
-    "version": "1.0.0",
-    "description": "NodeJS + MongoDB API for User Management, Authentication and Registration",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/cornflourblue/node-mongo-registration-login-api.git"
-    },
+    "name": "@diamond/server",
+    "version": "2.0.0",
+    "description": "Diamond Backend Service/API",
     "scripts": {
-        "start": "node ./server.js",
-        "start-dev": "nodemon ./server.js"
+        "start": "node server.js",
+        "prebuild": "cd ../client && npm install",
+        "build": "cd ../client && npm run build",
+        "postbuild": "cd .. && rimraf node_modules && cd server && npm install"
     },
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.18.3",
+        "config": "^3.2.2",
         "cors": "^2.8.4",
+        "dotenv": "^16.0.3",
         "express": "^4.16.3",
-        "express-jwt": "^5.3.1",
-        "jsonwebtoken": "^8.2.2",
+        "express-jwt": "^8.4.1",
+        "jsonwebtoken": "^9.0.0",
         "mongodb": "^3.0.10",
         "mongoose": "^5.1.4",
         "rootpath": "^0.1.2"
     },
     "devDependencies": {
-        "nodemon": "^1.17.5"
+        "rimraf": "^4.4.0"
     }
 }
