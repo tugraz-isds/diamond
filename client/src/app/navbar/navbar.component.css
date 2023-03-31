@@ -3,7 +3,7 @@
     font-weight: bold;
 }
 
-#bs-example-navbar-collapse-1 .navbar-left .highlighted {
+.navbar-nav a.highlighted {
     text-decoration: underline;
     font-weight: bolder;
 }
