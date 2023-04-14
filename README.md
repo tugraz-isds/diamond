@@ -163,7 +163,7 @@ The following people have contributed to Diamond:
   (IAweb WS 2022 G3). Improving the Diamond Tree Testing Tool.
 
 - Philipp Brandl, Tamara David, and Bernhard Kargl  
-  (IAweb WS 2020 G1). Made Card Sorting accessible.
+  (IAweb WS 2021 G1). Made Card Sorting accessible.
 
 - Christopher Oser, Markus Ruplitsch, and Markus Stradner  
   (IAweb WS 2020 G3). Added support for Card Sorting.
