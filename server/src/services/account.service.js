@@ -28,6 +28,7 @@ module.exports = {
     getCardSortTestsById,
     editCardSortTest,
     saveCardSortTests,
+    saveMultipleCardSortTests,
     saveCardSortMindset,
     saveCardSortFeedback,
 
@@ -312,6 +313,10 @@ async function saveCardSortTests(resultParam) {
     const result = new CardSortTest(resultParam);
     // save user
     await result.save();
+}
+
+async function saveMultipleCardSortTests(testParams) {
+  await Promise.all(testParams.map(item => saveCardSortTests(item)));
 }
 
 async function cardSortStudyPasswordRequired(studyId) {

@@ -248,7 +248,7 @@ export class CardsortStudiesComponent implements OnInit {
             err => alert("Error: " + err)
           );
 
-        let subs: Array<Observable<void>> = [];
+        let testsToImport: Array<ICardSortTest> = [];
 
         for(let study of json["tests"]) {
           let exclude = false;
@@ -265,10 +265,11 @@ export class CardsortStudiesComponent implements OnInit {
             excluded: exclude,
           };
 
-          subs.push(this.cardSortTestSerice.add(temp));
+          testsToImport.push(temp);
         }
-
-        forkJoin(subs).subscribe(res => this.getAllCardSortTests());
+        this.cardSortTestSerice
+          .addMultiple(testsToImport)
+          .subscribe(res => this.getAllCardSortTests());
       };
 
       fileReader.readAsText(input.files[0]);
