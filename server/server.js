@@ -1,5 +1,5 @@
 ﻿require('rootpath')();
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -27,12 +27,15 @@ var options = {
 const publicDir = process.env.PUBLIC_DIR || '../client/dist/client';
 app.use(express.static(publicDir, options))
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(cors());
 
+const maxPayloadSize = process.env.MAX_REQUEST_PAYLOAD_SIZE || '6mb';
+app.use(bodyParser.urlencoded({ extended: false, limit: maxPayloadSize }));
+app.use(bodyParser.json({ limit: maxPayloadSize }));
+
+
 // use JWT auth to secure the api
-// app.use(jwt());
+app.use(jwt());
 
 // api routes
 app.use('/users', require('./src/controllers/account.controller'));

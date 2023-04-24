@@ -11,6 +11,7 @@ module.exports = {
     // Tree Test
     getTreeTestsById,
     saveTreeTests,
+    saveMultipleTreeTests,
     editTreeTest,
     saveTreeTestFeedback,
 
@@ -28,6 +29,7 @@ module.exports = {
     getCardSortTestsById,
     editCardSortTest,
     saveCardSortTests,
+    saveMultipleCardSortTests,
     saveCardSortMindset,
     saveCardSortFeedback,
 
@@ -156,6 +158,9 @@ async function saveTreeTests(resultParam) {
     await treeTests.save();
 }
 
+async function saveMultipleTreeTests(resultParams) {
+  await Promise.all(resultParams.map(item => saveTreeTests(item)));
+}
 
 async function addTreeStudy(testParam) {
     const treeStudy = new TreeTestStudy(testParam);
@@ -312,6 +317,10 @@ async function saveCardSortTests(resultParam) {
     const result = new CardSortTest(resultParam);
     // save user
     await result.save();
+}
+
+async function saveMultipleCardSortTests(testParams) {
+  await Promise.all(testParams.map(item => saveCardSortTests(item)));
 }
 
 async function cardSortStudyPasswordRequired(studyId) {

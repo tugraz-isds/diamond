@@ -6,9 +6,11 @@ import { Router } from '@angular/router';
 import { saveAs } from 'file-saver'
 import { IParticipant, ITreetestStudy, ITreetestStudyEdit, TreetestStudyService } from '../treetest-study.service';
 import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
-import { forkJoin, Observable } from 'rxjs';
+import * as bytes from 'bytes';
 
 declare var $: any;
+
+declare const MAX_REQUEST_PAYLOAD_SIZE: string;
 
 @Component({
   selector: 'app-tests',
@@ -26,6 +28,8 @@ export class TreetestStudiesComponent implements OnInit {
   public deleteTestId: string;
 
   private baseurl: string;
+
+  public maxRequestPayloadSize = MAX_REQUEST_PAYLOAD_SIZE;
 
   //number of participants for each study
   public numberParticipants: Array<IParticipant> = [];
@@ -211,6 +215,13 @@ export class TreetestStudiesComponent implements OnInit {
         return;
       }
 
+      const maxFileSize = bytes(MAX_REQUEST_PAYLOAD_SIZE);
+
+      if (fileToRead.size >= maxFileSize) {
+        alert(`Filesize ${bytes(fileToRead.size)} exceeds limit of ${bytes(maxFileSize)}!`);
+        return;
+      }
+
       const fileReader = new FileReader();
       let json = null;
 
@@ -250,7 +261,8 @@ export class TreetestStudiesComponent implements OnInit {
             err => alert("Error: " + err)
           );
 
-        let subs: Array<Observable<void>> = [];
+        let testsToImport: Array<ITreetestTest> = [];
+
 
         for(let test of json["tests"]){
           let exclude = false;
@@ -266,10 +278,13 @@ export class TreetestStudiesComponent implements OnInit {
             excluded: exclude,
           };
 
-          subs.push(this.treetestTestService.add(temp));
+          testsToImport.push(temp);
         }
 
-        forkJoin(subs).subscribe(res => this.getAllTests());
+        this.treetestTestService
+          .addMultiple(testsToImport)
+          .subscribe(res => this.getAllTests());
+
       };
 
       fileReader.readAsText(input.files[0]);

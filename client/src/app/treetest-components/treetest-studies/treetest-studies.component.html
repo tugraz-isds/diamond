@@ -81,12 +81,16 @@
 
 
 
-   <div *ngIf="authService.userCan('studyAccess') || authService.isAdmin()">
-      <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-tree-test">{{ "createstudy" | translate }}</button>
-      <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importstudy" | translate }}</button>
-      <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
+    <div *ngIf="authService.userCan('studyAccess') || authService.isAdmin()" class="study-action-buttons">
+      <div>
+        <button style="margin-top: 30px; margin-bottom: 30px;" type="button" class="btn btn-primary" routerLink="/create-tree-test">{{ "createstudy" | translate }}</button>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" (click)="fileInput.click()">{{ "importstudy" | translate }}</button>
+        <p class="hint">{{ "maxfilesize" | translate }} {{ maxRequestPayloadSize }}</p>
+        <input style="display: none;" type="file" id="file" #fileInput (change)="onFileSelect($event.target)">
+      </div>
     </div>
-  </div>
 </div>
 
 <div id="copyboardtest"></div>

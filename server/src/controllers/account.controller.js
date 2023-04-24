@@ -24,6 +24,7 @@ router.post('/tree-study/delete', deleteTreeStudy);
 router.post('/tree-study/getbyuserid', getAllTreeStudies);
 // Tree Tests
 router.post('/tree-tests/add', saveTreeTests);
+router.post('/tree-tests/add-multiple', saveMultipleTreeTests);
 router.post('/tree-tests/feedback', saveTreeTestFeedback);
 router.post('/tree-tests/get/:id', getTreeTestsById);
 router.post('/tree-tests/delete', deleteIndividualTreeTest);
@@ -39,6 +40,7 @@ router.post('/card-sort-study/delete', deleteCardSortStudy);
 router.post('/card-sort-study/getbyuserid', getAllCardSortStudies);
 
 router.post('/card-sort-tests/add', saveCardSortTests);
+router.post('/card-sort-tests/add-multiple', saveMultipleCardSortTests);
 router.post('/card-sort-tests/mindset', saveCardSortMindset);
 router.post('/card-sort-tests/feedback', saveCardSortFeedback);
 router.post('/card-sort-tests/get/:id', getCardSortTestsById);
@@ -113,6 +115,12 @@ function saveTreeTests(req, res, next) {
     userService.saveTreeTests(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
+}
+
+function saveMultipleTreeTests(req, res, next) {
+  userService.saveMultipleTreeTests(req.body)
+    .then(() => res.json({}))
+    .catch(err => next(err));
 }
 
 function saveTreeTestFeedback(req, res, next) {
@@ -192,6 +200,13 @@ function saveCardSortTests(req, res, next) {
         .then(() => res.json({}))
         .catch(err => next(err));
 }
+
+function saveMultipleCardSortTests(req, res, next) {
+  userService.saveMultipleCardSortTests(req.body)
+        .then(()=> res.json({}))
+        .catch(err => next(err));
+}
+
 function editCardSortTest(req, res, next){
     userService.editCardSortTest(req.body)
         .then(() => res.json({}))

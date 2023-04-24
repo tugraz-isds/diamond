@@ -4,10 +4,12 @@ import { saveAs } from 'file-saver'
 import { AuthenticationService, ILoginResponse } from '../../authentification.service';
 import { CardSortStudyService, ICardSortStudy, ICardSortStudyEdit } from '../card-sort-study.service';
 import { CardSortTestService, ICardSortTest } from '../card-sort-test.service';
-import { forkJoin, Observable } from 'rxjs';
 import { IParticipant } from 'src/app/treetest-components/treetest-study.service';
+import * as bytes from 'bytes';
 
 declare var $: any;
+
+declare const MAX_REQUEST_PAYLOAD_SIZE: string;
 
 @Component({
   selector: 'app-tests',
@@ -27,6 +29,8 @@ export class CardsortStudiesComponent implements OnInit {
   public numberParticipants: Array<IParticipant> = [];
 
   private currentUser: ILoginResponse;
+
+  public maxRequestPayloadSize = MAX_REQUEST_PAYLOAD_SIZE;
 
   constructor(
     private cardSortStudyService: CardSortStudyService,
@@ -218,6 +222,13 @@ export class CardsortStudiesComponent implements OnInit {
         return;
       }
 
+      const maxFileSize = bytes(MAX_REQUEST_PAYLOAD_SIZE);
+
+      if (fileToRead.size >= maxFileSize) {
+        alert(`Filesize ${bytes(fileToRead.size)} exceeds limit of ${bytes(maxFileSize)}!`);
+        return;
+      }
+
       const fileReader = new FileReader();
       let json = null;
       fileReader.onload = (e) => {
@@ -248,7 +259,7 @@ export class CardsortStudiesComponent implements OnInit {
             err => alert("Error: " + err)
           );
 
-        let subs: Array<Observable<void>> = [];
+        let testsToImport: Array<ICardSortTest> = [];
 
         for(let study of json["tests"]) {
           let exclude = false;
@@ -265,10 +276,11 @@ export class CardsortStudiesComponent implements OnInit {
             excluded: exclude,
           };
 
-          subs.push(this.cardSortTestSerice.add(temp));
+          testsToImport.push(temp);
         }
-
-        forkJoin(subs).subscribe(res => this.getAllCardSortTests());
+        this.cardSortTestSerice
+          .addMultiple(testsToImport)
+          .subscribe(res => this.getAllCardSortTests());
       };
 
       fileReader.readAsText(input.files[0]);

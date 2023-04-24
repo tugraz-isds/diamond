@@ -59,6 +59,10 @@ export class CardSortTestService {
     return this.http.post<void>(`${this.apiUrl}/add`, cardSortTest);
   }
 
+  addMultiple(cardSortTests: Array<ICardSortTest>): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/add-multiple`, cardSortTests);
+  }
+
   mindset(username: string, mindset: string): Observable<void> {
     const payload: IMindsetRequest = {
       username,
