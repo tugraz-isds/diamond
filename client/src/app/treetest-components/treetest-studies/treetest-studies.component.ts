@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { saveAs } from 'file-saver'
 import { IParticipant, ITreetestStudy, ITreetestStudyEdit, TreetestStudyService } from '../treetest-study.service';
 import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
-
+import * as bytes from 'bytes';
 
 declare var $: any;
 
@@ -215,7 +215,12 @@ export class TreetestStudiesComponent implements OnInit {
         return;
       }
 
-      // TODO: check file size
+      const maxFileSize = bytes(MAX_REQUEST_PAYLOAD_SIZE);
+
+      if (fileToRead.size >= maxFileSize) {
+        alert(`Filesize ${bytes(fileToRead.size)} exceeds limit of ${bytes(maxFileSize)}!`);
+        return;
+      }
 
       const fileReader = new FileReader();
       let json = null;

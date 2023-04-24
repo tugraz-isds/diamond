@@ -4,8 +4,8 @@ import { saveAs } from 'file-saver'
 import { AuthenticationService, ILoginResponse } from '../../authentification.service';
 import { CardSortStudyService, ICardSortStudy, ICardSortStudyEdit } from '../card-sort-study.service';
 import { CardSortTestService, ICardSortTest } from '../card-sort-test.service';
-import { forkJoin, Observable } from 'rxjs';
 import { IParticipant } from 'src/app/treetest-components/treetest-study.service';
+import * as bytes from 'bytes';
 
 declare var $: any;
 
@@ -222,7 +222,12 @@ export class CardsortStudiesComponent implements OnInit {
         return;
       }
 
-      // TODO: check file size
+      const maxFileSize = bytes(MAX_REQUEST_PAYLOAD_SIZE);
+
+      if (fileToRead.size >= maxFileSize) {
+        alert(`Filesize ${bytes(fileToRead.size)} exceeds limit of ${bytes(maxFileSize)}!`);
+        return;
+      }
 
       const fileReader = new FileReader();
       let json = null;
