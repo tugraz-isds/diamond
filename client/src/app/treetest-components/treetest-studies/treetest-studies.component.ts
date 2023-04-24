@@ -6,9 +6,11 @@ import { Router } from '@angular/router';
 import { saveAs } from 'file-saver'
 import { IParticipant, ITreetestStudy, ITreetestStudyEdit, TreetestStudyService } from '../treetest-study.service';
 import { ITreetestTest, TreetestTestService } from '../treetest-test.service';
-import { forkJoin, Observable } from 'rxjs';
+
 
 declare var $: any;
+
+declare const MAX_REQUEST_PAYLOAD_SIZE: string;
 
 @Component({
   selector: 'app-tests',
@@ -26,6 +28,8 @@ export class TreetestStudiesComponent implements OnInit {
   public deleteTestId: string;
 
   private baseurl: string;
+
+  public maxRequestPayloadSize = MAX_REQUEST_PAYLOAD_SIZE;
 
   //number of participants for each study
   public numberParticipants: Array<IParticipant> = [];

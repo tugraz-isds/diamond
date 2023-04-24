@@ -9,6 +9,8 @@ import { IParticipant } from 'src/app/treetest-components/treetest-study.service
 
 declare var $: any;
 
+declare const MAX_REQUEST_PAYLOAD_SIZE: string;
+
 @Component({
   selector: 'app-tests',
   templateUrl: './cardsort-studies.component.html',
@@ -27,6 +29,8 @@ export class CardsortStudiesComponent implements OnInit {
   public numberParticipants: Array<IParticipant> = [];
 
   private currentUser: ILoginResponse;
+
+  public maxRequestPayloadSize = MAX_REQUEST_PAYLOAD_SIZE;
 
   constructor(
     private cardSortStudyService: CardSortStudyService,
@@ -217,6 +221,8 @@ export class CardsortStudiesComponent implements OnInit {
         alert("File extension is wrong! Please provide .json file.");
         return;
       }
+
+      // TODO: check file size
 
       const fileReader = new FileReader();
       let json = null;

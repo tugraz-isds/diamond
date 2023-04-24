@@ -7,3 +7,12 @@
 table td {
     vertical-align: middle;
 }
+
+.study-action-buttons {
+  display: flex;
+  align-items: baseline;
+}
+
+.study-action-buttons .hint {
+  font-size: 0.6em;
+}

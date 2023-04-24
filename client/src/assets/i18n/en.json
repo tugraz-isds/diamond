@@ -67,6 +67,7 @@
     "link": "Use this link to share the study with participants. The link will be inactive until you launch the study.",
     "login": "Login",
     "logout": "Logout",
+    "maxfilesize": "Max. allowed filesize is",
     "messages": "Messages",
     "nextstep": "Next Step",
     "newcardstudy": "New Card Sorting Study",
