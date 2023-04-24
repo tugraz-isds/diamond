@@ -211,6 +211,8 @@ export class TreetestStudiesComponent implements OnInit {
         return;
       }
 
+      // TODO: check file size
+
       const fileReader = new FileReader();
       let json = null;
 
@@ -250,7 +252,8 @@ export class TreetestStudiesComponent implements OnInit {
             err => alert("Error: " + err)
           );
 
-        let subs: Array<Observable<void>> = [];
+        let testsToImport: Array<ITreetestTest> = [];
+
 
         for(let test of json["tests"]){
           let exclude = false;
@@ -266,10 +269,13 @@ export class TreetestStudiesComponent implements OnInit {
             excluded: exclude,
           };
 
-          subs.push(this.treetestTestService.add(temp));
+          testsToImport.push(temp);
         }
 
-        forkJoin(subs).subscribe(res => this.getAllTests());
+        this.treetestTestService
+          .addMultiple(testsToImport)
+          .subscribe(res => this.getAllTests());
+
       };
 
       fileReader.readAsText(input.files[0]);

@@ -11,6 +11,7 @@ module.exports = {
     // Tree Test
     getTreeTestsById,
     saveTreeTests,
+    saveMultipleTreeTests,
     editTreeTest,
     saveTreeTestFeedback,
 
@@ -157,6 +158,9 @@ async function saveTreeTests(resultParam) {
     await treeTests.save();
 }
 
+async function saveMultipleTreeTests(resultParams) {
+  await Promise.all(resultParams.map(item => saveTreeTests(item)));
+}
 
 async function addTreeStudy(testParam) {
     const treeStudy = new TreeTestStudy(testParam);

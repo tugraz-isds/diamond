@@ -24,6 +24,7 @@ router.post('/tree-study/delete', deleteTreeStudy);
 router.post('/tree-study/getbyuserid', getAllTreeStudies);
 // Tree Tests
 router.post('/tree-tests/add', saveTreeTests);
+router.post('/tree-tests/add-multiple', saveMultipleTreeTests);
 router.post('/tree-tests/feedback', saveTreeTestFeedback);
 router.post('/tree-tests/get/:id', getTreeTestsById);
 router.post('/tree-tests/delete', deleteIndividualTreeTest);
@@ -114,6 +115,12 @@ function saveTreeTests(req, res, next) {
     userService.saveTreeTests(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
+}
+
+function saveMultipleTreeTests(req, res, next) {
+  userService.saveMultipleTreeTests(req.body)
+    .then(() => res.json({}))
+    .catch(err => next(err));
 }
 
 function saveTreeTestFeedback(req, res, next) {

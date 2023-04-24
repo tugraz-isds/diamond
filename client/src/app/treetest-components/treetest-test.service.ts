@@ -52,6 +52,10 @@ export class TreetestTestService {
     return this.http.post<void>(`${this.apiUrl}/add`, treetestTest);
   }
 
+  addMultiple(treetestTests: Array<ITreetestTest>): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/add-multiple`, treetestTests);
+  }
+
   update(treetestTest: ITreetestTest): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/edit`, treetestTest);
   }
