@@ -114,6 +114,7 @@
     "taskanalysis": "Task Analysis",
     "tasknumbers": "Show task numbers to users",
     "tasks": "Tasks",
+    "taskscant": "Tasks can not be changed after running the study!",
     "taskscompleted": "Tasks Completed",
     "tasksskipped": "Tasks Skipped",
     "taskscorrect": "Tasks Correct",

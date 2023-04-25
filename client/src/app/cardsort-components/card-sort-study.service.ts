@@ -12,6 +12,7 @@ export interface ICardSortStudy {
   name: string;
   password?: string;
   launched: boolean;
+  isLocked?: boolean;
   id: string;
   createdDate?: string;
   cards: Array<any>;
@@ -32,6 +33,7 @@ export interface ICardSortStudyEdit {
   name?: string;
   password?: string;
   launched?: boolean;
+  isLocked?: boolean;
   id: string;
   createdDate?: string;
   cards?: Array<any>;

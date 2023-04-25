@@ -105,6 +105,7 @@ export class TreetestStudiesComponent implements OnInit {
     const data: ITreetestStudyEdit = {
       id: studyId,
       launched: true,
+      isLocked: true,
       lastLaunched: new Date()
     };
 
@@ -130,6 +131,7 @@ export class TreetestStudiesComponent implements OnInit {
     const data: ITreetestStudyEdit = {
       id: studyId,
       launched: false,
+      isLocked: true,
       lastEnded: new Date()
     };
 
@@ -158,6 +160,7 @@ export class TreetestStudiesComponent implements OnInit {
     variant.lastEnded = new Date();
     variant.lastLaunched = new Date();
     variant.id = this.generateRandomStudyId();
+    variant.isLocked = false;
 
     this.treetestStudyService
       .add(variant)
@@ -247,11 +250,16 @@ export class TreetestStudiesComponent implements OnInit {
             orderNumbers: json["orderNumbers"],
             lastEnded: new Date(),
             lastLaunched: new Date(),
+            isLocked: json["isLocked"],
             isLaunchable: launchable
           };
         } catch (e) {
           alert(`Error while importing!\n${e.message}`);
           return;
+        }
+
+        if (study.isLocked === undefined) {
+          study.isLocked = json["tests"] !== undefined && json["tests"].length > 0;
         }
 
         this.treetestStudyService

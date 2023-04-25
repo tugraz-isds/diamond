@@ -201,6 +201,15 @@ async function treeStudyPassword(body) {
 async function getTreeStudy(id) {
 
     const study = await TreeTestStudy.find({ "id" : id });
+
+    if (study?.length > 0 && study[0].isLocked === undefined) {
+      console.log(`Check isLocked flag for tree test study: ${id}`);
+      const numberOfResults = await TreeTestTest.countDocuments({ "id" : id });
+      console.log(`Number of tests: ${numberOfResults}`);
+      study[0].isLocked = numberOfResults > 0;
+      await study[0].save();
+    }
+
     return study;
 }
 
@@ -257,6 +266,9 @@ async function editTreeStudy(updatedTest) {
     }
     if(updatedTest.lastLaunched){
         treeStudy[0].lastLaunched = updatedTest.lastLaunched
+    }
+    if(updatedTest.hasOwnProperty('isLocked')){
+      treeStudy[0].isLocked = updatedTest.isLocked
     }
     if(updatedTest.lastEnded){
         treeStudy[0].lastEnded = updatedTest.lastEnded
