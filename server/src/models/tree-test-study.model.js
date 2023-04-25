@@ -5,6 +5,7 @@ const treeStudySchema = new Schema({
     name: { type: String, unique: false, required: true },
     password: { type: String, unique: false, required: false },
     launched: { type: Boolean, unique: false, required: true },
+    isLocked: { type: Boolean, unique: false, required: false },
     id: { type: String, unique: true, required: true },
     createdDate: { type: Date, default: Date.now },
     tree: { type: Array, required: true },

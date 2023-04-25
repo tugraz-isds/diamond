@@ -258,6 +258,9 @@ async function editTreeStudy(updatedTest) {
     if(updatedTest.lastLaunched){
         treeStudy[0].lastLaunched = updatedTest.lastLaunched
     }
+    if(updatedTest.hasOwnProperty('isLocked')){
+      treeStudy[0].isLocked = updatedTest.isLocked
+    }
     if(updatedTest.lastEnded){
         treeStudy[0].lastEnded = updatedTest.lastEnded
     }

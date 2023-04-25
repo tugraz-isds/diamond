@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService, ILoginResponse } from 'src/app/authentification.service';
 import { EditComponent } from 'src/app/guard';
-import { IJstreeNode, IJstreeNodeAlt, ITreetestStudy, ITreetestTask, TreetestStudyService } from '../treetest-study.service';
+import { IJstreeNodeAlt, ITreetestStudy, ITreetestTask, TreetestStudyService } from '../treetest-study.service';
+import { TreetestTestService } from '../treetest-test.service';
 
 declare var $: any;
 
@@ -33,6 +34,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   public orderNumbers = true;
 
   public canSave = false;
+  public isLocked: boolean = false;
 
   private csvContent: string;
   public baseurl: string = '';
@@ -43,6 +45,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
 
   constructor(
     private treetestStudyService: TreetestStudyService,
+    private treetestTestService: TreetestTestService,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthenticationService
@@ -53,6 +56,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
     this.baseurl = location.origin;
     this.currentUser = this.authService.getCurrentUser();
     if (this.id) {
+      this.isLocked = true;
       this.treetestStudyService
         .get(this.id)
         .subscribe(res => {
@@ -64,16 +68,25 @@ export class CreateTestComponent implements OnInit, EditComponent {
           this.instructions = res.instructions;
           this.thankYouScreen = res.thankYouScreen;
           this.leaveFeedback = res.leaveFeedback;
+          this.isLocked = res.isLocked;
           if (res.leafNodes !== undefined) {
             this.leafNodes = res.leafNodes;
             this.orderNumbers = res.orderNumbers;
           }
+
+          // check isLocked flag -> we are in edit study mode
+          if (!res.hasOwnProperty('isLocked') || res.isLocked === null) {
+            this.isLocked = true;
+          }
+
           this.originalTest = this.createTestData();
         });
 
       // get it from database
       this.randomTestId = this.id;
       // this.testName = t
+
+
     } else {
         const arrayCollection: Array<IJstreeNodeAlt> = [{
           id: 'root',
@@ -370,6 +383,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   }
 
   saveAnswer(): void {
+    if (this.isLocked) return;
     const selected = ($('#test-tree-answer').jstree('get_selected', true))[0];
     this.tasks[this.currentTaskIndex].answer = selected.text;
     this.tasks[this.currentTaskIndex].id = selected.id;
@@ -390,6 +404,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   }
 
   addTask(): void {
+    if (this.isLocked) return;
     const task: ITreetestTask = {
       text: `Where would you expect to find ... ?`,
       answer: '',
@@ -399,6 +414,7 @@ export class CreateTestComponent implements OnInit, EditComponent {
   }
 
   deleteTask(index: number): void {
+    if (this.isLocked) return;
     this.tasks.splice(index, 1);
   }
 
@@ -428,7 +444,8 @@ export class CreateTestComponent implements OnInit, EditComponent {
       orderNumbers: this.orderNumbers,
       lastEnded: new Date(),
       lastLaunched: new Date(),
-      isLaunchable: launchable
+      isLaunchable: launchable,
+      isLocked: false
     };
   }
 

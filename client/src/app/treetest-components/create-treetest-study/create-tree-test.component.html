@@ -67,22 +67,27 @@
       <div id="tasks" class="mt-30 tab-pane fade">
         <div class="col-sm-4">
           <p>{{ "tasks" | translate }}</p>
+
+          <div class="color-red" *ngIf="isLocked">
+            {{ "taskscant" | translate }}
+          </div>
+
           <div *ngFor="let t of tasks; let i = index;" class="row mt-30">
             <div (click)="setIndex(i)" [ngClass]="{'selected-task': i === currentTaskIndex}" class="task col-sm-12">
               <div class="pull-left mt-10">{{i+1}}.</div>
-              <span (click)="deleteTask(i)" class="mt-10 pointer pull-right glyphicon glyphicon-trash"></span>
-              <textarea (click)="setIndex(i)" class="mt-10" rows="4" placeholder="Where would you expect to find ... ?" [(ngModel)]="tasks[i].text">
+              <span *ngIf="!isLocked" (click)="deleteTask(i)" class="mt-10 pointer pull-right glyphicon glyphicon-trash"></span>
+              <textarea [disabled]="isLocked" (click)="setIndex(i)" class="mt-10" rows="4" placeholder="Where would you expect to find ... ?" [(ngModel)]="tasks[i].text">
               </textarea>
               <div *ngIf="!tasks[i].answer" class="mb-10">{{ "selectcorrect" | translate }}</div>
               <div *ngIf="tasks[i].answer" class="mb-10">{{ "selectedanswer" | translate }}: <b>{{tasks[i].answer}}</b></div>
             </div>
           </div>
-          <button type="button" class="mt-20 btn btn-primary" (click)="addTask()">{{ "addtask" | translate }}</button>
+          <button [disabled]="isLocked" type="button" class="mt-20 btn btn-primary" (click)="addTask()">{{ "addtask" | translate }}</button>
 
           <div>
-            <button *ngIf="!isEditMode" type="button" class="btn btn-primary mt-30" (click)="open('messages');">{{ "nextstep" | translate }}</button>
-            <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "save" | translate }}</button>
-            <button *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
+            <button [disabled]="isLocked" *ngIf="!isEditMode" type="button" class="btn btn-primary mt-30" (click)="open('messages');">{{ "nextstep" | translate }}</button>
+            <button [disabled]="isLocked" *ngIf="isEditMode" type="button" class="btn btn-primary mt-30" (click)="saveTest(false);">{{ "save" | translate }}</button>
+            <button type="button" class="btn btn-primary mt-30" (click)="cancel();">{{ "cancel" | translate }}</button>
           </div>
         </div>
         <div class="col-sm-6 col-sm-offset-1">

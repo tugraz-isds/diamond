@@ -49,6 +49,7 @@ export interface ITreetestStudy {
   name: string;
   password?: string;
   launched?: boolean;
+  isLocked?: boolean;
   id: string;
   createdDate?: string;
   tree: Array<IJstreeNodeAlt>;
@@ -73,6 +74,7 @@ interface ITreetestStudyRequest {
 export interface ITreetestStudyEdit {
   id: string;
   launched?: boolean;
+  isLocked?: boolean;
   lastLaunched?: Date;
   lastEnded?: Date;
 }
