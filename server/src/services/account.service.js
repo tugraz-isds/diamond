@@ -201,6 +201,15 @@ async function treeStudyPassword(body) {
 async function getTreeStudy(id) {
 
     const study = await TreeTestStudy.find({ "id" : id });
+
+    if (study?.length > 0 && study[0].isLocked === undefined) {
+      console.log(`Check isLocked flag for tree test study: ${id}`);
+      const numberOfResults = await TreeTestTest.countDocuments({ "id" : id });
+      console.log(`Number of tests: ${numberOfResults}`);
+      study[0].isLocked = numberOfResults > 0;
+      await study[0].save();
+    }
+
     return study;
 }
 
