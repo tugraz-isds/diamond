@@ -22,6 +22,7 @@
         "rootpath": "^0.1.2"
     },
     "devDependencies": {
-        "rimraf": "^4.4.0"
+        "rimraf": "^4.4.0",
+        "git-describe": "^4.1.1"
     }
 }
