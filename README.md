@@ -1,5 +1,5 @@
 
-# Diamond - A Card-Sorting and Tree-Testing Application
+# Diamond - A Web Application for Card Sorting and Tree Testing
 
 
 
@@ -14,42 +14,47 @@ its frontend, Node.js as its server, and MongoDB as its database.
 ## Features
 
 - Registration and login.
-- Create/edit/delete a study.
-- Import an information hierarchy (tree) or set of cards as CSV.
-- Launch/unlaunch a study.
+- Create, edit, and delete a study.
+- Import an information hierarchy (for tree testing) or set of cards
+  (for card sorting) as CSV.
+- Launch and stop a study.
 - Perform a study.
-- Analyse/view study results.
+- View and analyse study results.
 - Export study results as CSV.
 
 
 
 ## Requirements
 
-- [MongoDB Atlas](https://www.mongodb.com/atlas/database)
-- NodeJS Webhosting [Cyclic.sh](https://www.cyclic.sh/)
+- GitHub account, at [github.com](https://github.com/).
+
+- MongoDB database host (v4 or higher), say at MongoDB Atlas
+  [https://mongodb.com/atlas/](https://mongodb.com/atlas/).
+
+- NodeJS web host (v16), say at Cyclic [https://cyclic.sh/](https://cyclic.sh/).
 
 
 
 ## Deploying Diamond
 
-In order to deploy Diamond to a remote server, it is necessary that
-the server supports Node.js v16 and MongoDB v4 or higher.
+In order to run a tree test or card sorting study, it is necessary to
+set up and self-host a Diamond server. The steps required are
+described here.
 
-We recommend to use [Cyclic.sh](https://www.cyclic.sh/) for hosting 
-the frontend and backend of Diamond. As a database provider, we 
-recommend [MongoDB Atlas](https://www.mongodb.com/atlas/database). Both
-offer a free-tier plan and are more than sufficient to run studies with
-Diamond.
-
-Follow the following steps in the exact order to setup and deploy Diamond:
-
+First, as noted above, it is necessary to have a provider (host) for
+both a MongoDB database and a NodeJS web application.  We recommend
+using [Cyclic](https://cyclic.sh/) for hosting the Diamond web
+application. As a database provider, we recommend [MongoDB
+Atlas](https://mongodb.com/atlas/database). Both offer a free-tier
+plan and are more than sufficient to run studies with Diamond.
 
 
-### 1. Setup a MongoDB Atlas Cluster
-More detailed and instructions on how to setup a free-tier MongoDB cluster can be found [here](https://www.mongodb.com/docs/atlas/getting-started/).
+Follow the steps below to setup and deploy Diamond:
 
-- Sign up to MongoDB Atlas or use your Github account.
-- After signup, you will be redirected to Atlas' dashboard.
+### 1. Set Up a MongoDB Atlas Cluster
+
+- Sign up to MongoDB Atlas at [https://mongodb.com/atlas/](https://mongodb.com/atlas/).
+- After signup, you will be redirected to the Atlas dashboard.
 - Click ```Build Database``` to create a new MongoDB database.
 - Choose the ```Shared``` deployment option.
 - Select the cloud provider and region of your choice. Defaults are fine.
@@ -64,59 +69,99 @@ More detailed and instructions on how to setup a free-tier MongoDB cluster can b
 - Here, you will find all created MongoDB clusters.
 - Click the ```Connect``` button next to the newly created cluster.
 - A modal window will pop up. Choose ```Connect to your application > Drivers```.
-- Copy and save the connection string.
+- Copy and save the database connection string.
+
+More detailed instructions on setting up a free-tier MongoDB cluster
+can be found at
+[https://mongodb.com/docs/atlas/getting-started/](https://mongodb.com/docs/atlas/getting-started/).
 
 
 
-### 2. Setup Cyclic.sh
+### 2. Set Up Deployment at Cyclic
 
-- Create a fork of the official Diamond Github repository
-- Sign up to Cyclic.sh or use our Github account.
+- Create a fork of the official Diamond GitHub repository
+  [https://github.com/tugraz-isds/diamond](https://github.com/tugraz-isds/diamond).
+
+- Sign up to Cyclic.sh using your GitHub account.
+
 - After signup, you will be redirected to Cyclic's dashboard.
-- Next, you need to connect your forked Diamond Github repository to your Cyclic acount. A detailed explanation can also be found [here](https://docs.cyclic.sh/how-to/add-private-repository).
-- Choose tab ```Link yout own```
-- Use the searchbar to search for your forked Diamond Github repository
+
+- Next, connect your forked Diamond Github repository to your Cyclic
+  acount:
+
+  + Choose tab ```Link your own```
+
+  + Use the search bar to search for your forked Diamond Github repository.
+
+  More information can be found at
+  [https://docs.cyclic.sh/how-to/add-private-repository]
+  (https://docs.cyclic.sh/how-to/add-private-repository).
+
 - On the next screen, click ```Advanced``` to specify the following build options:
   + Root Path: ```/server```
   + Output Path: ```/```
   + Static Site: ```No``` 
   + Runtime: ```Node 16.16.0``` (any Node 16 version is fine)
   + Branch: ```main```
+
 - Click ```Connect```.
-- Next select your forked Diamond Github repository to approve and install Cyclic's Github app. Default permissions are fine.
+
+- Next, select your forked Diamond Github repository to approve and
+  install Cyclic's Github app. The default permissions are fine.
+
 - Click ```Approve & Install```.
-- Now, Cyclic will build, deploy and run Diamond.
-- Next, go to the dashboard and choose the tab ```Variables```.
-- Specify the following environment variables:
-  + ADMIN_EMAIL: Email or username of Diamond's admin user
-  + ADMIN_PWD: Password of Diamond's admin user
-  + MAX_REQUEST_PAYLOAD_SIZE: 6mb
-  + DB_CONNECTION_URL: Connection string to your MongoDB Atlas server. ( As copied and saved during your MongoDB Atlas setup.)
+
+- Now, Cyclic will build, deploy, and run Diamond.
+  Before Diamond can be used, however, it is first necessary to configure
+  the environment variables.
+
+- Go to the dashboard and choose the tab ```Variables``` and specify
+  the following environment variables:
+  + ADMIN_EMAIL: Email (or user name) of Diamond's admin user.
+  + ADMIN_PWD: Password of Diamond's admin user.
+  + MAX_REQUEST_PAYLOAD_SIZE: 6mb (limit of Cyclic).
+  + DB_CONNECTION_URL: The database connection string to your MongoDB Atlas server
+    (as copied and saved during MongoDB Atlas setup).
+
+  The admin user is only created if it does not already exist.
+
 - Click ```Save``` to save your environment variables.
+
 - Next, chose the tab ```Deployments```.
-- Click ```Redeploy``` to restart Diamond, to use the new environment variables.
+
+- Choose the most recent deployment in the list, click ```Details```
+  and then select ```Redeploy``` to redeploy Diamond with the latest
+  environment variables.
+
 - Setup is now finished.
+
+- Optionally, a custom subdomain can be set via the tab ```Environments```.
+
 - Use the button ```Open App``` to access Diamond.
-- The URL can be found in the tab ```Overview```.
-- Optionally, a custom subdomain can be set via the tab ```Advanced``` using the custom domain settings.
 
+- The URLs associated with the deployment can be found in the tab
+  ```Overview```.
 
-[![Deploy to Cyclic](https://deploy.cyclic.sh/button.svg)](https://deploy.cyclic.sh/)
 
 
 ## Troubleshooting
 
-- Browser shows Error: The application failed to start. 
-- Error logs can be found in Cyclic's dashboard via tab ```Logs```
-- Database connection error:
-  + Check if the connection string is correct and your MongoDB is active and running
-  + MongoDB Atlas often pauses the database cluster due to inactivity.
-  + Login to MongoDB Atlas and manually activate your database cluster.
-  + Redeploy Diamond on Cyclic via the dashboard using the tab ```Deployments``` and clicking ```Redeploy``` on the latest deployment.
+- Browser shows “Error: The application failed to start.” 
+
+  + Consult the Cyclic error logs in the tab ```Logs```.
+
+  + If there is a database connection error:
+    * Check that the database connection string is correct and your MongoDB is active and running.
+    * MongoDB Atlas sometimes pauses the database cluster due to inactivity.
+    * Log in to MongoDB Atlas and manually activate your database cluster.
+    * Redeploy Diamond on Cyclic via the dashboard using the tab ```Deployments```
+      and clicking ```Details``` and ```Redeploy``` on the latest deployment.
+
 
 
 ## Developer Guide
-A developer Guide can be found in the [README-dev.md](https://github.com/tugraz-isds/diamond/blob/main/README-dev.md) file.
+A Developer Guide can be found in the [README-dev.md](https://github.com/tugraz-isds/diamond/blob/main/README-dev.md) file.
+
 
 ## Contributors
 
