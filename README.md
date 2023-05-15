@@ -1,5 +1,5 @@
 
-# Diamond - A Card-sorting and Tree-testing Application
+# Diamond - A Card-Sorting and Tree-Testing Application
 
 
 
@@ -90,6 +90,7 @@ More detailed and instructions on how to setup a free-tier MongoDB cluster can b
 - Specify the following environment variables:
   + ADMIN_EMAIL: Email or username of Diamond's admin user
   + ADMIN_PWD: Password of Diamond's admin user
+  + MAX_REQUEST_PAYLOAD_SIZE: 6mb
   + DB_CONNECTION_URL: Connection string to your MongoDB Atlas server. ( As copied and saved during your MongoDB Atlas setup.)
 - Click ```Save``` to save your environment variables.
 - Next, chose the tab ```Deployments```.
@@ -97,10 +98,25 @@ More detailed and instructions on how to setup a free-tier MongoDB cluster can b
 - Setup is now finished.
 - Use the button ```Open App``` to access Diamond.
 - The URL can be found in the tab ```Overview```.
+- Optionally, a custom subdomain can be set via the tab ```Advanced``` using the custom domain settings.
 
 
 [![Deploy to Cyclic](https://deploy.cyclic.sh/button.svg)](https://deploy.cyclic.sh/)
 
+
+## Troubleshooting
+
+- Browser shows Error: The application failed to start. 
+- Error logs can be found in Cyclic's dashboard via tab ```Logs```
+- Database connection error:
+  + Check if the connection string is correct and your MongoDB is active and running
+  + MongoDB Atlas often pauses the database cluster due to inactivity.
+  + Login to MongoDB Atlas and manually activate your database cluster.
+  + Redeploy Diamond on Cyclic via the dashboard using the tab ```Deployments``` and clicking ```Redeploy``` on the latest deployment.
+
+
+## Developer Guide
+A developer Guide can be found in the README-dev.md file.
 
 ## Contributors
 
