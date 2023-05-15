@@ -3,7 +3,9 @@
   "version": "2.0.0",
   "description": "Diamond Frontend Application",
   "scripts": {
+    "postinstall": "cd .. && node extract-version-info.js",
     "start": "ng serve --extra-webpack-config webpack.partial.js",
+    "prebuild": "cd .. && node extract-version-info.js",
     "build": "ng build -c production --extra-webpack-config webpack.partial.js"
   },
   "private": true,
@@ -41,6 +43,7 @@
     "@angular/language-service": "^15.2.2",
     "@types/d3": "^7.4.0",
     "dotenv": "^16.0.3",
+    "git-describe": "^4.1.1",
     "typescript": "~4.9.5"
   }
 }

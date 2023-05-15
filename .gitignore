@@ -14,7 +14,7 @@
 /bazel-out
 
 # version info output
-/src/environments/version.ts
+/client/src/environments/version.ts
 git-commit-hash.txt
 
 # dependencies
