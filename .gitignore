@@ -15,6 +15,7 @@
 
 # version info output
 /client/src/environments/version.ts
+/client/src/environments/version-info.ts
 git-commit-hash.txt
 
 # dependencies

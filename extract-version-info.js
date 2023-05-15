@@ -5,7 +5,7 @@ const { version } = require('./package.json');
 
 const REPO_ABSPATH = __dirname;
 const GIT_HASH_ABSPATH = path.join(REPO_ABSPATH, '/git-commit-hash.txt');
-const VERSION_FILE_ABSPATH = path.join(REPO_ABSPATH, '/client/src/environments/version.ts');
+const VERSION_FILE_ABSPATH = path.join(REPO_ABSPATH, '/client/src/environments/version-info.ts');
 
 let gitInfo = {};
 let gitFailed = false;
@@ -39,7 +39,7 @@ gitInfo.version = version;
 
 console.log(JSON.stringify(gitInfo, null, 4));
 
-const fileContent = `export const VERSION = ${JSON.stringify(gitInfo, null, 4)};\r\n`;
+const fileContent = `export const VERSION_INFO = ${JSON.stringify(gitInfo, null, 4)};\r\n`;
 
 fs.writeFileSync(VERSION_FILE_ABSPATH, fileContent);
 

@@ -42,6 +42,7 @@ import { datePipe } from './pipes/datePipe.pipe';
 import { StudyClosedComponent } from './study-closed/study-closed.component';
 import { AuthGuard } from './auth.guard';
 import { AuthRedirectGuard } from './auth-redirect.guard';
+import { FooterComponent } from './footer/footer.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent, canActivate: [ AuthGuard ]},
@@ -85,7 +86,8 @@ const appRoutes: Routes = [
     SortingComponent,
     participantsFilterPipe,
     datePipe,
-    StudyClosedComponent
+    StudyClosedComponent,
+    FooterComponent
   ],
   imports: [
     HttpClientModule,
