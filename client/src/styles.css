@@ -7,4 +7,25 @@
 }
 
 
+html, body, app-root {
+  height: 100%;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.diamond-page {
+  flex: 1 0 auto;
+}
+
+.diamond-footer {
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  flex-shrink: 0;
+}
+
+
+
 

@@ -8,6 +8,7 @@
     "server"
   ],
   "scripts": {
+    "postinstall": "node extract-version-info.js",
     "start": "npm start --workspace server",
     "build": "npm run build --workspace client"
   },
