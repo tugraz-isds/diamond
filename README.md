@@ -116,7 +116,7 @@ More detailed and instructions on how to setup a free-tier MongoDB cluster can b
 
 
 ## Developer Guide
-A developer Guide can be found in the README-dev.md file.
+A developer Guide can be found in the [README-dev.md](https://github.com/tugraz-isds/diamond/blob/main/README-dev.md) file.
 
 ## Contributors
 
