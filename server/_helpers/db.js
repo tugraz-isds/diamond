@@ -9,6 +9,8 @@ const database_connection_url = process.env.DB_CONNECTION_URL || 'mongodb://loca
 mongoose.connect(database_connection_url, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.Promise = global.Promise;
 
+
+
 module.exports = {
     Account: require('../src/models/account.model'),
     TreeTestStudy: require('../src/models/tree-test-study.model'),

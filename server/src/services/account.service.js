@@ -47,7 +47,7 @@ module.exports = {
     authenticate,
     getAll,
     getById,
-    create,
+    create: _create,
     update,
     delete: _delete
 };
@@ -78,9 +78,10 @@ async function getById(id) {
     return await Account.findById(id).select('-hash');
 }
 
-async function create(userParam) {
+async function _create(userParam) {
     // validate
     if (await Account.findOne({ email: userParam.email })) {
+        console.log('email "' + userParam.email + '" is already taken');
         throw 'email "' + userParam.email + '" is already taken';
     }
 

@@ -120,6 +120,7 @@ can be found at
   + ADMIN_EMAIL: Email (or user name) of Diamond's admin user.
   + ADMIN_PWD: Password of Diamond's admin user.
   + MAX_REQUEST_PAYLOAD_SIZE: 6mb (limit of Cyclic).
+  + NPM_CONFIG_CACHE: /tmp/.npm
   + DB_CONNECTION_URL: The database connection string to your MongoDB Atlas server
     (as copied and saved during MongoDB Atlas setup).
 
