@@ -72,6 +72,9 @@ export class TreeNode {
       pathPoint.node = this.root.findNodeById(clicks[0].id);
       pathPoint.direction = 'out';
     }
+    if (!pathPoint.node) {
+      return [];
+    }
     return [pathPoint, ...pathPoint.node.retrievePath(clicks.slice(1))];
   }
 
