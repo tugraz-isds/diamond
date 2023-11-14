@@ -1,9 +1,0 @@
-.dm-active-lang a {
-    opacity: 1;
-    font-weight: bold;
-}
-
-.navbar-nav a.highlighted {
-    text-decoration: underline;
-    font-weight: bolder;
-}
