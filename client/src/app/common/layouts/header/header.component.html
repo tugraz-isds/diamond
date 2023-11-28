@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+
+  <span>Diamond</span>
+
+  <nav *ngIf="mainNavMenuItems" class="dia-main-nav">
+    <a *ngFor="let navItem of mainNavMenuItems" mat-button routerLinkActive="dia-active-link" [routerLink]="navItem.path">{{navItem.label}}</a>
+  </nav>
+
+  <span class="dia-spacer"></span>
+
+  <nav *ngIf="secondaryNavMenuItems" class="dia-main-nav">
+    <a *ngFor="let navItem of secondaryNavMenuItems" mat-button routerLinkActive="dia-active-link" [routerLink]="navItem.path">{{navItem.label}}</a>
+  </nav>
+
+  <!-- TODO: Language Selector -->
+
+  <nav>
+    <button mat-button (click)="logout()">Logout</button>
+  </nav>
+
+</mat-toolbar>
