@@ -13,8 +13,12 @@
   </nav>
 
   <!-- TODO: Language Selector -->
-
   <nav>
+    <button mat-button>EN</button>
+    <button mat-button>DE</button>
+  </nav>
+
+  <nav *ngIf="isLoggedIn()">
     <button mat-button (click)="logout()">Logout</button>
   </nav>
 

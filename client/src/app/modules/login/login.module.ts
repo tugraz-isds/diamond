@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/common/material.module';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { DefaultLayoutComponent } from 'src/app/common/layouts/default/default-layout.component';
 
 @NgModule({
   declarations: [
@@ -17,10 +18,16 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
     RouterModule.forChild([
       {
         path: '',
-        component: LoginPageComponent
-      }, {
-        path: '**',
-        redirectTo: ''
+        component: DefaultLayoutComponent,
+        children: [
+          {
+            path: '',
+            component: LoginPageComponent
+          }, {
+            path: '**',
+            redirectTo: ''
+          }
+        ]
       }
     ])
   ]

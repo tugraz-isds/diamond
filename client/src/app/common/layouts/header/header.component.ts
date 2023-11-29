@@ -19,10 +19,7 @@ export class HeaderComponent implements OnInit {
     { path: '/card-sorting', label: 'Card Sorting' }
   ];
 
-  public secondaryNavMenuItems: Array<INavMenuItem> = [
-    { path: '/admin', label: 'Admin Panel' },
-    { path: '/profile', label: 'My Profile' }
-  ];
+  public secondaryNavMenuItems: Array<INavMenuItem> = [];
 
   constructor(
     private authService: AuthenticationService,
@@ -34,7 +31,16 @@ export class HeaderComponent implements OnInit {
   }
 
   setupMainNav(): void {
+    if ( this.authService.isLoggedIn() ) {
+     this.secondaryNavMenuItems = [
+      { path: '/admin', label: 'Admin Panel' },
+      { path: '/profile', label: 'My Profile' }
+     ];
+    }
+  }
 
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   logout(): void {
