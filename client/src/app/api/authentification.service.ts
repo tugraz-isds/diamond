@@ -23,7 +23,7 @@ export class AuthenticationService {
 
   private static CURRENT_USER_KEY = 'diamond-current-user';
 
-  private currentUser: ILoginResponse | undefined;
+  private currentUser: ILoginResponse;
 
   private apiUrl = `${environment.apiUrl}/users`;
 
@@ -73,14 +73,14 @@ export class AuthenticationService {
       }
     }
 
-    getAccessToken(): string | undefined {
+    getAccessToken(): string {
       if (!this.currentUser) {
         this.loadCurrentUser();
       }
       return this.currentUser?.token;
     }
 
-    getCurrentUser(): ILoginResponse | undefined {
+    getCurrentUser(): ILoginResponse {
       if (!this.currentUser) {
         this.loadCurrentUser();
       }

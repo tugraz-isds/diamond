@@ -171,8 +171,17 @@ async function addTreeStudy(testParam) {
 
 async function getAllTreeStudies(data) {
 
-    const treeStudy = await TreeTestStudy.find({ "user" : data.user })
-    return treeStudy;
+    const treeStudy = await TreeTestStudy.find({ "user" : data.user }).lean();
+
+    const studies = treeStudy;
+
+    // TODO: get number of participants
+    for (let study of studies) {
+      const treeTest = await TreeTestTest.find({ "id" : study.id });
+      study.participants = treeTest.length;
+    }
+
+    return studies;
 }
 
 async function treeStudypasswordRequired(studyId) {

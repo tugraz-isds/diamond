@@ -1,1 +1,10 @@
- 
+.dia-spinner {
+  display: flex;
+  mat-spinner {
+    margin-right: 1em;
+  }
+}
+
+h1 {
+  font-weight: 500;
+}

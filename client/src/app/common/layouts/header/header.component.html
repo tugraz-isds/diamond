@@ -1,6 +1,10 @@
 <mat-toolbar color="primary">
 
-  <span>Diamond</span>
+  <button mat-icon-button>
+    <img src="/assets/logo.png">
+  </button>
+
+  <span class="dia-app-title">Diamond</span>
 
   <nav *ngIf="mainNavMenuItems" class="dia-main-nav">
     <a *ngFor="let navItem of mainNavMenuItems" mat-button routerLinkActive="dia-active-link" [routerLink]="navItem.path">{{navItem.label}}</a>
@@ -12,7 +16,7 @@
     <a *ngFor="let navItem of secondaryNavMenuItems" mat-button routerLinkActive="dia-active-link" [routerLink]="navItem.path">{{navItem.label}}</a>
   </nav>
 
-  <!-- TODO: Language Selector -->
+  <!-- TODO: Language Selector in separate component -->
   <nav>
     <button mat-button>EN</button>
     <button mat-button>DE</button>
