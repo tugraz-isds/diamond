@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/api/authentification.service';
 
 export interface INavMenuItem {
   path: string,
@@ -22,7 +24,10 @@ export class HeaderComponent implements OnInit {
     { path: '/profile', label: 'My Profile' }
   ];
 
-  constructor() { }
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.setupMainNav();
@@ -33,7 +38,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    console.log('logout clicked!');
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

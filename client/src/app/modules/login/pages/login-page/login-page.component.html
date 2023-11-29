@@ -1,1 +1,43 @@
-<h1>Login Page</h1>
+<div class="dia-login-page">
+
+  <mat-card class="dia-login-card">
+
+    <mat-card-header>
+      <mat-card-subtitle>Diamond</mat-card-subtitle>
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <form [formGroup]="form" id="ngForm" #loginForm="ngForm" (submit)="onSubmit($event, form.value)">
+        <mat-form-field class="dia-full-width">
+          <input matInput name="username" formControlName="username" placeholder="Username">
+          <mat-error *ngIf="f['username'].errors?.required">
+            Username is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="dia-full-width">
+          <input matInput name="password" formControlName="password" placeholder="Password" type="password">
+          <mat-error *ngIf="f['password'].errors?.required">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <mat-divider></mat-divider>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit" form="ngForm" [disabled]="isLoading">Login</button>
+      <button mat-raised-button [disabled]="isLoading">Register</button>
+    </mat-card-actions>
+
+    <mat-card-footer>
+      <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+
+  </mat-card>
+
+</div>
