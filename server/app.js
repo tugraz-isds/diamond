@@ -43,7 +43,7 @@ app.use(jwt());
 
 app.use('/users', accountController);
 
-const adminEmail = process.env.ADMIN_EMAIL || 'admin';
+const adminEmail = process.env.ADMIN_USERNAME || 'admin';
 const adminPwd = process.env.ADMIN_PWD || 'admin189m';
 
 userService.create({ email: adminEmail, password: adminPwd })
