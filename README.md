@@ -31,7 +31,7 @@ its frontend, Node.js as its server, and MongoDB as its database.
 - MongoDB database host (v4 or higher), say at MongoDB Atlas
   [https://mongodb.com/atlas/](https://mongodb.com/atlas/).
 
-- NodeJS web host (v16), say at Cyclic [https://cyclic.sh/](https://cyclic.sh/).
+- NodeJS web host (v16), say at Render [render.com](https://render.com/).
 
 
 
@@ -43,7 +43,7 @@ described here.
 
 First, as noted above, it is necessary to have a provider (host) for
 both a MongoDB database and a NodeJS web application.  We recommend
-using [Cyclic](https://cyclic.sh/) for hosting the Diamond web
+using [Render](https://render.com/) for hosting the Diamond web
 application. As a database provider, we recommend [MongoDB
 Atlas](https://mongodb.com/atlas/database). Both offer a free-tier
 plan and are more than sufficient to run studies with Diamond.
@@ -77,16 +77,16 @@ can be found at
 
 
 
-### 2. Set Up Deployment at Cyclic
+### 2. Set Up Deployment at Render
 
 - Create a fork of the official Diamond GitHub repository
   [https://github.com/tugraz-isds/diamond](https://github.com/tugraz-isds/diamond).
 
-- Sign up to Cyclic.sh using your GitHub account.
+- Sign up to [Render](https://render.com/) using your GitHub account.
 
-- After signup, you will be redirected to Cyclic's dashboard.
+- After signup, you will be redirected to Render's dashboard.
 
-- Next, connect your forked Diamond Github repository to your Cyclic
+- Next, connect your forked Diamond Github repository to your Render
   acount:
 
   + Choose tab ```Link your own```
@@ -117,7 +117,7 @@ can be found at
 
 - Go to the dashboard and choose the tab ```Variables``` and specify
   the following environment variables:
-  + ADMIN_EMAIL: Email (or user name) of Diamond's admin user.
+  + ADMIN_USERNAME: User name of Diamond's admin user.
   + ADMIN_PWD: Password of Diamond's admin user.
   + MAX_REQUEST_PAYLOAD_SIZE: 6mb (limit of Cyclic).
   + NPM_CONFIG_CACHE: /tmp/.npm
@@ -161,7 +161,12 @@ can be found at
 
 
 ## Developer Guide
-A Developer Guide can be found in the [README-dev.md](https://github.com/tugraz-isds/diamond/blob/main/README-dev.md) file.
+
+For developers who want to build Diamond from source code, a
+Developer Guide can be found in the
+[README-dev.md](https://github.com/tugraz-isds/diamond/blob/main/README-dev.md)
+file.
+
 
 
 ## Contributors

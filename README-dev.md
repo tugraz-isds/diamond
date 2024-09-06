@@ -1,52 +1,65 @@
 
 # Diamond - Developer Guide
 
+This guide describes how to build Diamond from source code and run it
+locally.
+
+
 ## Requirements
 
 - [Node.js v16 (Gallium)](https://nodejs.org/en/download/releases)
 - [MongoDB v4](https://www.mongodb.com/docs/v4.4/installation/)
 
-To manage your Node.js installation, it is recommended to use 
-[NVM](https://github.com/nvm-sh/nvm) or 
-[NVM-Windows](https://github.com/coreybutler/nvm-windows).
-The required Node.js version is printed to the ```.nvmrc``` file.
+To manage your Node.js installation, it is recommended to use
+[NVM](https://github.com/nvm-sh/nvm) on macOS, Linux, or WSL, and to
+use [NVM-Windows](https://github.com/coreybutler/nvm-windows) on
+Microsoft Windows. The required Node.js version is printed to the
+```.nvmrc``` file.
 
 
 
 ## Architecture
 
 The project is set up as a multi-package repository containing both
-frontend and backend code. To seperate both code bases, npm workspaces 
-are used. Currently, there are to workspaces: client (for frontend code)
-and server (for backend code).
+frontend and backend code. To seperate both code bases, npm workspaces
+are used. Currently, there are two workspaces: client (for frontend
+code) and server (for backend code).
 
 
+## Installing a MongoDB Database
 
-## Running Diamond locally
+There are three ways to provide a MongoDB database for use by Diamond:
+1. Install MongoDB locally on the same machine
+  (see [Install MongoDB](https://mongodb.com/docs/manual/installation/)).
 
-- Make sure to have the specified versions of Node.js and MongoDB 
-  installed
-- Create a local copy of the sample environment file 
-  ```cp .env.sample .env``` and fill in admin account details and your 
-  local MongoDB connection string. 
-- Startup your local MongoDB
-- In the project root folder run ```npm install``` to install all 
-  dependencies
-- In the project root folder run ```npm run build``` to build the 
-frontend
-- In the project root folder run ```npm start``` to start the 
-  application
-
-Open your browser and got to 
-[http://localhost:8000](http://localhost:8000).
-
-Instead of installing MongoDB locally, you can use a dockerized version.
+2. Use a dockerised version of MongoDB.
 To start the MongoDB docker container, go to ```/deploy/local``` and run
 ```docker-compose up -d```. This will start a MongoDB instance in the
-background and can be accessed via 
-```mongodb://localhost:27017/<database_name>```. Diamond is set up to
-use this connection string as default, if no .env file is available.
+background, which can be accessed by
+```mongodb://127.0.0.1:27017/diamond```.
 Use ```docker-compose down``` to shut down MongoDB.
+
+3. Create an account with a MongoDB database provider,
+   such as MongoDB Atlas ([mongodb.com](https://mongodb.com/)).
+
+
+
+
+## Building and Running Diamond Locally
+
+- Make sure to have the specified versions of Node.js.
+- Create a local copy of the sample environment file 
+  ```cp .env.sample .env``` and fill in the admin user name and password,
+  and your MongoDB connection string. 
+- Start your MongoDB database.
+- Go to the project root folder.
+- Run ```npm install``` to install all dependencies.
+- Run ```npm run build``` to build the frontend.
+- Run ```npm start``` to start the application.
+
+Open your browser and go to 
+[http://localhost:8000](http://localhost:8000).
+
 
 
 ## Developing Diamond
